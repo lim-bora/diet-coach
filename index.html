@@ -189,6 +189,46 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 .prev-row .pk{font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink2)}
 .prev-none{font-size:12.5px;color:var(--ink3);padding:9px 2px;line-height:1.5}
 .prev-none b{color:var(--ink2)}
+.prev-row.direct{background:#fff;border-style:dashed;border-color:#CFE7DD;margin-top:8px}
+.prev-row.direct .pn{font-weight:700;color:var(--em-d)}
+.prev-row.direct .pk{color:var(--em-d);font-size:14px}
+
+/* ---------- quick new food ---------- */
+.qnew{margin-top:9px;padding:13px;border:1.5px dashed #CFE7DD;background:#F7FCFA;border-radius:16px}
+.qnew .qn-t{font-size:13px;font-weight:800;color:var(--em-d);letter-spacing:-0.02em}
+.qnew .qn-s{font-size:11.5px;color:var(--ink3);margin:3px 0 10px;line-height:1.5;letter-spacing:0}
+.qnew .qn-name{margin-bottom:8px}
+.qnew .qn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qnew .qn-f{position:relative;display:block}
+.qnew input{
+  width:100%;height:44px;border:1.4px solid #E3ECEA;background:#fff;border-radius:12px;
+  padding:0 34px 0 12px;font-size:15px;font-weight:600;color:var(--ink);outline:none;letter-spacing:-0.01em;
+}
+.qnew .qn-name input{padding-right:12px}
+.qnew input:focus{border-color:#B9EBD9;box-shadow:0 0 0 4px rgba(15,185,129,.09)}
+.qnew input::placeholder{color:#B4BFC3;font-weight:500}
+.qnew .qn-u{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--ink3)}
+.qnew .qn-go{
+  margin-top:9px;width:100%;border:0;border-radius:13px;padding:13px;
+  background:linear-gradient(160deg,#14AD82,#0A8C67);color:#fff;font-size:14px;font-weight:800;letter-spacing:-0.01em;
+}
+.qnew .qn-go:active{transform:scale(.985);opacity:.92}
+.qnew .qn-opt{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:11.5px;font-weight:600;color:var(--ink2);letter-spacing:-0.01em}
+.qnew .qn-opt input{
+  -webkit-appearance:none;appearance:none;width:20px;height:20px;flex:0 0 auto;border-radius:6px;
+  border:1.5px solid #D8E0E2;background:#fff;margin:0;position:relative;padding:0;
+}
+.qnew .qn-opt input:checked{background:var(--em);border-color:var(--em)}
+.qnew .qn-opt input:checked::after{content:"";position:absolute;left:5.5px;top:2px;width:5px;height:10px;border:2px solid #fff;border-top:0;border-left:0;transform:rotate(42deg)}
+
+/* ---------- meal item edit ---------- */
+.item-ed{
+  -webkit-appearance:none;border:0;background:transparent;color:#C8D2D6;font-size:13px;line-height:1;
+  width:22px;height:22px;padding:0;display:grid;place-items:center;border-radius:7px;flex:0 0 auto;
+}
+.item-ed:active{color:var(--em-d);background:var(--em-l)}
+.item.editable:active{background:#FAFCFB}
+
 .prev-foot{display:flex;align-items:center;gap:10px;margin-top:9px}
 .prev-total{flex:1;font-size:12.5px;color:var(--ink2);font-variant-numeric:tabular-nums}
 .prev-total b{font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-0.03em}
@@ -228,7 +268,8 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   background:var(--coral);color:#fff;font-size:11px;line-height:1;border:2px solid #fff;place-items:center;padding:0;
 }
 .chip.edit .delx{display:grid}
-.chip.add{border-style:dashed;border-color:#D5DEE0;background:#FAFCFC;color:var(--ink2)}
+.chip.add{border-style:dashed;border-color:#9EE0C8;background:#F2FCF8;color:var(--em-d)}
+.chip.add .cn{color:var(--em-d);font-weight:700}
 .chips-empty{font-size:12.5px;color:var(--ink3);margin:12px 0 0}
 
 #quickCard{transition:box-shadow .3s ease,border-color .3s ease}
@@ -570,7 +611,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       <input id="quickInput" type="text" placeholder="계란 2개 아메리카노" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
       <button class="clr" id="btnClear" aria-label="입력 지우기">&#10005;</button>
     </div>
-    <div class="q-hint" id="qHint">대충 적어도 찾아요 &middot; <b>&ldquo;삼겹살 1인분&rdquo;</b> <b>&ldquo;그릭요거트&rdquo;</b></div>
+    <div class="q-hint" id="qHint">대충 적어도 찾아요 &middot; <b>&ldquo;테이크핏 호박고구마맛&rdquo;</b> <b>&ldquo;삼겹살 1인분&rdquo;</b> &middot; 없으면 바로 새 음식으로 기록</div>
     <div class="preview" id="quickPreview"></div>
     <div class="chips" id="chipsRow"></div>
     <div class="chips-empty" id="chipsEmpty" style="display:none">자주 먹는 음식을 추가해 두면 한 번에 기록돼요.</div>
@@ -781,6 +822,60 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   </div>
   <div class="sheet-foot"><button class="btn-primary block em" id="btnAddManual">추가하기</button></div>
 </section>
+
+<section class="sheet" id="sheetEdit" role="dialog" aria-modal="true" aria-label="기록 수정">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h3>기록 수정</h3><button class="xbtn" data-close="edit" aria-label="닫기">&#10005;</button></div>
+  <div class="sheet-body">
+    <div class="field">
+      <label>음식 이름</label>
+      <input class="text-input" id="eName" type="text" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>끼니</label>
+      <div class="opt-pills" id="eMeal">
+        <button class="opt" data-v="breakfast">아침</button>
+        <button class="opt" data-v="lunch">점심</button>
+        <button class="opt" data-v="dinner">저녁</button>
+        <button class="opt" data-v="snack">간식</button>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>수량</label>
+        <div class="input-row"><input class="text-input" id="eQty" type="number" inputmode="decimal" step="0.5" min="0.1"><span class="unit" id="eQtyUnit">인분</span></div>
+      </div>
+      <div class="field">
+        <label>칼로리</label>
+        <div class="input-row"><input class="text-input" id="eKcal" type="number" inputmode="numeric" step="1" min="0"><span class="unit">kcal</span></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>단백질</label>
+        <div class="input-row"><input class="text-input" id="eP" type="number" inputmode="decimal" step="0.1" min="0"><span class="unit">g</span></div>
+      </div>
+      <div class="field">
+        <label>탄수화물</label>
+        <div class="input-row"><input class="text-input" id="eC" type="number" inputmode="decimal" step="0.1" min="0"><span class="unit">g</span></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>지방</label>
+        <div class="input-row"><input class="text-input" id="eF" type="number" inputmode="decimal" step="0.1" min="0"><span class="unit">g</span></div>
+      </div>
+      <div class="field"></div>
+    </div>
+    <p class="formula">여기서 고친 값은 오늘 기록에 바로 반영돼요.</p>
+  </div>
+  <div class="sheet-foot">
+    <div class="data-row">
+      <button class="btn-ghost" id="btnDelItem" style="color:#D2563F;border-color:#F6DFD8">삭제</button>
+      <button class="btn-primary em" id="btnSaveItem" style="flex:2">수정 저장</button>
+    </div>
+  </div>
+</section>
 <script>
 (function () {
   'use strict';
@@ -924,20 +1019,173 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     { n: '맥주', e: '🍺', k: 150, p: 1, c: 11, f: 0, u: '캔', g: 355, a: ['맥주', '캔맥주', '생맥'] },
     { n: '소주', e: '🍶', k: 70, p: 0, c: 0, f: 0, u: '잔', g: 50, a: ['소주', '참이슬'] },
     { n: '와인', e: '🍷', k: 120, p: 0, c: 4, f: 0, u: '잔', g: 150, a: ['와인', '레드와인'] },
-    { n: '이온음료', e: '💧', k: 130, p: 0, c: 34, f: 0, u: '병', g: 500, a: ['이온음료', '게토레이', '포카리'] }
+    { n: '이온음료', e: '💧', k: 130, p: 0, c: 34, f: 0, u: '병', g: 500, a: ['이온음료', '게토레이', '포카리'] },
+    { n: '제로사이다', e: '🥤', k: 0, p: 0, c: 0, f: 0, u: '캔', g: 355, a: ['제로사이다', '스프라이트제로', '나랑드사이다', '칠성사이다제로'] },
+    { n: '제로음료', e: '🥤', k: 0, p: 0, c: 0, f: 0, u: '캔', g: 355, a: ['제로음료', '제로드링크', '무칼로리음료', '제로탄산'] },
+
+    /* --- 편의점 단백질 음료 (250ml) --- */
+    { n: '테이크핏 맥스 호박고구마맛', e: '🍠', k: 105, p: 24, c: 1, f: 0.5, u: '병', g: 250, a: ['테이크핏', '테이크핏맥스', '테이크핏맥스호박고구마맛', '테이크핏호박고구마맛', '테이크핏호박고구마', '테이크핏고구마맛', '테이크핏고구마', '테이크핏호박고구마맛단백질음료'] },
+    { n: '테이크핏 맥스 초코맛', e: '🍫', k: 106, p: 24, c: 1, f: 0.7, u: '병', g: 250, a: ['테이크핏초코', '테이크핏초코맛', '테이크핏초콜릿', '테이크핏맥스초코맛', '테이크핏초콜릿맛'] },
+    { n: '테이크핏 맥스 바나나맛', e: '🍌', k: 106, p: 24, c: 1, f: 0.7, u: '병', g: 250, a: ['테이크핏바나나', '테이크핏바나나맛', '테이크핏맥스바나나맛'] },
+    { n: '테이크핏 맥스 고소한맛', e: '🥛', k: 106, p: 24, c: 1, f: 0.7, u: '병', g: 250, a: ['테이크핏고소한맛', '테이크핏고소', '테이크핏맥스고소한맛', '테이크핏고소한'] },
+    { n: '더단백 드링크 초코맛', e: '🍫', k: 105, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['더단백', '더단백드링크', '더단백초코', '더단백초코맛', '더단백초콜릿', '더단백드링크초코맛', '더단백드링크초콜릿', '빙그레더단백'] },
+    { n: '더단백 드링크 바나나맛', e: '🍌', k: 105, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['더단백바나나', '더단백바나나맛', '더단백드링크바나나맛'] },
+    { n: '더단백 드링크 딸기맛', e: '🍓', k: 105, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['더단백딸기', '더단백딸기맛', '더단백드링크딸기맛'] },
+    { n: '더단백 드링크 밀크티맛', e: '🧋', k: 105, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['더단백밀크티', '더단백밀크티맛', '더단백드링크밀크티맛'] },
+    { n: '더단백 드링크 카라멜맛', e: '🍮', k: 105, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['더단백카라멜', '더단백카라멜맛', '더단백드링크카라멜맛'] },
+    { n: '셀렉스 프로핏 초콜릿맛', e: '🍫', k: 100, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['셀렉스', '셀렉스프로핏', '셀렉스프로핏초콜릿', '셀렉스초코', '셀렉스초콜릿맛', '셀렉스프로핏초콜릿맛'] },
+    { n: '셀렉스 프로핏 밀크바닐라맛', e: '🥛', k: 100, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['셀렉스바닐라', '셀렉스밀크바닐라', '셀렉스프로핏바닐라', '셀렉스밀크바닐라맛', '셀렉스프로핏밀크바닐라맛'] },
+    { n: '셀렉스 프로핏 모카맛', e: '☕️', k: 100, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['셀렉스모카', '셀렉스모카맛', '셀렉스프로핏모카맛'] },
+    { n: '셀렉스 프로핏 복숭아맛', e: '🍑', k: 100, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['셀렉스복숭아', '셀렉스복숭아맛', '셀렉스프로핏복숭아맛'] },
+    { n: '셀렉스 프로핏 아메리카노맛', e: '☕️', k: 100, p: 20, c: 1, f: 0.6, u: '병', g: 250, a: ['셀렉스아메리카노', '셀렉스아메리카노맛', '셀렉스프로핏아메리카노맛', '셀렉스아메리카노맛프로틴'] },
+    { n: '하이뮨 액티브', e: '💪', k: 130, p: 20, c: 5, f: 2.8, u: '병', g: 250, a: ['하이뮨', '하이뮨액티브', '하이뮨단백질', '하이뮨프로틴'] },
+    { n: '닥터유PRO 단백질 드링크', e: '🥤', k: 142, p: 24, c: 3, f: 3.5, u: '병', g: 250, a: ['닥터유', '닥터유프로', '닥터유프로단백질드링크', '닥터유단백질드링크', '닥터유단백질', '닥터유프로틴'] },
+    { n: '얼티브 프로틴 밤맛', e: '🌰', k: 115, p: 21, c: 4, f: 1.5, u: '병', g: 250, a: ['얼티브', '얼티브프로틴', '얼티브밤맛', '얼티브프로틴밤', '얼티브밤'] },
+    { n: '얼티브 프로틴 초코', e: '🍫', k: 115, p: 21, c: 4, f: 1.5, u: '병', g: 250, a: ['얼티브초코', '얼티브초콜릿', '얼티브프로틴초코'] },
+    { n: '랩노쉬 프로틴 드링크', e: '🥤', k: 145, p: 20, c: 6, f: 3.5, u: '병', g: 250, a: ['랩노쉬', '랩노쉬프로틴', '랩노쉬프로틴드링크', '랩노쉬드링크'] },
+
+    /* --- 편의점 다이어트 간편식 --- */
+    { n: '연어포케', e: '🐟', k: 520, p: 28, c: 58, f: 16, u: '그릇', g: 400, a: ['포케', '연어포케', '포케볼', '사케포케'] },
+    { n: '샐러디 샐러드', e: '🥗', k: 320, p: 22, c: 20, f: 16, u: '그릇', g: 350, a: ['샐러디', '샐러디샐러드', '샐러디랩'] },
+    { n: '닭가슴살 소시지', e: '🌭', k: 110, p: 16, c: 2, f: 3.5, u: '개', g: 70, a: ['닭가슴살소시지', '닭소시지', '닭가슴살소세지'] },
+    { n: '구운란', e: '🥚', k: 65, p: 5.5, c: 0.5, f: 4.5, u: '개', g: 50, a: ['구운란', '구운계란', '훈제란', '맥반석계란'] },
+    { n: '아몬드브리즈', e: '🥛', k: 45, p: 1.5, c: 3, f: 2.5, u: '팩', g: 190, a: ['아몬드브리즈', '아몬드브리즈오리지널', '아몬드밀크', '아몬드브리즈언스위트'] },
+    { n: '곤약면', e: '🍜', k: 40, p: 1, c: 9, f: 0.3, u: '팩', g: 200, a: ['곤약면', '실곤약', '곤약국수'] },
+    { n: '두부면', e: '🍜', k: 80, p: 8, c: 4, f: 4, u: '팩', g: 200, a: ['두부면', '두부국수'] },
+    { n: '닭가슴살 스테이크', e: '🍗', k: 120, p: 22, c: 3, f: 2, u: '팩', g: 100, a: ['닭가슴살스테이크', '닭스테이크'] },
+    { n: '닭가슴살 큐브', e: '🍗', k: 110, p: 23, c: 1, f: 1.5, u: '팩', g: 100, a: ['닭가슴살큐브', '닭가슴살깍둑', '닭가슴살볼'] },
+    { n: '닭가슴살 볶음밥', e: '🍚', k: 350, p: 20, c: 45, f: 9, u: '팩', g: 250, a: ['닭가슴살볶음밥', '닭볶음밥', '닭가슴살볶밥'] },
+    { n: '키토김밥', e: '🍙', k: 380, p: 12, c: 45, f: 17, u: '줄', g: 220, a: ['키토김밥', '곤약김밥', '저탄김밥'] },
+    { n: '프로틴 아이스크림', e: '🍦', k: 130, p: 12, c: 14, f: 3, u: '개', g: 100, a: ['프로틴아이스크림', '단백질아이스크림', '프로틴바아이스크림'] },
+    { n: '제로 아이스크림', e: '🍦', k: 90, p: 3, c: 12, f: 3, u: '개', g: 100, a: ['제로아이스크림', '저칼로리아이스크림'] }
   ];
 
-  /* 사전 정렬된 별칭 사전 (긴 것부터) */
-  var ALIASES = [];
-  DB.forEach(function (food, idx) {
-    (food.a || [food.n]).forEach(function (al) {
-      ALIASES.push({ a: String(al).toLowerCase(), f: food });
+  /* ================= 검색 색인 · 스마트 매칭 ================= */
+  var NOISE_TOKENS = ['맛', '음료', '드링크', '맥스', '프로', '마시는', '한병', '한개', '다이어트', '저당'];
+
+  function squash(s) {
+    return String(s == null ? '' : s).toLowerCase().replace(/[^0-9a-z가-힣]/g, '');
+  }
+  function coreTokens(text) {
+    var raw = String(text == null ? '' : text).toLowerCase().replace(/[^0-9a-z가-힣]+/g, ' ').trim();
+    if (!raw) return [];
+    var out = [];
+    raw.split(' ').forEach(function (t) {
+      if (!t) return;
+      t = t.replace(/맛$/, '').replace(/(드링크|음료|맥스)/g, '');
+      if (!t) return;
+      if (NOISE_TOKENS.indexOf(t) >= 0) return;
+      out.push(t);
     });
-  });
-  ALIASES.sort(function (x, y) { return y.a.length - x.a.length; });
+    if (!out.length) out = raw.split(' ').filter(Boolean);
+    return out;
+  }
+  function coreOf(text) { return coreTokens(text).join(''); }
+
+  function bigrams(s) {
+    var out = {}, i, g;
+    for (i = 0; i < s.length - 1; i++) { g = s.substr(i, 2); out[g] = (out[g] || 0) + 1; }
+    return out;
+  }
+  function diceSim(a, b) {
+    if (!a.length || !b.length) return 0;
+    if (a === b) return 1;
+    var A = bigrams(a), B = bigrams(b), inter = 0, total = 0, k;
+    for (k in A) { total += A[k]; if (B[k]) inter += Math.min(A[k], B[k]); }
+    for (k in B) total += B[k];
+    return total ? (2 * inter) / total : 0;
+  }
+
+  /* 0~1 유사도: 공백·접미사(맛/음료/드링크)·수식어(맥스/프로) 차이를 흡수 */
+  function textScore(query, cand) {
+    var q = coreOf(query), c = coreOf(cand);
+    if (!q || !c) return 0;
+    var score = 0;
+    if (q === c) {
+      score = 1;
+    } else {
+      var shortS = q.length <= c.length ? q : c;
+      var longS = q.length <= c.length ? c : q;
+      if (longS.indexOf(shortS) >= 0) {
+        score = 0.6 + 0.36 * (shortS.length / longS.length);
+      } else {
+        score = diceSim(q, c) * 0.72;
+        var common = 0;
+        while (common < shortS.length && q.charAt(common) === c.charAt(common)) common++;
+        if (common >= 2) score += Math.min(0.16, 0.045 * common);
+      }
+      var qt = coreTokens(query), hit = 0;
+      qt.forEach(function (t) {
+        if (t.length >= 2 && c.indexOf(t) >= 0) hit++;
+      });
+      if (qt.length && hit) score = Math.max(score, 0.5 + 0.45 * (hit / qt.length));
+    }
+    if (squash(query).length < 2) score *= 0.45;
+    return Math.min(1, score);
+  }
+
+  function allFoods() {
+    var extra = (typeof state !== 'undefined' && state && Array.isArray(state.customs)) ? state.customs : [];
+    return DB.concat(extra);
+  }
+
+  function foodKeys(food) {
+    var keys = [food.n].concat(food.a || []);
+    return keys.filter(function (k) { return !!k; });
+  }
+
+  function scoreFood(food, query) {
+    var best = 0;
+    foodKeys(food).forEach(function (key) {
+      var s = textScore(query, key);
+      if (s > best) best = s;
+    });
+    return best;
+  }
+
+  /* 점수 높은 순 후보 목록 */
+  function findFoods(query, limit) {
+    var q = String(query == null ? '' : query).trim();
+    if (squash(q).length < 1) return [];
+    var out = [];
+    allFoods().forEach(function (food) {
+      var s = scoreFood(food, q);
+      if (s >= 0.42) out.push({ f: food, s: s });
+    });
+    out.sort(function (a, b) { return b.s - a.s; });
+    return out.slice(0, limit || 5);
+  }
+
+  /* 입력 조각 하나를 확정해서 고르기 (오탐 방지) */
+  function bestMatch(text) {
+    var list = findFoods(text, 3);
+    if (!list.length) return null;
+    var best = list[0];
+    if (best.s >= 0.995) return best;
+    if (best.s < 0.58) return null;
+    if (list.length > 1 && best.s - list[1].s < 0.06) return best.s >= 0.8 ? best : null;
+    return best;
+  }
+
+  /* 사전 정렬된 별칭 사전 (긴 것부터) — 직접 추가한 음식도 포함 */
+  var ALIASES = [];
+  function rebuildAliases() {
+    var list = [];
+    allFoods().forEach(function (food) {
+      var keys = foodKeys(food);
+      if (!keys.length) keys = [food.n];
+      keys.forEach(function (al) {
+        list.push({ a: String(al).toLowerCase(), f: food });
+      });
+    });
+    list.sort(function (x, y) { return y.a.length - x.a.length; });
+    ALIASES = list;
+  }
+  rebuildAliases();
 
   var DEFAULT_FAVS = [
     { n: '그릭요거트+땅콩버터', e: '🥜', k: 225, p: 22, c: 11, f: 9.5, u: '그릇', q: 1 },
+    { n: '테이크핏 맥스 호박고구마맛', e: '🍠', k: 105, p: 24, c: 1, f: 0.5, u: '병', q: 1 },
     { n: '삶은계란', e: '🥚', k: 78, p: 6.3, c: 0.6, f: 5.3, u: '개', q: 2 },
     { n: '곤약밥+계란찜', e: '🍙', k: 240, p: 12, c: 31, f: 7, u: '세트', q: 1 },
     { n: '단쉐', e: '🥤', k: 120, p: 20, c: 5, f: 2, u: '병', q: 1 },
@@ -1005,6 +1253,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     profile: { gender: 'f', age: 30, height: 160, weight: 50, target: 48, activity: 'office', pace: 'focus' },
     days: {},
     favs: [],
+    customs: [],
     ui: { date: '', meal: 'lunch', editChips: false }
   };
   var draft = null;
@@ -1044,7 +1293,17 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
         if (!f || !f.n) return null;
         return {
           n: String(f.n), e: f.e || '🍽', k: num(f.k, 0), p: num(f.p, 0), c: num(f.c, 0),
-          f: num(f.f, 0), u: f.u || '인분', q: Math.max(0.5, num(f.q, 1))
+          f: num(f.f, 0), u: f.u || '인분', q: Math.max(0.5, num(f.q, 1)),
+          cu: f.cu ? 1 : 0
+        };
+      }).filter(Boolean);
+    }
+    if (Array.isArray(o.customs)) {
+      s.customs = o.customs.map(function (f) {
+        if (!f || !f.n) return null;
+        return {
+          n: String(f.n), e: f.e || '🍽', k: num(f.k, 0), p: num(f.p, 0), c: num(f.c, 0),
+          f: num(f.f, 0), u: f.u || '인분', g: num(f.g, 0), cu: 1
         };
       }).filter(Boolean);
     }
@@ -1188,7 +1447,14 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   function matchAt(s, i) {
     for (var k = 0; k < ALIASES.length; k++) {
       var al = ALIASES[k].a;
-      if (s.substr(i, al.length) === al) return ALIASES[k];
+      var j = i, ok = true;
+      for (var p = 0; p < al.length; p++) {
+        if (al.charAt(p) === ' ') continue;
+        while (j < s.length && s.charAt(j) === ' ') j++;
+        if (s.charAt(j) !== al.charAt(p)) { ok = false; break; }
+        j++;
+      }
+      if (ok) return { f: ALIASES[k].f, len: j - i };
     }
     return null;
   }
@@ -1204,7 +1470,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       if (m[2]) n = n / parseFloat(m[2]);
       return { n: n, unit: (m[3] || '').toLowerCase(), end: j + m[0].length };
     }
-    var m2 = rest.match(new RegExp('^(반|한|하나|두|둘|세|셋|네|넷|다섯)\\s*(' + unitAlt + ')?', 'i'));
+    var m2 = rest.match(new RegExp('^(반|한|하나|두|둘|세|셋|네|넷|다섯)\\s*(' + unitAlt + ')?(?![가-힣])', 'i'));
     if (m2) {
       return { n: KO_NUM[m2[1]] || 1, unit: (m2[2] || '').toLowerCase(), end: j + m2[0].length };
     }
@@ -1227,9 +1493,50 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     return n;
   }
 
+  /* 입력 문장 전체가 한 음식의 이름/별칭과 정확히 같으면 그것 하나로 본다 */
+  function tailQty(s) {
+    var unitAlt = UNITS.join('|');
+    var m = s.match(new RegExp('(\\d+(?:\\.\\d+)?)\\s*(?:\\/\\s*(\\d+))?\\s*(' + unitAlt + ')?\\s*$', 'i'));
+    if (m && m.index > 0) {
+      var n = parseFloat(m[1]);
+      if (m[2]) n = n / parseFloat(m[2]);
+      return { n: n, unit: (m[3] || '').toLowerCase(), raw: m[0] };
+    }
+    var m2 = s.match(new RegExp('(반|한|하나|두|둘|세|셋|네|넷|다섯)\\s*(' + unitAlt + ')?\\s*$', 'i'));
+    if (m2 && m2.index > 0) {
+      return { n: KO_NUM[m2[1]] || 1, unit: (m2[2] || '').toLowerCase(), raw: m2[0] };
+    }
+    return null;
+  }
+
+  function wholeCoreMatch(s) {
+    var q = tailQty(s);
+    var body = q ? s.slice(0, s.length - q.raw.length) : s;
+    var core = coreOf(body);
+    if (!core) return null;
+    var pool = allFoods();
+    for (var i = 0; i < pool.length; i++) {
+      var keys = foodKeys(pool[i]);
+      for (var j = 0; j < keys.length; j++) {
+        if (coreOf(keys[j]) === core) return { f: pool[i], qty: q };
+      }
+    }
+    return null;
+  }
+
   function parseQuick(text) {
     var s = String(text == null ? '' : text).toLowerCase();
-    s = s.replace(/[,·、|/]/g, ' ').replace(/\s+/g, ' ');
+    s = s.replace(/[,·|/]/g, ' ').replace(/\s+/g, ' ');
+
+    /* 1) 문장 전체가 한 음식이면 바로 그것 */
+    if (s.indexOf('+') < 0) {
+      var wm = wholeCoreMatch(s);
+      if (wm) {
+        var wq = wm.qty;
+        return { items: [{ f: wm.f, n: qtyToServing(wm.f, wq ? wq.n : 1, wq ? wq.unit : '') }], unknown: [] };
+      }
+    }
+
     var items = [], unknown = [];
     var i = 0, guard = 0;
     while (i < s.length && guard < 300) {
@@ -1245,37 +1552,39 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
         i = Math.max(j, i + 1);
         continue;
       }
-      i += m.a.length;
+      i += m.len;
       var q = readQty(s, i);
       var n = 1, unit = '';
       if (q) { n = q.n; unit = q.unit; i = q.end; }
       items.push({ f: m.f, n: qtyToServing(m.f, n, unit) });
     }
+
+    /* 사전에 없는 표현도 유사도로 한 번 더 시도 ("테이크핏 호박고구마맛" 같은 긴 구문) */
+    var leftovers = [];
+    unknown.forEach(function (w) {
+      var hit = bestMatch(w);
+      if (hit) items.push({ f: hit.f, n: 1 });
+      else leftovers.push(w);
+    });
+    if (!items.length) {
+      var whole = s.trim();
+      var h2 = whole ? bestMatch(whole) : null;
+      if (h2) items.push({ f: h2.f, n: 1 });
+      else leftovers = [];
+    }
+
     var merged = [];
     items.forEach(function (it) {
       for (var k = 0; k < merged.length; k++) {
-        if (merged[k].f === it.f) { merged[k].n += it.n; return; }
+        if (merged[k].f === it.f || (merged[k].f.n === it.f.n && merged[k].f.k === it.f.k)) { merged[k].n += it.n; return; }
       }
       merged.push({ f: it.f, n: it.n });
     });
-    return { items: merged, unknown: unknown };
+    return { items: merged, unknown: leftovers };
   }
 
   function suggest(text) {
-    var q = String(text || '').toLowerCase().replace(/\s+/g, '');
-    if (q.length < 1) return [];
-    var out = [];
-    for (var i = 0; i < DB.length && out.length < 5; i++) {
-      var food = DB[i];
-      var hit = food.n.toLowerCase().indexOf(q) >= 0;
-      if (!hit) {
-        for (var j = 0; j < (food.a || []).length; j++) {
-          if (String(food.a[j]).toLowerCase().indexOf(q) >= 0) { hit = true; break; }
-        }
-      }
-      if (hit) out.push(food);
-    }
-    return out;
+    return findFoods(text, 5).map(function (r) { return r.f; });
   }
 
   /* ================= toast ================= */
@@ -1371,12 +1680,13 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       } else {
         items.forEach(function (it) {
           var q = it.n * it.mult;
-          html += '<div class="item" data-id="' + it.id + '">' +
+          html += '<div class="item editable" data-id="' + it.id + '">' +
             '<div class="item-e">' + it.emoji + '</div>' +
             '<div class="item-body">' +
               '<div class="item-l1">' +
                 '<span class="item-name">' + esc(it.name) + '</span>' +
                 '<span class="item-kcal">' + fmtInt(it.kcal * q) + '</span>' +
+                '<button class="item-ed" data-edit="' + it.id + '" aria-label="수정">&#9998;</button>' +
                 '<button class="item-del" data-del="' + it.id + '" aria-label="삭제">&#215;</button>' +
               '</div>' +
               '<div class="item-l2">' +
@@ -1406,7 +1716,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
         (edit ? '<span class="delx">&#215;</span>' : '') +
         '</button>';
     });
-    html += '<button class="chip add" data-manual="1"><span class="ce">＋</span><span class="cn">직접 입력</span></button>';
+    html += '<button class="chip add" data-manual="1"><span class="ce">＋</span><span class="cn">직접 추가</span></button>';
     $('chipsRow').innerHTML = html;
     $('chipsEmpty').style.display = favs.length ? 'none' : 'block';
     $('btnChipsEdit').textContent = edit ? '완료' : '편집';
@@ -1523,6 +1833,25 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     $('exTotal').textContent = '+' + fmtInt(total) + ' kcal';
   }
 
+  function directRow(label) {
+    return '<button class="prev-row direct" data-direct="' + esc(label) + '">' +
+      '<span class="pe">＋</span><span class="pn">‘' + esc(label) + '’ 직접 입력하기</span><span class="pk">→</span></button>';
+  }
+
+  function quickNewForm(name) {
+    return '<div class="qnew" id="quickNew">' +
+      '<div class="qn-t">‘' + esc(name) + '’ 새 음식으로 바로 기록</div>' +
+      '<div class="qn-s">칼로리만 적으면 돼. 저장하면 다음부터는 이름만 쳐도 바로 찾아줘.</div>' +
+      '<label class="qn-name"><input id="qnName" type="text" value="' + esc(name) + '" placeholder="음식 이름" autocomplete="off"></label>' +
+      '<div class="qn-row">' +
+        '<span class="qn-f"><input id="qnKcal" type="number" inputmode="numeric" placeholder="칼로리"><span class="qn-u">kcal</span></span>' +
+        '<span class="qn-f"><input id="qnP" type="number" inputmode="decimal" placeholder="단백질"><span class="qn-u">g</span></span>' +
+      '</div>' +
+      '<button class="qn-go" data-quicknew="1">기록하고 저장</button>' +
+      '<label class="qn-opt"><input type="checkbox" id="qnFav" checked><span>자주 먹는 음식에 넣기</span></label>' +
+    '</div>';
+  }
+
   function renderPreview() {
     var inp = $('quickInput');
     var raw = inp.value;
@@ -1552,25 +1881,29 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       html += '<div class="prev-foot"><div class="prev-total"><b>' + fmtInt(totK) + '</b> kcal · 단백질 ' + fmt1(totP) + 'g</div>' +
         '<button class="btn-primary em" id="btnCommit">기록하기</button></div>';
       if (p.unknown.length) {
-        html += '<div class="q-hint" style="margin-top:8px">이 단어는 못 알아들었어: ' + esc(p.unknown.join(', ')) + '</div>';
+        html += '<div class="q-hint" style="margin-top:8px">못 알아들었어: ' + esc(p.unknown.join(', ')) + '</div>';
+        html += directRow(p.unknown.join(' '));
       }
       box.className = 'preview show';
       box.innerHTML = html;
       $('btnCommit').onclick = commitQuick;
       return;
     }
-    var sug = suggest(raw);
-    html += '<div class="prev-none">못 찾았어' + (p.unknown.length ? ': <b>' + esc(p.unknown.join(' ')) + '</b>' : '') + '. ';
-    html += sug.length ? '혹시 이거야?' : '다른 이름으로 적어보거나 직접 입력해 줘.</div>';
+    var sug = findFoods(raw, 5);
+    var label = (p.unknown.length ? p.unknown.join(' ') : raw.trim());
+    html += '<div class="prev-none">못 찾았어' + (p.unknown.length ? ': <b>' + esc(p.unknown.join(' ')) + '</b>' : '') + '. ' +
+      (sug.length ? '혹시 이거야? 아니면 아래에 바로 적어서 저장해.' : '아래에 칼로리만 적으면 바로 기록되고, 다음부터는 이름만 쳐도 찾아.') + '</div>';
     if (sug.length) {
-      html += '</div><div class="prev-list">';
-      sug.forEach(function (f, idx) {
-        html += '<button class="prev-row" data-sug="' + DB.indexOf(f) + '" style="text-align:left">' +
+      html += '<div class="prev-list">';
+      sug.forEach(function (r) {
+        var f = r.f;
+        html += '<button class="prev-row" data-sug="' + esc(f.n) + '">' +
           '<span class="pe">' + f.e + '</span><span class="pn">' + esc(f.n) + '</span>' +
-          '<span class="pq">' + f.u + '</span><span class="pk">' + fmtInt(f.k) + ' kcal</span></button>';
+          '<span class="pq">' + esc(f.u || '인분') + '</span><span class="pk">' + fmtInt(f.k) + ' kcal</span></button>';
       });
       html += '</div>';
     }
+    html += quickNewForm(label);
     box.className = 'preview show';
     box.innerHTML = html;
   }
@@ -1615,7 +1948,12 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   function commitQuick() {
     var text = $('quickInput').value;
     var p = parseQuick(text);
-    if (!p.items.length) { toast('음식을 못 찾았어'); return; }
+    if (!p.items.length) {
+      var qn = $('qnKcal');
+      if (qn) { try { qn.focus(); } catch (e) {} return; }
+      openManual(text.trim());
+      return;
+    }
     var d = curDay(), tot = 0;
     p.items.forEach(function (it) {
       d.meals.push(itemFromFood(it.f, it.n, state.ui.meal));
@@ -1627,6 +1965,128 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     toast(p.items.length === 1
       ? p.items[0].f.n + ' ' + fmtInt(tot) + 'kcal 기록했어'
       : p.items.length + '개 기록 · ' + fmtInt(tot) + 'kcal');
+  }
+
+  function findFoodByName(name) {
+    var key = squash(name);
+    var pool = allFoods();
+    for (var i = 0; i < pool.length; i++) {
+      if (squash(pool[i].n) === key) return pool[i];
+    }
+    return null;
+  }
+
+  function addFav(food) {
+    var key = squash(food.n);
+    if (!Array.isArray(state.favs)) state.favs = [];
+    for (var i = 0; i < state.favs.length; i++) {
+      if (squash(state.favs[i].n) === key) {
+        state.favs[i] = {
+          n: food.n, e: food.e || '🍽', k: num(food.k, 0), p: num(food.p, 0), c: num(food.c, 0),
+          f: num(food.f, 0), u: food.u || '인분', q: state.favs[i].q || 1, cu: food.cu ? 1 : 0
+        };
+        return;
+      }
+    }
+    state.favs.push({
+      n: food.n, e: food.e || '🍽', k: num(food.k, 0), p: num(food.p, 0), c: num(food.c, 0),
+      f: num(food.f, 0), u: food.u || '인분', q: 1, cu: food.cu ? 1 : 0
+    });
+  }
+
+  function saveCustomFood(food, wantFav) {
+    var key = squash(food.n);
+    if (!Array.isArray(state.customs)) state.customs = [];
+    var found = null;
+    for (var i = 0; i < state.customs.length; i++) {
+      if (squash(state.customs[i].n) === key) { found = state.customs[i]; break; }
+    }
+    if (!found) {
+      found = { n: food.n, e: food.e || '🍽', k: 0, p: 0, c: 0, f: 0, u: '인분', g: 0, cu: 1 };
+      state.customs.push(found);
+    }
+    found.e = food.e || '🍽';
+    found.k = num(food.k, 0);
+    found.p = num(food.p, 0);
+    found.c = num(food.c, 0);
+    found.f = num(food.f, 0);
+    found.u = food.u || '인분';
+    found.g = num(food.g, 0);
+    found.cu = 1;
+    rebuildAliases();
+    if (wantFav) addFav(found);
+  }
+
+  function removeCustomFood(name) {
+    var key = squash(name);
+    if (!Array.isArray(state.customs)) return;
+    state.customs = state.customs.filter(function (f) { return squash(f.n) !== key; });
+    rebuildAliases();
+  }
+
+  /* 못 찾은 음식을 인라인에서 바로 기록 + 저장 */
+  function createQuickFood() {
+    var raw = $('quickInput').value;
+    var nameEl = $('qnName'), kcalEl = $('qnKcal'), pEl = $('qnP'), favEl = $('qnFav');
+    var name = String((nameEl && nameEl.value) || raw || '').trim();
+    if (!name) { toast('음식 이름을 적어줰'); try { nameEl.focus(); } catch (e) {} return; }
+    var kcal = kcalEl ? num(kcalEl.value, null) : null;
+    if (kcal == null || !isFinite(kcal) || kcal <= 0) {
+      toast('칼로리를 적어줰'); try { kcalEl.focus(); } catch (e) {}
+      return;
+    }
+    var protein = pEl ? Math.max(0, num(pEl.value, 0)) : 0;
+    var food = { n: name, e: '🍽', k: kcal, p: protein, c: 0, f: 0, u: '인분', g: 0, cu: 1 };
+    saveCustomFood(food, !favEl || favEl.checked);
+    var meal = state.ui.meal;
+    $('quickInput').value = '';
+    addFood(food, 1, meal);
+    toast(name + ' ' + fmtInt(kcal) + 'kcal 기록 · 다음부터 이름만 쳐도 찾아');
+  }
+
+  /* ================= 기록 수정 ================= */
+  var editId = null, editMeal = 'lunch';
+
+  function findDayItem(id) {
+    var d = curDay();
+    for (var i = 0; i < d.meals.length; i++) if (d.meals[i].id === id) return d.meals[i];
+    return null;
+  }
+
+  function openEdit(id) {
+    var it = findDayItem(id);
+    if (!it) return;
+    editId = id;
+    editMeal = it.meal;
+    $('eName').value = it.name;
+    $('eQty').value = fmtQty(it.n);
+    $('eQtyUnit').textContent = it.u || '인분';
+    $('eKcal').value = fmt1(it.kcal);
+    $('eP').value = fmt1(it.p);
+    $('eC').value = fmt1(it.c);
+    $('eF').value = fmt1(it.f);
+    syncOpt('eMeal', editMeal);
+    openSheet('edit');
+  }
+
+  function saveEdit() {
+    var it = findDayItem(editId);
+    if (!it) { closeSheets(); return; }
+    var name = $('eName').value.trim();
+    if (!name) { toast('음식 이름을 적어줰'); $('eName').focus(); return; }
+    var kcal = num($('eKcal').value, null);
+    if (kcal == null || !isFinite(kcal) || kcal < 0) { toast('칼로리를 적어줰'); $('eKcal').focus(); return; }
+    it.name = name;
+    it.n = Math.max(0.1, num($('eQty').value, it.n) || it.n);
+    it.kcal = kcal;
+    it.p = Math.max(0, num($('eP').value, 0));
+    it.c = Math.max(0, num($('eC').value, 0));
+    it.f = Math.max(0, num($('eF').value, 0));
+    it.meal = MEALS.some(function (m) { return m.k === editMeal; }) ? editMeal : it.meal;
+    save();
+    renderAll();
+    closeSheets();
+    toast('수정했어 · ' + name + ' ' + fmtInt(kcal * it.n * it.mult) + 'kcal');
   }
 
   function deleteItem(id) {
@@ -1782,9 +2242,9 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 
   function addManual() {
     var name = $('mName').value.trim();
-    var kcal = num($('mKcal').value, 0);
+    var kcal = num($('mKcal').value, null);
     if (!name) { toast('음식 이름을 적어줘'); $('mName').focus(); return; }
-    if (kcal <= 0) { toast('칼로리를 적어줘'); $('mKcal').focus(); return; }
+    if (kcal == null || !isFinite(kcal) || kcal <= 0) { toast('칼로리를 적어줘'); $('mKcal').focus(); return; }
     var food = {
       n: name, e: '🍽', k: kcal,
       p: Math.max(0, num($('mP').value, 0)),
@@ -1792,16 +2252,15 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       f: Math.max(0, num($('mF').value, 0)),
       u: '인분', g: 0
     };
-    addFood(food, 1, manualMeal);
-    if ($('mFav').checked) {
-      state.favs.push({ n: name, e: '🍽', k: food.k, p: food.p, c: food.c, f: food.f, u: '인분', q: 1 });
-      save();
-      renderChips();
-      toast('추가하고 자주 먹는 음식에 저장했어');
-    } else {
-      toast(food.n + ' ' + fmtInt(kcal) + 'kcal 기록했어');
-    }
+    var wantFav = !!$('mFav').checked;
+    var meal = manualMeal;
+    saveCustomFood(food, wantFav);
+    if (manualFromQuery) { $('quickInput').value = ''; manualFromQuery = false; }
     closeSheets();
+    addFood(food, 1, meal);
+    toast(wantFav
+      ? '기록하고 자주 먹는 음식에 저장했어 · ' + fmtInt(kcal) + 'kcal'
+      : name + ' ' + fmtInt(kcal) + 'kcal 기록했어');
   }
 
   /* ================= data io ================= */
@@ -1857,8 +2316,10 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       profile: { gender: 'f', age: 30, height: 160, weight: 50, target: 48, activity: 'office', pace: 'focus' },
       days: {},
       favs: DEFAULT_FAVS.slice(),
+      customs: [],
       ui: { date: '', meal: autoMeal(), editChips: false }
     };
+    rebuildAliases();
     save();
     renderAll();
     closeSheets();
@@ -1916,6 +2377,15 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 
   /* ================= bind ================= */
   function bind() {
+    $('toastUndo').onclick = function () {
+      var fn = undoFn;
+      if (!fn) return;
+      undoFn = null;
+      clearTimeout(toastTimer);
+      try { fn(); } catch (e) {}
+      $('toast').classList.remove('show');
+    };
+
     $('prevDay').onclick = function () { shiftDate(-1); };
     $('nextDay').onclick = function () { shiftDate(1); };
     $('dayTitleBtn').onclick = function () {
@@ -1954,17 +2424,23 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     };
 
     $('quickPreview').addEventListener('click', function (e) {
-      var sug = e.target.closest ? e.target.closest('[data-sug]') : null;
+      var t = e.target;
+      if (!t.closest) return;
+      var quickNew = t.closest('[data-quicknew]');
+      if (quickNew) { createQuickFood(); return; }
+      var direct = t.closest('[data-direct]');
+      if (direct) { openManual(direct.getAttribute('data-direct')); return; }
+      var sug = t.closest('[data-sug]');
       if (sug) {
-        var idx = parseInt(sug.getAttribute('data-sug'), 10);
-        var food = DB[idx];
+        var food = findFoodByName(sug.getAttribute('data-sug'));
         if (food) {
+          $('quickInput').value = '';
           addFood(food, 1, state.ui.meal);
           toast(food.n + ' 기록했어');
         }
         return;
       }
-      var commit = e.target.closest ? e.target.closest('#btnCommit') : null;
+      var commit = t.closest('#btnCommit');
       if (commit) commitQuick();
     });
 
@@ -1977,11 +2453,19 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       var fav = state.favs[i];
       if (!fav) return;
       if (state.ui.editChips) {
+        var removedCustom = null;
+        if (fav.cu && Array.isArray(state.customs)) {
+          for (var ci = 0; ci < state.customs.length; ci++) {
+            if (squash(state.customs[ci].n) === squash(fav.n)) { removedCustom = state.customs[ci]; break; }
+          }
+          if (removedCustom) removeCustomFood(fav.n);
+        }
         state.favs.splice(i, 1);
         save();
         renderChips();
         toast(fav.n + ' 즐겨찾기에서 뺐어', function () {
           state.favs.splice(i, 0, fav);
+          if (removedCustom) { state.customs.push(removedCustom); rebuildAliases(); }
           save(); renderChips();
         });
       } else {
@@ -1992,16 +2476,22 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 
     $('mealsBody').addEventListener('click', function (e) {
       var t = e.target;
-      var del = t.closest ? t.closest('[data-del]') : null;
+      if (!t.closest) return;
+      var del = t.closest('[data-del]');
       if (del) { deleteItem(del.getAttribute('data-del')); return; }
-      var mb = t.closest ? t.closest('[data-mult]') : null;
+      var eb = t.closest('[data-edit]');
+      if (eb) { openEdit(eb.getAttribute('data-edit')); return; }
+      var mb = t.closest('[data-mult]');
       if (mb) { setMult(mb.getAttribute('data-id'), parseFloat(mb.getAttribute('data-mult'))); return; }
-      var am = t.closest ? t.closest('[data-addmeal]') : null;
+      var am = t.closest('[data-addmeal]');
       if (am) {
         state.ui.meal = am.getAttribute('data-addmeal');
         save(); renderPills();
         flashQuick();
+        return;
       }
+      var row = t.closest('.item');
+      if (row && row.getAttribute('data-id')) openEdit(row.getAttribute('data-id'));
     });
 
     $('wMinus').onclick = function () {
@@ -2098,6 +2588,20 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     };
     $('btnReset').onclick = doReset;
 
+    /* edit sheet */
+    $('eMeal').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button[data-v]') : null;
+      if (!b) return;
+      editMeal = b.getAttribute('data-v');
+      syncOpt('eMeal', editMeal);
+    });
+    $('btnSaveItem').onclick = saveEdit;
+    $('btnDelItem').onclick = function () {
+      var id = editId;
+      closeSheets();
+      if (id) deleteItem(id);
+    };
+
     /* manual */
     $('mMeal').addEventListener('click', function (e) {
       var b = e.target.closest ? e.target.closest('button[data-v]') : null;
@@ -2119,9 +2623,11 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       } catch (e) {}
     }
     if (!state.ui.meal) state.ui.meal = autoMeal();
+    if (!Array.isArray(state.customs)) state.customs = [];
     if (!state.favs || !state.favs.length) {
       if (!raw) state.favs = clone(DEFAULT_FAVS);
     }
+    rebuildAliases();
     state.ui.date = todayKey();
     curDay();
     if (!storageOK) {
@@ -2151,7 +2657,16 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     totals: totalsOf,
     burn: burnOf,
     DB: DB,
-    ALIASES: ALIASES,
+    ALIASES: function () { return ALIASES; },
+    findFoods: findFoods,
+    bestMatch: bestMatch,
+    textScore: textScore,
+    openManual: openManual,
+    openEdit: openEdit,
+    createQuickFood: createQuickFood,
+    saveEdit: saveEdit,
+    removeCustomFood: removeCustomFood,
+    findFoodByName: findFoodByName,
     state: function () { return state; }
   };
 })();

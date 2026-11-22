@@ -1631,7 +1631,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     var C = 439.82;
     var bar = $('ringBar');
     bar.setAttribute('stroke-dashoffset', String(Math.round((C * (1 - pct)) * 10) / 10));
-    bar.className = 'ring-bar' + (remain < 0 ? ' over' : '');
+    bar.setAttribute('class', 'ring-bar' + (remain < 0 ? ' over' : ''));
     bar.style.opacity = pct <= 0.001 ? '0' : '1';
 
     var kk = $('heroKcal');
@@ -1886,7 +1886,6 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       }
       box.className = 'preview show';
       box.innerHTML = html;
-      $('btnCommit').onclick = commitQuick;
       return;
     }
     var sug = findFoods(raw, 5);

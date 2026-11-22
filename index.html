@@ -2167,25 +2167,32 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 
   function closeSheets() {
     $('mask').classList.remove('open');
-    var a = $('sheetSettings'), b = $('sheetManual');
+    var a = $('sheetSettings'), b = $('sheetManual'), c = $('sheetEdit');
     if (a) a.classList.remove('open');
     if (b) b.classList.remove('open');
+    if (c) c.classList.remove('open');
     document.body.classList.remove('lock');
     document.body.style.top = '';
     window.scrollTo(0, lockY);
   }
 
-  function openManual() {
+  var manualFromQuery = false;
+
+  function openManual(prefillName) {
+    var pf = String(prefillName == null ? '' : prefillName).trim();
+    manualFromQuery = !!pf;
     manualMeal = state.ui.meal;
-    $('mName').value = '';
+    $('mName').value = pf;
     $('mKcal').value = '';
     $('mP').value = '';
     $('mC').value = '';
     $('mF').value = '';
-    $('mFav').checked = false;
+    $('mFav').checked = manualFromQuery;
     syncOpt('mMeal', manualMeal);
     openSheet('manual');
-    setTimeout(function () { try { $('mName').focus(); } catch (e) {} }, 380);
+    setTimeout(function () {
+      try { (manualFromQuery ? $('mKcal') : $('mName')).focus(); } catch (e) {}
+    }, 380);
   }
 
   function syncOpt(id, val) {

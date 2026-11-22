@@ -1119,7 +1119,9 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       qt.forEach(function (t) {
         if (t.length >= 2 && c.indexOf(t) >= 0) hit++;
       });
-      if (qt.length && hit) score = Math.max(score, 0.5 + 0.45 * (hit / qt.length));
+      if (qt.length && hit) {
+        score = Math.max(score, 0.5 + 0.45 * (hit / qt.length) * (shortS.length / longS.length));
+      }
     }
     if (squash(query).length < 2) score *= 0.45;
     return Math.min(1, score);
@@ -1564,7 +1566,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     var leftovers = [];
     unknown.forEach(function (w) {
       var hit = bestMatch(w);
-      if (hit) items.push({ f: hit.f, n: 1 });
+      if (hit && (squash(w).length >= 3 || hit.s >= 0.995)) items.push({ f: hit.f, n: 1 });
       else leftovers.push(w);
     });
     if (!items.length) {
@@ -1904,6 +1906,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       html += '</div>';
     }
     html += quickNewForm(label);
+    if (label) html += directRow(label);
     box.className = 'preview show';
     box.innerHTML = html;
   }

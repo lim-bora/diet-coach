@@ -2849,7 +2849,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     id: null, row: null, fromMeal: null, timer: null, active: false,
     ghost: null, baseRect: null, pointerId: null,
     startX: 0, startY: 0, lastX: 0, lastY: 0, over: null,
-    suppressUntil: 0
+    scrollTimer: null, suppressUntil: 0
   };
   var LONG_PRESS_MS = 300;
   var DRAG_SLOP = 10;
@@ -2891,6 +2891,22 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     if (grp) grp.classList.add('drop-target');
   }
 
+  function dgAutoScroll() {
+    if (!DG.active) return;
+    var y = DG.lastY, h = window.innerHeight;
+    var dy = 0;
+    if (y < 120) dy = -Math.min(12, (120 - y) / 4);
+    else if (y > h - 160) dy = Math.min(12, (y - (h - 160)) / 4);
+    if (!dy) return;
+    window.scrollBy(0, dy);
+    dgMoveGhost(DG.lastX, DG.lastY);
+    dgTrack(DG.lastX, DG.lastY);
+  }
+
+  function dgStopScroll() {
+    if (DG.scrollTimer) { clearInterval(DG.scrollTimer); DG.scrollTimer = null; }
+  }
+
   function dgStart(x, y) {
     var row = DG.row, it = DG.id ? dgItem(DG.id) : null;
     if (!row || !it || !row.parentNode) { dgCancelQuiet(); return; }
@@ -2911,11 +2927,14 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     dgTrack(x, y);
     document.addEventListener('touchmove', dgBlockScroll, { passive: false });
     if (document.body) document.body.classList.add('dg-lock');
+    dgStopScroll();
+    DG.scrollTimer = setInterval(dgAutoScroll, 16);
     try { if (navigator.vibrate) navigator.vibrate(15); } catch (e) {}
   }
 
   function dgCancelQuiet() {
     dgClearTimer();
+    dgStopScroll();
     document.removeEventListener('touchmove', dgBlockScroll, { passive: false });
     if (document.body) document.body.classList.remove('dg-lock');
     if (DG.row) DG.row.classList.remove('pressing', 'dragging');
@@ -2931,6 +2950,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     var target = over ? over.getAttribute('data-mealgroup') : null;
     var it = id ? dgItem(id) : null;
     var moved = !!(target && from && target !== from && it);
+    dgStopScroll();
     document.removeEventListener('touchmove', dgBlockScroll, { passive: false });
     if (document.body) document.body.classList.remove('dg-lock');
     if (row) row.classList.remove('pressing', 'dragging');

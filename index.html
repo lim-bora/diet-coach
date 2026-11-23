@@ -331,7 +331,11 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 .head-actions{display:flex;align-items:center;gap:7px}
 .link-btn.copy-btn{background:#EFF7F3;border-radius:9px;padding:5px 10px;font-size:12px;color:var(--em-d)}
 .link-btn.copy-btn:active{opacity:.6}
-.qnew input.err{border-color:#FF9A88;box-shadow:0 0 0 4px rgba(255,122,102,.16)}
+.qnew input.err{border-color:#FF8F79;box-shadow:0 0 0 4px rgba(255,122,102,.18);background:#FFF8F6}
+.qn-err{
+  margin-top:9px;padding:8px 11px;border-radius:10px;background:#FFF1ED;color:#D9452A;
+  font-size:11.5px;font-weight:800;letter-spacing:-0.01em;animation:pop .2s ease both;
+}
 
 /* ---------- meal list ---------- */
 .meal-group{padding:2px 0}
@@ -2655,9 +2659,19 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       toast('칼로리부터 적어줘');
       flagQboxErr(true);
       if (kcalEl) {
+        var prev = document.getElementById('qnErr');
+        if (prev && prev.parentNode) prev.parentNode.removeChild(prev);
+        var msg = document.createElement('div');
+        msg.id = 'qnErr';
+        msg.className = 'qn-err';
+        msg.textContent = '칼로리(kcal)를 먼저 적어줘';
+        var go = document.querySelector('#quickNew .qn-go');
+        if (go && go.parentNode) go.parentNode.insertBefore(msg, go);
+        else if (kcalEl.parentNode) kcalEl.parentNode.appendChild(msg);
         try { kcalEl.focus(); kcalEl.select(); } catch (e) {}
         kcalEl.classList.add('err');
-        setTimeout(function () { try { kcalEl.classList.remove('err'); } catch (e) {} }, 2000);
+        kcalEl.oninput = clearQnErr;
+        setTimeout(function () { try { kcalEl.classList.remove('err'); } catch (e) {} }, 3200);
       }
       return;
     }
@@ -2668,6 +2682,13 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     $('quickInput').value = '';
     addFood(food, 1, meal);
     toast(name + ' ' + fmtInt(kcal) + 'kcal 기록 · 다음부터 이름만 쳐도 찾아');
+  }
+
+  function clearQnErr() {
+    var m = document.getElementById('qnErr');
+    if (m && m.parentNode) m.parentNode.removeChild(m);
+    var k = $('qnKcal');
+    if (k) k.classList.remove('err');
   }
 
   /* ================= 기록 수정 ================= */

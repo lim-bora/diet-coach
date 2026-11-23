@@ -229,6 +229,71 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 .item-ed:active{color:var(--em-d);background:var(--em-l)}
 .item.editable:active{background:#FAFCFB}
 
+/* ---------- v4: 꾹 눌러 끼니 이동 ---------- */
+.item.editable{
+  -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+  -webkit-touch-callout:none;cursor:default;
+}
+.item.editable.dragging{opacity:.28}
+body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none}
+.meal-group.drop-target{
+  background:var(--em-l);border-radius:14px;
+  outline:2px dashed var(--em);outline-offset:3px;
+  box-shadow:0 0 0 7px rgba(15,185,129,.05);
+}
+.meal-group.drop-target .meal-head .mn,
+.meal-group.drop-target .meal-head .mk{color:var(--em-d)}
+.drag-ghost{
+  position:fixed;left:0;top:0;z-index:9999;pointer-events:none;
+  display:flex;align-items:center;gap:9px;padding:10px 14px;border-radius:16px;
+  background:#fff;border:1.5px solid #BDEDD9;
+  box-shadow:0 18px 40px -14px rgba(16,24,28,.45),0 2px 8px rgba(16,24,28,.10);
+  transform:scale(1.02);will-change:left,top,transform;
+}
+.drag-ghost .item-e{width:28px;height:28px;border-radius:9px;font-size:14px}
+.drag-ghost.returning{transition:left .24s cubic-bezier(.22,.85,.3,1),top .24s cubic-bezier(.22,.85,.3,1),opacity .2s ease,transform .24s ease}
+
+/* ---------- v4: 빠른 기록 칩 설정 ---------- */
+.favs-list{display:flex;flex-direction:column;gap:6px;margin:2px 0 4px}
+.favs-row{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;
+  background:#F8FBFA;border:1px solid #EDF4F1;
+}
+.favs-row .fr-e{width:28px;height:28px;flex:0 0 auto;border-radius:9px;background:#fff;display:grid;place-items:center;font-size:14px;border:1px solid #EDF4F1}
+.favs-row .fr-n{flex:1;min-width:0;font-size:13.5px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.favs-row .fr-k{font-size:11.5px;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.favs-row .fr-btn{
+  -webkit-appearance:none;border:1px solid #E6EDEA;background:#fff;color:var(--ink2);
+  width:28px;height:28px;border-radius:9px;padding:0;display:grid;place-items:center;
+  font-size:12px;font-weight:800;flex:0 0 auto;
+}
+.favs-row .fr-btn:disabled{opacity:.28}
+.favs-row .fr-btn:active{background:var(--em-l);color:var(--em-d)}
+.favs-row .fr-del{color:#C8D2D6;font-size:15px;font-weight:700}
+.favs-row .fr-del:active{color:var(--coral);background:var(--coral-l);border-color:#F6DFD8}
+.favs-res{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-height:36vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.favs-res .favs-row{background:#fff}
+.favs-add{
+  -webkit-appearance:none;border:0;border-radius:10px;padding:6px 10px;flex:0 0 auto;
+  background:var(--em-l);color:var(--em-d);font-size:11.5px;font-weight:800;letter-spacing:-0.01em;
+}
+.favs-add:active{background:#D8F4E8}
+.favs-add.on{background:#F1F4F5;color:var(--ink3)}
+.favs-empty{font-size:12px;color:var(--ink3);padding:9px 2px;line-height:1.5}
+.favs-sec{display:flex;align-items:baseline;justify-content:space-between;margin:14px 0 6px}
+.favs-sec b{font-size:12px;font-weight:800;color:var(--ink2);letter-spacing:-0.01em}
+.favs-sec span{font-size:11px;color:var(--ink3);font-weight:600}
+.favs-search{position:relative}
+.favs-search .text-input{padding-right:44px}
+.favs-search #favSearch::-webkit-search-cancel-button,
+.favs-search #favSearch::-webkit-search-decoration{-webkit-appearance:none;display:none}
+.favs-clear{
+  -webkit-appearance:none;border:0;position:absolute;right:7px;top:50%;transform:translateY(-50%);
+  width:30px;height:30px;border-radius:50%;background:#F1F4F5;color:var(--ink2);
+  font-size:15px;line-height:1;display:grid;place-items:center;padding:0;
+}
+.favs-clear:active{background:#E6EDEA}
+
 .prev-foot{display:flex;align-items:center;gap:10px;margin-top:9px}
 .prev-total{flex:1;font-size:12.5px;color:var(--ink2);font-variant-numeric:tabular-nums}
 .prev-total b{font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-0.03em}
@@ -949,6 +1014,24 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       <button class="btn-primary em" id="btnSaveItem" style="flex:2">수정 저장</button>
     </div>
   </div>
+</section>
+
+<section class="sheet" id="sheetFavs" role="dialog" aria-modal="true" aria-label="빠른 기록 칩 설정">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h3>빠른 기록 칩 설정</h3><button class="xbtn" data-close="favs" aria-label="닫기">&#10005;</button></div>
+  <div class="sheet-body">
+    <div class="favs-sec"><b>음식 검색해서 추가</b><span>내장 333종 · 내 음식</span></div>
+    <div class="favs-search">
+      <input class="text-input" id="favSearch" type="search" autocomplete="off" placeholder="예: 마가렛트, 아메리카노, 닭가슴살">
+      <button class="favs-clear" id="favSearchClear" aria-label="검색어 지우기" hidden>&#215;</button>
+    </div>
+    <div class="favs-res" id="favResults"></div>
+    <div class="favs-sec"><b>지금 꺼내놓은 칩</b><span id="favCount">0개</span></div>
+    <div class="favs-list" id="favList"></div>
+    <button class="btn-ghost" id="btnFavManual" style="width:100%;margin-top:12px">＋ 직접 새 음식 만들어 칩에 넣기</button>
+    <p class="formula">바꾸는 즉시 빠른 기록 칩에 반영돼요.</p>
+  </div>
+  <div class="sheet-foot"><button class="btn-primary block em" id="btnFavsDone">완료</button></div>
 </section>
 <script>
 (function () {
@@ -1980,7 +2063,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       var items = d.meals.filter(function (it) { return it.meal === m.k; });
       var sum = 0;
       items.forEach(function (it) { sum += it.kcal * it.n * it.mult; });
-      html += '<div class="meal-group"><div class="meal-head"><span class="me">' + m.e + '</span><span class="mn">' + m.n + '</span>' +
+      html += '<div class="meal-group" data-mealgroup="' + m.k + '"><div class="meal-head"><span class="me">' + m.e + '</span><span class="mn">' + m.n + '</span>' +
         '<span class="mk' + (items.length ? ' has' : '') + '">' + (items.length ? fmtInt(sum) + ' kcal' : '') + '</span></div>';
       if (!items.length) {
         html += '<button class="meal-empty" data-addmeal="' + m.k + '">＋ ' + m.n + ' 기록하기</button>';
@@ -2026,7 +2109,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     html += '<button class="chip add" data-manual="1"><span class="ce">＋</span><span class="cn">직접 추가</span></button>';
     $('chipsRow').innerHTML = html;
     $('chipsEmpty').style.display = favs.length ? 'none' : 'block';
-    $('btnChipsEdit').textContent = edit ? '완료' : '편집';
+    $('btnChipsEdit').textContent = edit ? '완료' : '칩 설정';
   }
 
   function renderWeight() {
@@ -2761,6 +2844,362 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     renderAll();
   }
 
+  /* ================= v4: 꾹 눌러 끼니 이동 ================= */
+  var DG = {
+    id: null, row: null, fromMeal: null, timer: null, active: false,
+    ghost: null, baseRect: null, pointerId: null,
+    startX: 0, startY: 0, lastX: 0, lastY: 0, over: null,
+    suppressUntil: 0
+  };
+  var LONG_PRESS_MS = 300;
+  var DRAG_SLOP = 10;
+  var favHits = [];
+
+  function mealNameOf(k) {
+    for (var i = 0; i < MEALS.length; i++) { if (MEALS[i].k === k) return MEALS[i].n; }
+    return '';
+  }
+
+  function dgItem(id) {
+    var d = curDay();
+    for (var i = 0; i < d.meals.length; i++) { if (d.meals[i].id === id) return d.meals[i]; }
+    return null;
+  }
+
+  function dgClearTimer() {
+    if (DG.timer) { clearTimeout(DG.timer); DG.timer = null; }
+  }
+
+  function dgBlockScroll(e) {
+    if (DG.active && e.cancelable) e.preventDefault();
+  }
+
+  function dgMoveGhost(x, y) {
+    var g = DG.ghost;
+    if (!g) return;
+    var w = g.offsetWidth || 180, h = g.offsetHeight || 46;
+    g.style.left = Math.round(x - w / 2) + 'px';
+    g.style.top = Math.round(y - h / 2) + 'px';
+  }
+
+  function dgTrack(x, y) {
+    var el = document.elementFromPoint(x, y);
+    var grp = (el && el.closest) ? el.closest('[data-mealgroup]') : null;
+    if (grp === DG.over) return;
+    if (DG.over) DG.over.classList.remove('drop-target');
+    DG.over = grp;
+    if (grp) grp.classList.add('drop-target');
+  }
+
+  function dgStart(x, y) {
+    var row = DG.row, it = DG.id ? dgItem(DG.id) : null;
+    if (!row || !it || !row.parentNode) { dgCancelQuiet(); return; }
+    DG.active = true;
+    DG.fromMeal = it.meal;
+    DG.baseRect = row.getBoundingClientRect();
+    var g = document.createElement('div');
+    g.className = 'drag-ghost';
+    g.style.width = Math.round(DG.baseRect.width) + 'px';
+    g.innerHTML = '<span class="item-e">' + it.emoji + '</span>' +
+      '<span style="flex:1;min-width:0;font-size:14.5px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(it.name) + '</span>' +
+      '<span style="font-size:12.5px;font-weight:800;color:var(--ink3);font-variant-numeric:tabular-nums">' + fmtInt(it.kcal * it.n * it.mult) + '</span>';
+    document.body.appendChild(g);
+    DG.ghost = g;
+    row.classList.remove('pressing');
+    row.classList.add('dragging');
+    dgMoveGhost(x, y);
+    dgTrack(x, y);
+    document.addEventListener('touchmove', dgBlockScroll, { passive: false });
+    if (document.body) document.body.classList.add('dg-lock');
+    try { if (navigator.vibrate) navigator.vibrate(15); } catch (e) {}
+  }
+
+  function dgCancelQuiet() {
+    dgClearTimer();
+    document.removeEventListener('touchmove', dgBlockScroll, { passive: false });
+    if (document.body) document.body.classList.remove('dg-lock');
+    if (DG.row) DG.row.classList.remove('pressing', 'dragging');
+    if (DG.over) DG.over.classList.remove('drop-target');
+    if (DG.ghost && DG.ghost.parentNode) DG.ghost.parentNode.removeChild(DG.ghost);
+    DG.id = null; DG.row = null; DG.fromMeal = null; DG.ghost = null;
+    DG.over = null; DG.active = false; DG.baseRect = null; DG.pointerId = null;
+  }
+
+  function dgDrop() {
+    var id = DG.id, from = DG.fromMeal, row = DG.row, ghost = DG.ghost,
+      rect = DG.baseRect, over = DG.over;
+    var target = over ? over.getAttribute('data-mealgroup') : null;
+    var it = id ? dgItem(id) : null;
+    var moved = !!(target && from && target !== from && it);
+    document.removeEventListener('touchmove', dgBlockScroll, { passive: false });
+    if (document.body) document.body.classList.remove('dg-lock');
+    if (row) row.classList.remove('pressing', 'dragging');
+    if (over) over.classList.remove('drop-target');
+    DG.suppressUntil = Date.now() + 400;
+    DG.id = null; DG.row = null; DG.fromMeal = null; DG.over = null;
+    DG.active = false; DG.baseRect = null; DG.pointerId = null; DG.ghost = null;
+
+    if (!moved) {
+      if (ghost && ghost.parentNode) {
+        if (rect) {
+          ghost.classList.add('returning');
+          ghost.style.left = Math.round(rect.left) + 'px';
+          ghost.style.top = Math.round(rect.top) + 'px';
+          ghost.style.width = Math.round(rect.width) + 'px';
+          ghost.style.opacity = '0';
+          ghost.style.transform = 'scale(.97)';
+        }
+        var back = ghost;
+        setTimeout(function () { if (back.parentNode) back.parentNode.removeChild(back); }, rect ? 280 : 0);
+      }
+      return;
+    }
+
+    if (ghost && ghost.parentNode) {
+      var gh = ghost;
+      gh.classList.add('returning');
+      gh.style.opacity = '0';
+      gh.style.transform = 'scale(.9)';
+      setTimeout(function () { if (gh.parentNode) gh.parentNode.removeChild(gh); }, 200);
+    }
+
+    it.meal = target;
+    save();
+    renderAll();
+    toast(it.name + ' → ' + mealNameOf(target) + '으로 옮겼어', function () {
+      var back2 = dgItem(id);
+      if (!back2) return;
+      back2.meal = from;
+      save(); renderAll();
+    });
+  }
+
+  function bindMealDrag() {
+    var box = $('mealsBody');
+    if (!box) return;
+
+    box.addEventListener('contextmenu', function (e) {
+      if (e.target && e.target.closest && e.target.closest('.item[data-id]')) e.preventDefault();
+    });
+
+    document.addEventListener('selectstart', function (e) {
+      if (DG.active) e.preventDefault();
+    });
+
+    box.addEventListener('pointerdown', function (e) {
+      if (e.button != null && e.button !== 0) return;
+      if (DG.active) return;
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('button,a,input,select,textarea')) return;
+      var row = t.closest('.item[data-id]');
+      if (!row) return;
+      if (Date.now() < DG.suppressUntil) return;
+      dgClearTimer();
+      DG.id = row.getAttribute('data-id');
+      DG.row = row;
+      DG.pointerId = e.pointerId;
+      DG.startX = DG.lastX = e.clientX;
+      DG.startY = DG.lastY = e.clientY;
+      DG.over = null;
+      row.classList.add('pressing');
+      DG.timer = setTimeout(function () {
+        DG.timer = null;
+        if (DG.id) dgStart(DG.lastX, DG.lastY);
+      }, LONG_PRESS_MS);
+    });
+
+    document.addEventListener('pointermove', function (e) {
+      if (!DG.id && !DG.active) return;
+      if (DG.pointerId != null && e.pointerId !== DG.pointerId) return;
+      if (DG.active) {
+        if (e.cancelable) e.preventDefault();
+        DG.lastX = e.clientX; DG.lastY = e.clientY;
+        dgMoveGhost(e.clientX, e.clientY);
+        dgTrack(e.clientX, e.clientY);
+        return;
+      }
+      DG.lastX = e.clientX; DG.lastY = e.clientY;
+      if (Math.abs(e.clientX - DG.startX) > DRAG_SLOP || Math.abs(e.clientY - DG.startY) > DRAG_SLOP) {
+        dgCancelQuiet();
+      }
+    }, { passive: false });
+
+    document.addEventListener('pointerup', function (e) {
+      if (!DG.id && !DG.active) return;
+      if (DG.pointerId != null && e.pointerId !== DG.pointerId) return;
+      if (DG.active) dgDrop(); else dgCancelQuiet();
+    });
+
+    document.addEventListener('pointercancel', function (e) {
+      if (!DG.id && !DG.active) return;
+      if (DG.pointerId != null && e.pointerId !== DG.pointerId) return;
+      if (DG.active) { DG.over = null; dgDrop(); return; }
+      dgCancelQuiet();
+    });
+
+    window.addEventListener('blur', function () {
+      if (DG.active || DG.id) dgCancelQuiet();
+    });
+  }
+
+  /* ================= v4: 빠른 기록 칩 설정 ================= */
+  function favIndex(food) {
+    var key = squash(food && food.n);
+    if (!key) return -1;
+    var favs = state.favs || [];
+    for (var i = 0; i < favs.length; i++) {
+      if (squash(favs[i].n) === key) return i;
+    }
+    return -1;
+  }
+
+  function pushFav(food) {
+    if (!Array.isArray(state.favs)) state.favs = [];
+    if (favIndex(food) >= 0) return false;
+    state.favs.push({
+      n: food.n, e: food.e || '🍽', k: num(food.k, 0), p: num(food.p, 0), c: num(food.c, 0),
+      f: num(food.f, 0), u: food.u || '인분', q: 1, cu: food.cu ? 1 : 0
+    });
+    return true;
+  }
+
+  function renderFavSheet() {
+    var list = $('favList');
+    if (!list) return;
+    var favs = Array.isArray(state.favs) ? state.favs : [];
+    if ($('favCount')) $('favCount').textContent = favs.length + '개';
+    var html = '';
+    if (!favs.length) {
+      html = '<div class="favs-empty">아직 꺼내놓은 칩이 없어. 위에서 검색해 추가해 봐.</div>';
+    } else {
+      favs.forEach(function (fav, i) {
+        html += '<div class="favs-row">' +
+          '<span class="fr-e">' + (fav.e || '🍽') + '</span>' +
+          '<span class="fr-n">' + esc(fav.n) + '</span>' +
+          '<span class="fr-k">' + fmtInt(fav.k * (fav.q || 1)) + '</span>' +
+          '<button class="fr-btn" data-fup="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="위로">&#8593;</button>' +
+          '<button class="fr-btn" data-fdown="' + i + '"' + (i === favs.length - 1 ? ' disabled' : '') + ' aria-label="아래로">&#8595;</button>' +
+          '<button class="fr-btn fr-del" data-fdel="' + i + '" aria-label="빼기">&#215;</button>' +
+          '</div>';
+      });
+    }
+    list.innerHTML = html;
+    renderFavResults();
+  }
+
+  function renderFavResults() {
+    var box = $('favResults');
+    if (!box) return;
+    var q = String(($('favSearch') && $('favSearch').value) || '').trim();
+    favHits = [];
+    if (!q) { box.innerHTML = ''; return; }
+    var found = findFoods(q, 12);
+    if (!found.length) {
+      box.innerHTML = '<div class="favs-empty">못 찾았어. 다른 이름으로 쳐 보거나, 아래 <b>직접 새 음식</b>으로 만들어서 넣어 봐.</div>';
+      return;
+    }
+    var html = '';
+    found.forEach(function (hit, i) {
+      var f = hit.f;
+      favHits.push(f);
+      html += '<div class="favs-row">' +
+        '<span class="fr-e">' + (f.e || '🍽') + '</span>' +
+        '<span class="fr-n">' + esc(f.n) + '</span>' +
+        '<span class="fr-k">' + fmtInt(f.k) + '</span>' +
+        (favIndex(f) >= 0
+          ? '<span class="favs-add on">추가됨</span>'
+          : '<button class="favs-add" data-fadd="' + i + '">＋ 추가</button>') +
+        '</div>';
+    });
+    box.innerHTML = html;
+  }
+
+  function favMove(i, dir) {
+    var favs = Array.isArray(state.favs) ? state.favs : [];
+    var j = i + dir;
+    if (i < 0 || j < 0 || j >= favs.length) return;
+    var tmp = favs[i];
+    favs[i] = favs[j];
+    favs[j] = tmp;
+    save();
+    renderChips();
+    renderFavSheet();
+  }
+
+  function favRemove(i) {
+    var favs = Array.isArray(state.favs) ? state.favs : [];
+    if (i < 0 || i >= favs.length) return;
+    favs.splice(i, 1);
+    save();
+    renderChips();
+    renderFavSheet();
+  }
+
+  function openFavs() {
+    if (!Array.isArray(state.favs)) state.favs = [];
+    state.ui.editChips = false;
+    if ($('favSearch')) $('favSearch').value = '';
+    if ($('favSearchClear')) $('favSearchClear').hidden = true;
+    renderFavSheet();
+    openSheet('favs');
+  }
+
+  function bindFavSheet() {
+    var list = $('favList');
+    if (list) {
+      list.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        var up = t.closest('[data-fup]');
+        if (up) { favMove(parseInt(up.getAttribute('data-fup'), 10), -1); return; }
+        var dn = t.closest('[data-fdown]');
+        if (dn) { favMove(parseInt(dn.getAttribute('data-fdown'), 10), 1); return; }
+        var dl = t.closest('[data-fdel]');
+        if (dl) { favRemove(parseInt(dl.getAttribute('data-fdel'), 10)); return; }
+      });
+    }
+    var res = $('favResults');
+    if (res) {
+      res.addEventListener('click', function (e) {
+        var b = e.target && e.target.closest ? e.target.closest('[data-fadd]') : null;
+        if (!b) return;
+        var food = favHits[parseInt(b.getAttribute('data-fadd'), 10)];
+        if (!food) return;
+        if (pushFav(food)) {
+          save();
+          renderChips();
+          renderFavSheet();
+        }
+      });
+    }
+    if ($('favSearch')) {
+      $('favSearch').addEventListener('input', function () {
+        if ($('favSearchClear')) $('favSearchClear').hidden = !this.value;
+        renderFavResults();
+        if (this.value.trim() && $('favResults')) {
+          try { $('favResults').scrollIntoView({ block: 'nearest' }); } catch (e) {}
+        }
+      });
+    }
+    if ($('favSearchClear')) {
+      $('favSearchClear').onclick = function () {
+        $('favSearch').value = '';
+        this.hidden = true;
+        renderFavResults();
+        try { $('favSearch').focus(); } catch (e) {}
+      };
+    }
+    if ($('btnFavsDone')) $('btnFavsDone').onclick = closeSheets;
+    if ($('btnFavManual')) {
+      $('btnFavManual').onclick = function () {
+        closeSheets();
+        openManual('');
+        if ($('mFav')) $('mFav').checked = true;
+      };
+    }
+  }
+
   function setWeight(v) {
     var val = Math.round(clamp(v, 30, 200) * 10) / 10;
     var d = curDay();
@@ -2815,10 +3254,11 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 
   function closeSheets() {
     $('mask').classList.remove('open');
-    var a = $('sheetSettings'), b = $('sheetManual'), c = $('sheetEdit');
+    var a = $('sheetSettings'), b = $('sheetManual'), c = $('sheetEdit'), d = $('sheetFavs');
     if (a) a.classList.remove('open');
     if (b) b.classList.remove('open');
     if (c) c.classList.remove('open');
+    if (d) d.classList.remove('open');
     document.body.classList.remove('lock');
     document.body.style.top = '';
     window.scrollTo(0, lockY);
@@ -3052,10 +3492,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     };
     $('btnSettings').onclick = openSettings;
     $('btnGoal').onclick = openSettings;
-    $('btnChipsEdit').onclick = function () {
-      state.ui.editChips = !state.ui.editChips;
-      renderChips();
-    };
+    $('btnChipsEdit').onclick = openFavs;
     $('fab').onclick = flashQuick;
     $('qGo').onclick = function () { commitQuick(); };
     $('btnCopyDay').onclick = copyDay;
@@ -3169,29 +3606,12 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       var i = parseInt(chip.getAttribute('data-fav'), 10);
       var fav = state.favs[i];
       if (!fav) return;
-      if (state.ui.editChips) {
-        var removedCustom = null;
-        if (fav.cu && Array.isArray(state.customs)) {
-          for (var ci = 0; ci < state.customs.length; ci++) {
-            if (squash(state.customs[ci].n) === squash(fav.n)) { removedCustom = state.customs[ci]; break; }
-          }
-          if (removedCustom) removeCustomFood(fav.n);
-        }
-        state.favs.splice(i, 1);
-        save();
-        renderChips();
-        toast(fav.n + ' 즐겨찾기에서 뺐어', function () {
-          state.favs.splice(i, 0, fav);
-          if (removedCustom) { state.customs.push(removedCustom); rebuildAliases(); }
-          save(); renderChips();
-        });
-      } else {
-        addFood({ n: fav.n, e: fav.e, k: fav.k, p: fav.p, c: fav.c, f: fav.f, u: fav.u }, fav.q || 1, state.ui.meal);
-        toast(fav.n + ' ' + fmtInt(fav.k * (fav.q || 1)) + 'kcal 기록했어');
-      }
+      addFood({ n: fav.n, e: fav.e, k: fav.k, p: fav.p, c: fav.c, f: fav.f, u: fav.u }, fav.q || 1, state.ui.meal);
+      toast(fav.n + ' ' + fmtInt(fav.k * (fav.q || 1)) + 'kcal 기록했어');
     });
 
     $('mealsBody').addEventListener('click', function (e) {
+      if (Date.now() < DG.suppressUntil) return;
       var t = e.target;
       if (!t.closest) return;
       var del = t.closest('[data-del]');
@@ -3210,6 +3630,9 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       var row = t.closest('.item');
       if (row && row.getAttribute('data-id')) openEdit(row.getAttribute('data-id'));
     });
+
+    bindMealDrag();
+    bindFavSheet();
 
     $('wMinus').onclick = function () {
       var v = num($('weightInput').value, weightForBurn()) - 0.1;

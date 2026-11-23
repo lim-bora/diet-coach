@@ -318,6 +318,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 .preset-head .ph-t{font-size:13px;font-weight:800;color:#B4791F;letter-spacing:-0.02em}
 .preset-head .ph-s{font-size:11px;color:var(--ink3);letter-spacing:0}
 .presets{display:flex;gap:6px;overflow-x:auto;margin:0 -16px 10px;padding:0 16px 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.presets,.chips{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 24px),rgba(0,0,0,.15) 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 24px),rgba(0,0,0,.15) 100%)}
 .presets::-webkit-scrollbar{display:none}
 .preset{
   -webkit-appearance:none;flex:0 0 auto;display:flex;align-items:center;gap:6px;
@@ -2995,7 +2996,8 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   function scrollToCard(id) {
     var el = $(id);
     if (!el) return;
-    var top = el.getBoundingClientRect().top + (window.scrollY || 0) - 62;
+    /* 상단 고정 입력 바(약 66px) + 헤더(46px)에 카드 제목이 가리지 않게 */
+    var top = el.getBoundingClientRect().top + (window.scrollY || 0) - (id === 'quickCard' ? 76 : 118);
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   }
 

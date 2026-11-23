@@ -2596,6 +2596,19 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     if (wantFav) addFav(found);
   }
 
+  /* 내장 DB에 같은 이름이 생긴 커스텀 음식은 내장값(정확한 라벨값)을 쓴다 */
+  function shadowedByBuiltin(c) {
+    var key = squash(c && c.n);
+    if (!key) return false;
+    for (var i = 0; i < DB.length; i++) {
+      var keys = foodKeys(DB[i]);
+      for (var j = 0; j < keys.length; j++) {
+        if (squash(keys[j]) === key) return true;
+      }
+    }
+    return false;
+  }
+
   function removeCustomFood(name) {
     var key = squash(name);
     if (!Array.isArray(state.customs)) return;
@@ -3273,6 +3286,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     }
     if (!state.ui.meal) state.ui.meal = autoMeal();
     if (!Array.isArray(state.customs)) state.customs = [];
+    state.customs = state.customs.filter(function (c) { return !shadowedByBuiltin(c); });
     if (!state.favs || !state.favs.length) {
       if (!raw) state.favs = clone(DEFAULT_FAVS);
     }

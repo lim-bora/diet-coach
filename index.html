@@ -2229,14 +2229,14 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   function offFetch(q) {
     OFF.loading = true; OFF.err = ''; OFF.done = false; OFF.items = [];
     drawPreview();
-    var ctl = null;
-    try { if (window.AbortController) ctl = new AbortController(); } catch (e) { ctl = null; }
-    var to = setTimeout(function () { try { if (ctl) ctl.abort(); } catch (e) {} }, 9000);
-    var url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(q) +
-      '&search_simple=1&action=process&json=1&page_size=12' +
-      '&fields=product_name,product_name_ko,brands,nutriments,serving_quantity,serving_size,countries_tags,code';
+    var fields = '&fields=product_name,product_name_ko,brands,nutriments,serving_quantity,serving_size,countries_tags,code';
+    var urls = [
+      'https://world.openfoodfacts.org',
+      'https://kr.openfoodfacts.org',
+      'https://world.openfoodfacts.org'
+    ];
+    var idx = 0, t0 = Date.now();
     var finish = function (items, err) {
-      clearTimeout(to);
       if (OFF.q !== q) return;
       OFF.items = items || [];
       OFF.err = err || '';
@@ -2244,16 +2244,29 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
       OFF.done = true;
       drawPreview();
     };
-    var opts = { headers: { 'Accept': 'application/json' } };
-    if (ctl) opts.signal = ctl.signal;
-    fetch(url, opts).then(function (r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    }).then(function (j) {
-      finish(offMap(j && j.products ? j.products : []), '');
-    }).catch(function () {
-      finish([], '연결 실패');
-    });
+    var attempt = function () {
+      if (OFF.q !== q) return;
+      if (idx >= urls.length || Date.now() - t0 > 16000) { finish([], '연결 실패'); return; }
+      var url = urls[idx++] + '/cgi/search.pl?search_terms=' + encodeURIComponent(q) +
+        '&search_simple=1&action=process&json=1&page_size=12' + fields;
+      var ctl = null;
+      try { if (window.AbortController) ctl = new AbortController(); } catch (e) { ctl = null; }
+      var to = setTimeout(function () { try { if (ctl) ctl.abort(); } catch (e) {} }, 6500);
+      var opts = { headers: { 'Accept': 'application/json' } };
+      if (ctl) opts.signal = ctl.signal;
+      fetch(url, opts).then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      }).then(function (j) {
+        clearTimeout(to);
+        finish(offMap(j && j.products ? j.products : []), '');
+      }).catch(function () {
+        clearTimeout(to);
+        if (idx >= urls.length) { finish([], '연결 실패'); return; }
+        setTimeout(attempt, 1000);
+      });
+    };
+    attempt();
   }
 
   function offMaybe(text, want) {
@@ -2299,7 +2312,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   }
 
   /* ================= v3: 미리보기(양 조절 칩) ================= */
-  var pvItems = [], pvAdj = {}, pvSuggest = [], pvUnknown = [], qboxErr = false;
+  var pvItems = [], pvAdj = {}, pvSuggest = [], pvUnknown = [], qboxErr = false, pvTouch = 0;
 
   function syncQbox() {
     var v = $('quickInput').value;
@@ -3045,11 +3058,13 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     $('quickPreview').addEventListener('click', function (e) {
       var t = e.target;
       if (!t.closest) return;
+      pvTouch = Date.now();
       var padj = t.closest('[data-padj]');
       if (padj) {
         var pi = parseInt(padj.getAttribute('data-padj'), 10);
         pvAdj[pi] = parseFloat(padj.getAttribute('data-pm'));
         drawPreview();
+        try { qi.focus(); } catch (e) {}
         return;
       }
       var sseg = t.closest('[data-sugseg]');
@@ -3100,8 +3115,9 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
     });
 
     document.addEventListener('click', function (e) {
+      if (Date.now() - pvTouch < 400) return;
       var bar = $('qbar');
-      if (bar && bar.contains(e.target)) return;
+      if (bar && e.target && bar.contains(e.target)) return;
       var box = $('quickPreview');
       if (box && box.className.indexOf('show') >= 0) box.className = 'preview';
     });

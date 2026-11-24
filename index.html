@@ -615,6 +615,19 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .opt.on small{color:#62B79C}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .formula{font-size:11px;color:var(--ink3);line-height:1.6;margin:2px 0 0;letter-spacing:0}
+/* v4.4: 박스 · 개수 분할 */
+.lab-opt{font-weight:600;color:#B4BFC3;font-size:10.5px;letter-spacing:0;margin-left:5px}
+.pack-box{margin-top:9px;background:#F7FBFA;border:1px solid #E4F2EC;border-radius:14px;padding:10px 12px}
+.pk-row{display:flex;align-items:center;gap:10px}
+.pk-lb{font-size:11.5px;font-weight:700;color:var(--ink3);letter-spacing:0}
+.eat-box{display:flex;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:2px;margin-left:auto}
+.eat-box .pk-step{-webkit-appearance:none;border:0;background:transparent;width:32px;height:32px;border-radius:9px;font-size:16px;font-weight:700;color:var(--ink2);line-height:1;display:grid;place-items:center}
+.eat-box .pk-step:active{background:#EEF5F2;color:var(--em-d)}
+.eat-box .pk-n{min-width:26px;text-align:center;font-size:14.5px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-0.02em}
+.pk-unit{font-size:11px;font-weight:700;color:var(--ink3);padding-right:6px}
+.pack-hint{margin:8px 0 0;font-size:11.5px;font-weight:800;color:var(--em-d);letter-spacing:0;line-height:1.5}
+.pack-hint .pk-sub{display:block;font-weight:600;color:var(--ink3);margin-top:3px}
+.pack-hint .pk-sub b{font-weight:800;color:var(--ink2)}
 .plan-box{background:linear-gradient(160deg,#F3FBF7,#EDF7F3);border:1px solid #DEF2E9;border-radius:18px;padding:14px;margin:4px 0 14px}
 .plan-box .pb-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
 .plan-box .pb-k{font-size:12px;font-weight:700;color:#3E8E75;letter-spacing:0}
@@ -1008,6 +1021,25 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
       </div>
     </div>
     <div class="field">
+      <label>총 몇 개 들어있어?<span class="lab-opt">선택 · 1개당 자동 계산</span></label>
+      <div class="input-row">
+        <input class="text-input" id="mPack" type="number" inputmode="numeric" step="1" min="2" placeholder="예: 8 (박스·봉지)">
+        <span class="unit" style="width:auto">개입</span>
+      </div>
+      <div class="pack-box" id="mPackBox" hidden>
+        <div class="pk-row">
+          <span class="pk-lb">먹은 개수</span>
+          <div class="eat-box">
+            <button type="button" class="pk-step" id="mEatMinus" aria-label="한 개 줄이기">&#8722;</button>
+            <b class="pk-n" id="mEatN">1</b>
+            <button type="button" class="pk-step" id="mEatPlus" aria-label="한 개 늘리기">+</button>
+            <span class="pk-unit">개</span>
+          </div>
+        </div>
+        <p class="pack-hint" id="mPackHint"></p>
+      </div>
+    </div>
+    <div class="field">
       <label>끼니</label>
       <div class="opt-pills" id="mMeal">
         <button class="opt" data-v="breakfast">아침</button>
@@ -1028,6 +1060,25 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     <div class="field">
       <label>음식 이름</label>
       <input class="text-input" id="eName" type="text" autocomplete="off">
+    </div>
+    <div class="field" id="ePackField">
+      <label>나눠 먹기<span class="lab-opt">선택 · 박스로 등록된 거면</span></label>
+      <div class="input-row">
+        <input class="text-input" id="ePack" type="number" inputmode="numeric" step="1" min="2" placeholder="전체 몇 개? (예: 8)">
+        <span class="unit" style="width:auto">개입</span>
+      </div>
+      <div class="pack-box" id="ePackBox" hidden>
+        <div class="pk-row">
+          <span class="pk-lb">먹은 개수</span>
+          <div class="eat-box">
+            <button type="button" class="pk-step" id="eEatMinus" aria-label="한 개 줄이기">&#8722;</button>
+            <b class="pk-n" id="eEatN">1</b>
+            <button type="button" class="pk-step" id="eEatPlus" aria-label="한 개 늘리기">+</button>
+            <span class="pk-unit">개</span>
+          </div>
+        </div>
+        <p class="pack-hint" id="ePackHint"></p>
+      </div>
     </div>
     <div class="field">
       <label>끼니</label>
@@ -2846,6 +2897,106 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     if (k) k.classList.remove('err');
   }
 
+  /* ================= v4.4: 박스 · 개수 분할 ================= */
+  var manualEat = 1, editEat = 1;
+
+  function packOf(v) {
+    var n = Math.round(num(v, 0));
+    return (isFinite(n) && n >= 2 && n <= 99) ? n : 0;
+  }
+  function perOf(v, pack) {
+    return Math.round((num(v, 0) / pack) * 10) / 10;
+  }
+
+  /* "→ 1개당 110 kcal · 단백질 2g" + 왜 그런지 한 줄 */
+  function packHintHtml(boxKcal, boxP, pack, eat) {
+    var pk = perOf(boxKcal, pack), pp = perOf(boxP, pack);
+    var main = boxKcal > 0
+      ? '→ 1개당 ' + fmt1(pk) + ' kcal' + (boxP > 0 ? ' · 단백질 ' + fmt1(pp) + 'g' : '')
+      : '→ 칼로리를 적으면 1개당 값을 바로 계산해줘';
+    var sub = '적은 값은 <b>박스 ' + pack + '개 전체</b> 기준' +
+      (boxKcal > 0 ? ' (' + fmtInt(boxKcal) + ' kcal ÷ ' + pack + ')' : '') +
+      ' · 먹은 ' + eat + '개 = ' + (boxKcal > 0 ? fmtInt(pk * eat) : 0) + ' kcal';
+    return main + '<span class="pk-sub">' + sub + '</span>';
+  }
+
+  /* 직접 입력 · 성분표 확인 폼 */
+  function renderPackManual() {
+    var box = $('mPackBox'), hint = $('mPackHint'), nEl = $('mEatN');
+    if (!box || !hint || !$('mPack')) return;
+    var pack = packOf($('mPack').value);
+    if (!pack) {
+      box.hidden = true;
+      hint.innerHTML = '';
+      manualEat = 1;
+      if (nEl) nEl.textContent = '1';
+      return;
+    }
+    manualEat = Math.min(pack, Math.max(1, Math.round(manualEat || 1)));
+    box.hidden = false;
+    if (nEl) nEl.textContent = String(manualEat);
+    hint.innerHTML = packHintHtml(num($('mKcal').value, 0), num($('mP').value, 0), pack, manualEat);
+  }
+
+  /* 기록 수정 폼 */
+  var editQtyBase = null;
+
+  function renderPackEdit() {
+    var box = $('ePackBox'), hint = $('ePackHint'), nEl = $('eEatN');
+    if (!box || !hint || !$('ePack')) return;
+    var pack = packOf($('ePack').value);
+    if (!pack) {
+      box.hidden = true;
+      hint.innerHTML = '';
+      editEat = 1;
+      if (nEl) nEl.textContent = '1';
+      if (editQtyBase && $('eQty')) {
+        $('eQty').value = editQtyBase.q;
+        $('eQtyUnit').textContent = editQtyBase.u;
+      }
+      return;
+    }
+    editEat = Math.min(pack, Math.max(1, Math.round(editEat || 1)));
+    box.hidden = false;
+    if (nEl) nEl.textContent = String(editEat);
+    /* 수량 칸도 먹은 개수와 같게 맞춰 둔다 */
+    if ($('eQty')) {
+      $('eQty').value = String(editEat);
+      $('eQtyUnit').textContent = '개';
+    }
+    hint.innerHTML = packHintHtml(num($('eKcal').value, 0), num($('eP').value, 0), pack, editEat);
+  }
+
+  function stepManualEat(d) {
+    var pack = packOf($('mPack') && $('mPack').value) || 1;
+    manualEat = Math.min(pack, Math.max(1, (Math.round(manualEat) || 1) + d));
+    renderPackManual();
+  }
+  function stepEditEat(d) {
+    var pack = packOf($('ePack') && $('ePack').value) || 1;
+    editEat = Math.min(pack, Math.max(1, (Math.round(editEat) || 1) + d));
+    renderPackEdit();
+  }
+
+  /* 분할해서 기록한 음식은 내 음식·칩도 1개 기준으로 맞춘다 */
+  function syncFoodFromItem(it) {
+    var key = squash(it.name), changed = false;
+    (state.customs || []).forEach(function (c) {
+      if (squash(c.n) !== key) return;
+      c.k = it.kcal; c.p = it.p; c.c = it.c; c.f = it.f; c.u = it.u; c.cu = 1;
+      changed = true;
+    });
+    (state.favs || []).forEach(function (f) {
+      if (squash(f.n) !== key) return;
+      f.k = it.kcal; f.p = it.p; f.c = it.c; f.f = it.f; f.u = it.u;
+      changed = true;
+    });
+    if (changed) {
+      rebuildAliases();
+      save();
+    }
+  }
+
   /* ================= 기록 수정 ================= */
   var editId = null, editMeal = 'lunch';
 
@@ -2863,11 +3014,17 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     $('eName').value = it.name;
     $('eQty').value = fmtQty(it.n * it.mult);
     $('eQtyUnit').textContent = it.u || '인분';
+    editQtyBase = { q: fmtQty(it.n * it.mult), u: it.u || '인분' };
+    /* 이미 1개 기준으로 담긴 음식은 나눌 필요가 없어서 칸을 숨긴다 */
+    if ($('ePackField')) $('ePackField').hidden = (it.u === '개');
     $('eKcal').value = fmt1(it.kcal);
     $('eP').value = fmt1(it.p);
     $('eC').value = fmt1(it.c);
     $('eF').value = fmt1(it.f);
     syncOpt('eMeal', editMeal);
+    if ($('ePack')) $('ePack').value = '';
+    editEat = 1;
+    renderPackEdit();
     openSheet('edit');
   }
 
@@ -2878,14 +3035,32 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     if (!name) { toast('음식 이름을 적어줘'); $('eName').focus(); return; }
     var kcal = num($('eKcal').value, null);
     if (kcal == null || !isFinite(kcal) || kcal < 0) { toast('칼로리를 적어줘'); $('eKcal').focus(); return; }
+    var meal = MEALS.some(function (m) { return m.k === editMeal; }) ? editMeal : it.meal;
+    var pack = packOf($('ePack') && $('ePack').value);
     it.name = name;
+    it.meal = meal;
+    if (pack) {
+      var eat = Math.min(pack, Math.max(1, Math.round(editEat || 1)));
+      it.kcal = perOf(kcal, pack);
+      it.p = perOf(Math.max(0, num($('eP').value, 0)), pack);
+      it.c = perOf(Math.max(0, num($('eC').value, 0)), pack);
+      it.f = perOf(Math.max(0, num($('eF').value, 0)), pack);
+      it.n = eat;
+      it.mult = 1;
+      it.u = '개';
+      save();
+      syncFoodFromItem(it);
+      renderAll();
+      closeSheets();
+      toast('1개당 ' + fmt1(it.kcal) + 'kcal로 나눴어 · ' + eat + '개 = ' + fmtInt(it.kcal * eat) + 'kcal');
+      return;
+    }
     it.n = Math.max(0.1, num($('eQty').value, it.n) || it.n);
     it.mult = 1;
     it.kcal = kcal;
     it.p = Math.max(0, num($('eP').value, 0));
     it.c = Math.max(0, num($('eC').value, 0));
     it.f = Math.max(0, num($('eF').value, 0));
-    it.meal = MEALS.some(function (m) { return m.k === editMeal; }) ? editMeal : it.meal;
     save();
     renderAll();
     closeSheets();
@@ -3369,6 +3544,9 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     $('mP').value = pre && pre.p != null ? pre.p : '';
     $('mC').value = pre && pre.c != null ? pre.c : '';
     $('mF').value = pre && pre.f != null ? pre.f : '';
+    if ($('mPack')) $('mPack').value = pre && pre.pack ? String(pre.pack) : '';
+    manualEat = 1;
+    renderPackManual();
     $('mFav').checked = manualFromQuery;
     if ($('mTitle')) $('mTitle').textContent = (pre && pre.ocr && !pre.error) ? '성분표 확인' : '직접 입력';
     renderOcrHint(pre);
@@ -3473,22 +3651,32 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     var kcal = num($('mKcal').value, null);
     if (!name) { toast('음식 이름을 적어줘'); $('mName').focus(); return; }
     if (kcal == null || !isFinite(kcal) || kcal <= 0) { toast('칼로리를 적어줘'); $('mKcal').focus(); return; }
+    var pack = packOf($('mPack') && $('mPack').value);
+    var eat = pack ? Math.min(pack, Math.max(1, Math.round(manualEat || 1))) : 1;
+    var pv = Math.max(0, num($('mP').value, 0));
+    var cv = Math.max(0, num($('mC').value, 0));
+    var fv = Math.max(0, num($('mF').value, 0));
     var food = {
-      n: name, e: '🍽', k: kcal,
-      p: Math.max(0, num($('mP').value, 0)),
-      c: Math.max(0, num($('mC').value, 0)),
-      f: Math.max(0, num($('mF').value, 0)),
-      u: '인분', g: 0
+      n: name, e: '🍽',
+      k: pack ? perOf(kcal, pack) : kcal,
+      p: pack ? perOf(pv, pack) : pv,
+      c: pack ? perOf(cv, pack) : cv,
+      f: pack ? perOf(fv, pack) : fv,
+      u: pack ? '개' : '인분', g: 0
     };
     var wantFav = !!$('mFav').checked;
     var meal = manualMeal;
     saveCustomFood(food, wantFav);
     if (manualFromQuery) { $('quickInput').value = ''; manualFromQuery = false; }
     closeSheets();
-    addFood(food, 1, meal);
-    toast(wantFav
-      ? '기록하고 자주 먹는 음식에 저장했어 · ' + fmtInt(kcal) + 'kcal'
-      : name + ' ' + fmtInt(kcal) + 'kcal 기록했어');
+    addFood(food, eat, meal);
+    if (pack) {
+      toast('1개당 ' + fmt1(food.k) + 'kcal로 담았어 · ' + eat + '개 = ' + fmtInt(food.k * eat) + 'kcal');
+    } else {
+      toast(wantFav
+        ? '기록하고 자주 먹는 음식에 저장했어 · ' + fmtInt(kcal) + 'kcal'
+        : name + ' ' + fmtInt(kcal) + 'kcal 기록했어');
+    }
   }
 
   /* ================= v4.3: 성분표 사진 인식 (Tesseract.js) ================= */
@@ -3645,7 +3833,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     var got = p.k != null || p.p != null || p.c != null || p.f != null;
     closeSheets();
     openManual('', {
-      ocr: true, k: p.k, p: p.p, c: p.c, f: p.f,
+      ocr: true, k: p.k, p: p.p, c: p.c, f: p.f, pack: p.pack,
       name: got ? p.name : '', text: text, miss: p.miss, serv: p.serv
     });
     toast(got ? '성분표에서 읽었어 · 확인하고 등록해줘' : '숫자를 못 읽었어 · 직접 넣어줄래?');
@@ -3845,10 +4033,26 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     return best || {};
   }
 
+  /* 총 개입 수: "(20g × 8봉)", "8개입", "총 8개" 같은 표기 */
+  function ocrPackCount(lines) {
+    var flat = lines.join(' ');
+    var m = flat.match(/([0-9]{1,4}(?:[.,][0-9]{1,2})?)\s*(?:g|G|ml|mL|m1|그램)\s*[x×X*]\s*([0-9]{1,3})\s*(?:개입|개들이|봉지|봉|팩|포|입|조각|알|캔|병|미)?/);
+    var n = m ? ocrNum(m[2]) : null;
+    if (!(n >= 2 && n <= 60)) {
+      m = flat.match(/(?:총|전체)\s*(?:내용량|중량)?[^0-9]{0,8}([0-9]{1,3})\s*(?:개입|개들이|개|봉지|봉|팩|포|입|조각|알|캔|병|미)/);
+      n = m ? ocrNum(m[1]) : null;
+    }
+    if (!(n >= 2 && n <= 60)) {
+      m = flat.match(/([0-9]{1,3})\s*(?:개입|개들이|봉지|입|조각|알|미)(?![0-9])/);
+      n = m ? ocrNum(m[1]) : null;
+    }
+    return (n >= 2 && n <= 60) ? Math.round(n) : null;
+  }
+
   function parseNutrition(text) {
     var raw = ocrNormalize(text);
     var lines = ocrLines(raw);
-    var out = { k: null, p: null, c: null, f: null, name: '', serv: '', miss: [], raw: raw };
+    var out = { k: null, p: null, c: null, f: null, pack: null, name: '', serv: '', miss: [], raw: raw };
 
     out.k = ocrKcal(lines);
 
@@ -3866,6 +4070,9 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     var totalG = flat.match(/총\s*내용량[^0-9]{0,8}([0-9]{1,4}(?:[.,][0-9]{1,2})?)\s*(g|ml|mL|m1)/i);
     if (serv) out.serv = '1회 제공량 ' + ocrNum(serv[1]) + (/(ml|m1)/i.test(serv[2]) ? 'ml' : 'g') + ' 기준 값이에요.';
     else if (totalG) out.serv = '총 내용량 ' + ocrNum(totalG[1]) + (/(ml|m1)/i.test(totalG[2]) ? 'ml' : 'g') + ' 기준 값이에요.';
+
+    out.pack = ocrPackCount(lines);
+    if (out.pack) out.serv = (out.serv ? out.serv + ' ' : '') + '총 ' + out.pack + '개입으로 읽었어요. 1개당으로 나눠 담을게요.';
 
     if (out.k == null) out.miss.push('열량');
     if (out.p == null) out.miss.push('단백질');
@@ -4288,6 +4495,21 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
       editMeal = b.getAttribute('data-v');
       syncOpt('eMeal', editMeal);
     });
+    if ($('ePack')) {
+      $('ePack').addEventListener('input', renderPackEdit);
+      ['eKcal', 'eP', 'eC', 'eF'].forEach(function (id) {
+        if ($(id)) $(id).addEventListener('input', function () { if (!$('ePackBox').hidden) renderPackEdit(); });
+      });
+      if ($('eEatMinus')) $('eEatMinus').onclick = function () { stepEditEat(-1); };
+      if ($('eEatPlus')) $('eEatPlus').onclick = function () { stepEditEat(1); };
+      if ($('eQty')) $('eQty').addEventListener('input', function () {
+        if (!packOf($('ePack').value)) return;
+        var v = Math.round(num(this.value, 1));
+        var pk = packOf($('ePack').value);
+        editEat = Math.min(pk, Math.max(1, isFinite(v) ? v : 1));
+        renderPackEdit();
+      });
+    }
     $('btnSaveItem').onclick = saveEdit;
     $('btnDelItem').onclick = function () {
       var id = editId;
@@ -4303,6 +4525,14 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
       syncOpt('mMeal', manualMeal);
     });
     $('btnAddManual').onclick = addManual;
+    if ($('mPack')) {
+      $('mPack').addEventListener('input', renderPackManual);
+      ['mKcal', 'mP', 'mC', 'mF'].forEach(function (id) {
+        if ($(id)) $(id).addEventListener('input', function () { if (!$('mPackBox').hidden) renderPackManual(); });
+      });
+      if ($('mEatMinus')) $('mEatMinus').onclick = function () { stepManualEat(-1); };
+      if ($('mEatPlus')) $('mEatPlus').onclick = function () { stepManualEat(1); };
+    }
 
     /* 성분표 사진 */
     $('btnOcr').onclick = pickOcrPhoto;
@@ -4363,6 +4593,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     textScore: textScore,
     openManual: openManual,
     ocrParse: parseNutrition,
+    ocrPack: ocrPackCount,
     ocrNameGuess: guessFoodName,
     openEdit: openEdit,
     createQuickFood: createQuickFood,

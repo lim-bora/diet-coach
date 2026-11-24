@@ -661,6 +661,51 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   html{background:#E7ECEE}
   #app{box-shadow:0 20px 60px -30px rgba(16,24,28,.45),0 0 0 1px rgba(20,26,28,.04)}
 }
+/* ===== v4.3: 성분표 사진 인식 ===== */
+.qbox .cam{
+  -webkit-appearance:none;border:0;flex:0 0 auto;width:34px;height:34px;padding:0;border-radius:11px;
+  background:#EAF7F1;color:#0B8E69;display:grid;place-items:center;
+  transition:transform .12s ease,background .15s ease;
+}
+.qbox .cam:active{transform:scale(.92);background:#DCF1E8}
+.qbox .cam svg{width:19px;height:19px;color:inherit}
+.link-btn.ocr-btn{
+  display:inline-flex;align-items:center;gap:4px;background:#EAF7F1;color:var(--em-d);
+  border-radius:9px;padding:5px 9px;font-size:12px;font-weight:800;letter-spacing:-0.01em;
+}
+.link-btn.ocr-btn:active{opacity:.6}
+.ocr-shot{
+  margin:2px 0 12px;border-radius:16px;overflow:hidden;background:#F1F5F4;
+  border:1px solid var(--line);display:none;align-items:center;justify-content:center;
+}
+.ocr-shot.on{display:flex}
+.ocr-shot img{width:100%;display:block;max-height:190px;object-fit:contain;background:#fff}
+.ocr-status{font-size:14px;font-weight:800;color:var(--ink);letter-spacing:-0.025em}
+.ocr-sub{font-size:11.5px;color:var(--ink3);margin-top:5px;line-height:1.5;min-height:17px}
+.ocr-bar{height:6px;border-radius:3px;background:#EAF0EE;overflow:hidden;margin:11px 0 0}
+.ocr-bar i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#7BF2CB,#14AD82);transition:width .3s ease}
+.ocr-hint{
+  margin:0 0 14px;padding:10px 12px;border-radius:12px;background:#F2FBF7;
+  border:1px solid #D3F0E3;font-size:11.5px;color:#0B6B51;line-height:1.6;letter-spacing:-0.01em;
+}
+.ocr-hint b{font-weight:800}
+.ocr-hint.warn{background:#FFF8F1;border-color:#F3E2CE;color:#8A5A20}
+.ocr-hint[hidden]{display:none}
+.ocr-details{margin:0 0 12px}
+.ocr-details[hidden]{display:none}
+.ocr-details summary{
+  font-size:11.5px;font-weight:700;color:var(--ink3);cursor:pointer;
+  list-style:none;padding:2px 0;letter-spacing:0;
+}
+.ocr-details summary::-webkit-details-marker{display:none}
+.ocr-details summary::before{content:"▸ ";font-size:10px}
+.ocr-details[open] summary::before{content:"▾ "}
+.ocr-raw{
+  margin:7px 0 0;max-height:150px;overflow:auto;background:#F7F9F9;border:1px solid var(--line);
+  border-radius:10px;padding:9px 10px;font-size:11px;line-height:1.55;color:var(--ink2);
+  white-space:pre-wrap;word-break:break-all;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",system-ui,sans-serif;
+}
+
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
 }
@@ -687,6 +732,9 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
         <svg class="magic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/><path d="M18 15.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg>
         <input id="quickInput" type="text" placeholder="뭐 먹었어?  예) 마가렛트 2봉지 아메리카노" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         <button class="clr" id="btnClear" aria-label="입력 지우기">&#10005;</button>
+        <button class="cam" id="btnOcrCam" aria-label="성분표 사진으로 등록" title="성분표 사진으로 등록">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5h3l1.4-2.2h6.2l1.4 2.2h3a1.6 1.6 0 0 1 1.6 1.6v7.3a1.6 1.6 0 0 1-1.6 1.6H3.5a1.6 1.6 0 0 1-1.6-1.6V10.1a1.6 1.6 0 0 1 1.6-1.6Z"/><circle cx="12" cy="13.4" r="2.9"/></svg>
+        </button>
         <button class="qgo" id="qGo" aria-label="바로 기록">&#8629;</button>
       </div>
       <div class="preview" id="quickPreview"></div>
@@ -739,7 +787,10 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   <section class="card" id="quickCard">
     <div class="card-head">
       <h2>빠른 기록</h2>
-      <button class="link-btn muted" id="btnChipsEdit">편집</button>
+      <div class="head-actions">
+        <button class="link-btn ocr-btn" id="btnOcr">📷 성분표</button>
+        <button class="link-btn muted" id="btnChipsEdit">편집</button>
+      </div>
     </div>
     <div class="preset-head"><span class="ph-t">대충 컷</span><span class="ph-s">메뉴가 기억 안 나면 한 번에</span></div>
     <div class="presets" id="presetRow"></div>
@@ -846,6 +897,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 
 <div class="mask" id="mask"></div>
 
+<input type="file" id="fileOcr" class="file-in" accept="image/*">
+
 <section class="sheet" id="sheetSettings" role="dialog" aria-modal="true" aria-label="내 정보와 목표">
   <div class="sheet-grab"></div>
   <div class="sheet-head"><h3>내 정보 &middot; 목표</h3><button class="xbtn" data-close="settings" aria-label="닫기">&#10005;</button></div>
@@ -923,8 +976,13 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 
 <section class="sheet" id="sheetManual" role="dialog" aria-modal="true" aria-label="직접 입력">
   <div class="sheet-grab"></div>
-  <div class="sheet-head"><h3>직접 입력</h3><button class="xbtn" data-close="manual" aria-label="닫기">&#10005;</button></div>
+  <div class="sheet-head"><h3 id="mTitle">직접 입력</h3><button class="xbtn" data-close="manual" aria-label="닫기">&#10005;</button></div>
   <div class="sheet-body">
+    <div class="ocr-hint" id="mOcrHint" hidden></div>
+    <details class="ocr-details" id="mOcrDet" hidden>
+      <summary>인식된 칼자 보기</summary>
+      <pre class="ocr-raw" id="mOcrRawText"></pre>
+    </details>
     <div class="field">
       <label>음식 이름</label>
       <input class="text-input" id="mName" type="text" placeholder="예: 엄마표 김치볶음밥" autocomplete="off">
@@ -1034,6 +1092,19 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   </div>
   <div class="sheet-foot"><button class="btn-primary block em" id="btnFavsDone">완료</button></div>
 </section>
+<section class="sheet" id="sheetOcr" role="dialog" aria-modal="true" aria-label="성분표 사진 인식">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h3>성분표 사진</h3><button class="xbtn" data-close="ocr" aria-label="닫기">&#10005;</button></div>
+  <div class="sheet-body">
+    <div class="ocr-shot" id="ocrShot"><img id="ocrImg" alt="성분표 사진"></div>
+    <div class="ocr-status" id="ocrStatus">성분표 읽는 중...</div>
+    <div class="ocr-sub" id="ocrSub">사진을 정리하는 중</div>
+    <div class="ocr-bar" id="ocrBar"><i id="ocrBarFill"></i></div>
+    <p class="formula" id="ocrNote" style="margin-top:12px">사진에서 열량·단백질·탄수화물·지방을 찾아 폼에 채워둘게요. 숫자는 넣기 전에 한 번 확인할 수 있어요.</p>
+  </div>
+  <div class="sheet-foot"><button class="btn-ghost" id="btnOcrSkip" style="width:100%">사진 없이 직접 입력</button></div>
+</section>
+
 <script>
 (function () {
   'use strict';
@@ -3274,12 +3345,14 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   }
 
   function closeSheets() {
+    if (ocrRunning) { ocrToken++; ocrRunning = false; }
     $('mask').classList.remove('open');
-    var a = $('sheetSettings'), b = $('sheetManual'), c = $('sheetEdit'), d = $('sheetFavs');
+    var a = $('sheetSettings'), b = $('sheetManual'), c = $('sheetEdit'), d = $('sheetFavs'), e = $('sheetOcr');
     if (a) a.classList.remove('open');
     if (b) b.classList.remove('open');
     if (c) c.classList.remove('open');
     if (d) d.classList.remove('open');
+    if (e) e.classList.remove('open');
     document.body.classList.remove('lock');
     document.body.style.top = '';
     window.scrollTo(0, lockY);
@@ -3287,21 +3360,60 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 
   var manualFromQuery = false;
 
-  function openManual(prefillName) {
+  function openManual(prefillName, pre) {
     var pf = String(prefillName == null ? '' : prefillName).trim();
     manualFromQuery = !!pf;
     manualMeal = state.ui.meal;
-    $('mName').value = pf;
-    $('mKcal').value = '';
-    $('mP').value = '';
-    $('mC').value = '';
-    $('mF').value = '';
+    $('mName').value = pf || (pre && pre.name ? String(pre.name) : '');
+    $('mKcal').value = pre && pre.k != null ? pre.k : '';
+    $('mP').value = pre && pre.p != null ? pre.p : '';
+    $('mC').value = pre && pre.c != null ? pre.c : '';
+    $('mF').value = pre && pre.f != null ? pre.f : '';
     $('mFav').checked = manualFromQuery;
+    if ($('mTitle')) $('mTitle').textContent = (pre && pre.ocr && !pre.error) ? '성분표 확인' : '직접 입력';
+    renderOcrHint(pre);
     syncOpt('mMeal', manualMeal);
     openSheet('manual');
     setTimeout(function () {
-      try { (manualFromQuery ? $('mKcal') : $('mName')).focus(); } catch (e) {}
+      var focusKcal = !manualFromQuery && pre && pre.k != null;
+      try { (focusKcal ? $('mKcal') : $('mName')).focus(); } catch (e) {}
     }, 380);
+  }
+
+  /* 성분표에서 읽은 값을 폼 위에 안내 */
+  function renderOcrHint(pre) {
+    var box = $('mOcrHint'), det = $('mOcrDet'), raw = $('mOcrRawText');
+    if (!box || !det || !raw) return;
+    if (!pre || !pre.ocr) {
+      box.hidden = true;
+      box.className = 'ocr-hint';
+      box.innerHTML = '';
+      det.hidden = true;
+      det.open = false;
+      raw.textContent = '';
+      return;
+    }
+    box.hidden = false;
+    if (pre.error) {
+      box.className = 'ocr-hint warn';
+      box.innerHTML = '<b>사진을 읽지 못했어요</b><br>' + esc(pre.error) + ' 직접 넣어줄게요.';
+    } else {
+      box.className = 'ocr-hint';
+      var miss = pre.miss || [];
+      var html = '<b>📷 성분표에서 읽은 값이에요</b><br>인식된 숫자를 확인하고 필요하면 살짝 고쳐주세요.';
+      if (miss.length) html += '<br>' + esc(miss.join(' · ')) + '은 못 읽었어요.';
+      if (pre.serv) html += '<br>' + esc(pre.serv);
+      box.innerHTML = html;
+    }
+    if (pre.text && String(pre.text).trim()) {
+      det.hidden = false;
+      det.open = false;
+      raw.textContent = String(pre.text).trim();
+    } else {
+      det.hidden = true;
+      det.open = false;
+      raw.textContent = '';
+    }
   }
 
   function syncOpt(id, val) {
@@ -3377,6 +3489,426 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     toast(wantFav
       ? '기록하고 자주 먹는 음식에 저장했어 · ' + fmtInt(kcal) + 'kcal'
       : name + ' ' + fmtInt(kcal) + 'kcal 기록했어');
+  }
+
+  /* ================= v4.3: 성분표 사진 인식 (Tesseract.js) ================= */
+  var OCR_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+  var OCR_LANG_PATH = 'https://tessdata.projectnaptha.com/4.0.0_fast';
+  var ocrEngineP = null;
+  var ocrToken = 0;
+  var ocrRunning = false;
+
+  function ocrSetStatus(main, sub, pct) {
+    var a = $('ocrStatus'), b = $('ocrSub'), f = $('ocrBarFill');
+    if (a && main != null) a.textContent = main;
+    if (b && sub != null) b.textContent = sub;
+    if (f && pct != null) f.style.width = Math.max(0, Math.min(100, Math.round(pct * 100))) + '%';
+  }
+
+  /* 인식 엔진은 처음 사진을 넣을 때만 CDN에서 받아온다 */
+  function loadOcrEngine() {
+    if (window.Tesseract && window.Tesseract.recognize) return Promise.resolve(window.Tesseract);
+    if (ocrEngineP) return ocrEngineP;
+    ocrEngineP = new Promise(function (res, rej) {
+      var s = document.createElement('script');
+      s.src = OCR_CDN;
+      s.async = true;
+      s.onload = function () {
+        if (window.Tesseract && window.Tesseract.recognize) res(window.Tesseract);
+        else { ocrEngineP = null; rej(new Error('인식 엔진을 열지 못했어요.')); }
+      };
+      s.onerror = function () {
+        ocrEngineP = null;
+        rej(new Error('인터넷이 필요해요(처음 한 번).'));
+      };
+      document.head.appendChild(s);
+    });
+    return ocrEngineP;
+  }
+
+  /* 사진 → 가로 최대 1400px · 그레이스케일 · 자동 대조 */
+  function ocrPreprocess(file) {
+    return new Promise(function (res, rej) {
+      var url = null;
+      try { url = URL.createObjectURL(file); } catch (e) {}
+      if (!url) { rej(new Error('사진을 열지 못했어요.')); return; }
+      var img = new Image();
+      img.onload = function () {
+        try {
+          var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+          if (!iw || !ih) throw new Error('사진 크기를 읽지 못했어요.');
+          var scale = Math.min(1, 1400 / iw);
+          var w = Math.max(1, Math.round(iw * scale));
+          var h = Math.max(1, Math.round(ih * scale));
+          var cv = document.createElement('canvas');
+          cv.width = w; cv.height = h;
+          var cx = cv.getContext('2d');
+          cx.fillStyle = '#fff';
+          cx.fillRect(0, 0, w, h);
+          cx.drawImage(img, 0, 0, w, h);
+
+          var id = cx.getImageData(0, 0, w, h), d = id.data, n = d.length;
+          var hist = new Array(256), i;
+          for (i = 0; i < 256; i++) hist[i] = 0;
+          for (i = 0; i < n; i += 4) {
+            var y = (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114) | 0;
+            d[i] = d[i + 1] = d[i + 2] = y;
+            hist[y]++;
+          }
+          var total = (n / 4) | 0, lo = 0, hi = 255, acc = 0, loT = total * 0.012, hiT = total * 0.988;
+          for (i = 0; i < 256; i++) { acc += hist[i]; if (acc >= loT) { lo = i; break; } }
+          acc = 0;
+          for (i = 255; i >= 0; i--) { acc += hist[i]; if (acc >= total - hiT) { hi = i; break; } }
+          var span = Math.max(24, hi - lo);
+          for (i = 0; i < n; i += 4) {
+            var v = (d[i] - lo) / span * 255 * 1.12 - 10;
+            v = v < 0 ? 0 : (v > 255 ? 255 : v);
+            d[i] = d[i + 1] = d[i + 2] = v | 0;
+          }
+          cx.putImageData(id, 0, 0);
+          var out = cv.toDataURL('image/jpeg', 0.92);
+          try { URL.revokeObjectURL(url); } catch (e) {}
+          res({ dataUrl: out, w: w, h: h });
+        } catch (e) {
+          try { URL.revokeObjectURL(url); } catch (e2) {}
+          rej(e);
+        }
+      };
+      img.onerror = function () {
+        try { URL.revokeObjectURL(url); } catch (e) {}
+        rej(new Error('사진을 열지 못했어요.'));
+      };
+      img.src = url;
+    });
+  }
+
+  function ocrProgress(m) {
+    if (!m) return;
+    var p = typeof m.progress === 'number' ? m.progress : 0;
+    var st = String(m.status || '');
+    if (st.indexOf('recognizing') >= 0) ocrSetStatus('성분표 읽는 중...', '글자를 읽는 중 ' + Math.round(p * 100) + '%', 0.15 + p * 0.85);
+    else if (st.indexOf('language') >= 0) ocrSetStatus('성분표 읽는 중...', '한국어 인식 데이터 받는 중 (처음 한 번만)', 0.05 + p * 0.08);
+    else ocrSetStatus('성분표 읽는 중...', '인식 엔진 준비 중', Math.max(0.05, p * 0.1));
+  }
+
+  function pickOcrPhoto() {
+    var f = $('fileOcr');
+    if (!f) return;
+    f.value = '';
+    try { f.click(); } catch (e) { toast('사진을 열 수 없어'); }
+  }
+
+  function startOcr(file) {
+    var token = ++ocrToken;
+    ocrRunning = true;
+    var shot = $('ocrShot'), im = $('ocrImg'), note = $('ocrNote');
+    if (shot) shot.className = 'ocr-shot';
+    if (im) im.removeAttribute('src');
+    if (note) note.textContent = '사진에서 열량·단백질·탄수화물·지방을 찾아 폼에 채워둘게요. 숫자는 넣기 전에 한 번 확인할 수 있어요.';
+    ocrSetStatus('성분표 읽는 중...', '사진을 정리하는 중', 0.03);
+    openSheet('ocr');
+    var dataUrl = '';
+
+    ocrPreprocess(file).then(function (r) {
+      if (token !== ocrToken) return null;
+      dataUrl = r.dataUrl;
+      if (im) im.src = dataUrl;
+      if (shot) shot.className = 'ocr-shot on';
+      ocrSetStatus('성분표 읽는 중...', '인식 엔진 준비 중 (처음 한 번만 받아와요)', 0.06);
+      return loadOcrEngine();
+    }).then(function (T) {
+      if (token !== ocrToken || !T) return null;
+      return T.recognize(dataUrl, 'kor+eng', {
+        langPath: OCR_LANG_PATH,
+        logger: function (m) { if (token === ocrToken) ocrProgress(m); }
+      });
+    }).then(function (r) {
+      if (token !== ocrToken || !r) return;
+      ocrRunning = false;
+      var text = (r && r.data && typeof r.data.text === 'string') ? r.data.text : String(r || '');
+      finishOcr(text);
+    }).catch(function (err) {
+      if (token !== ocrToken) return;
+      ocrRunning = false;
+      failOcr(err);
+    });
+  }
+
+  function ocrReadable() {
+    var s = $('sheetOcr');
+    return !!(s && s.className.indexOf('open') >= 0);
+  }
+
+  function finishOcr(text) {
+    if (!ocrReadable()) return; /* 사용자가 시트를 먼저 침으면 버린다 */
+    var p = parseNutrition(text);
+    var got = p.k != null || p.p != null || p.c != null || p.f != null;
+    closeSheets();
+    openManual('', {
+      ocr: true, k: p.k, p: p.p, c: p.c, f: p.f,
+      name: got ? p.name : '', text: text, miss: p.miss, serv: p.serv
+    });
+    toast(got ? '성분표에서 읽었어 · 확인하고 등록해줘' : '숫자를 못 읽었어 · 직접 넣어줄래?');
+  }
+
+  function failOcr(err) {
+    var msg = (err && err.message) ? err.message : '사진을 읽지 못했어요.';
+    if (!ocrReadable()) return;
+    closeSheets();
+    openManual('', { ocr: true, error: msg });
+    toast('사진을 못 읽었어 · 직접 넣어줄게');
+  }
+
+  /* ---------- 영양성분표 글자 → 숫자 ---------- */
+  function ocrNormalize(t) {
+    var s = String(t == null ? '' : t);
+    s = s.replace(/[\uFF01-\uFF5E]/g, function (c) {
+      return String.fromCharCode(c.charCodeAt(0) - 0xFEE0);
+    });
+    s = s.replace(/[\u3000\u00A0]/g, ' ');
+    s = s.replace(/[|｜│┃]/g, ' ');
+    s = s.replace(/[·・•∙]/g, ' ');
+    s = s.replace(/[“”"]/g, ' ');
+    s = s.replace(/[（(]/g, ' (').replace(/[）)]/g, ') ');
+    return s;
+  }
+
+  function ocrNum(s) {
+    if (s == null) return null;
+    var v = parseFloat(String(s).replace(/[^0-9.]/g, ''));
+    return isFinite(v) ? v : null;
+  }
+
+  var OCR_STOP_WORDS = [
+    '영양정보', '영양성분', '영양성분표', '영양', '1일', '기준치', '비율', '총내용량', '내용량', '1회', '제공량', '분량',
+    '열량', '칼로리', '나트륨', '탄수화물', '당류', '지방', '트랜스', '포화', '콜레스테롤', '단백질',
+    '원재료', '유통기한', '보관', '제조', '고객', '반품', '교환', '품목', '알레르기', '주의', '섭취', '조리', '포장', '재질',
+    'kcal', 'cal', 'mg', 'ml'
+  ];
+
+  function ocrLines(raw) {
+    return String(raw || '').split(/\r?\n/).map(function (l) {
+      return l.replace(/\s+/g, ' ').trim();
+    }).filter(function (l) { return !!l; });
+  }
+
+  /* OCR이 "단 백 질"처럼 글자를 띄어 읽은 경우를 되붙인다 */
+  function mergeSpacedHangul(toks) {
+    var out = [], run = [];
+    function flush() {
+      if (!run.length) return;
+      var hasSingle = run.some(function (t) { return t.length === 1; });
+      if (hasSingle && run.length > 1) out.push(run.join(''));
+      else out = out.concat(run);
+      run = [];
+    }
+    for (var i = 0; i < toks.length; i++) {
+      var t = toks[i];
+      if (/^[\uAC00-\uD7A3]{1,2}$/.test(t)) run.push(t);
+      else { flush(); out.push(t); }
+    }
+    flush();
+    return out;
+  }
+
+  /* 한 줄 → 토큰 (앞쪽 기호를 떼고, 끝이 %인 비율 토큰은 버린다) */
+  function ocrTokens(line) {
+    var toks = String(line || '').split(' ').map(function (t) {
+      return t.replace(/^[^0-9A-Za-z\uAC00-\uD7A3]+/, '').replace(/[^0-9A-Za-z\uAC00-\uD7A3%)]+$/, '');
+    }).filter(function (t) { return t && !/%$/.test(t); });
+    return mergeSpacedHangul(toks);
+  }
+
+  /* "18g" / "188"(=18g 오인식) / "1,200" 같은 토큰에서 가능한 값을 모두 낸다 */
+  function ocrParseNum(tok) {
+    if (tok == null) return null;
+    var t = String(tok).replace(/([0-9]),([0-9]{3})(?![0-9])/g, '$1$2');
+    var m = t.match(/^([0-9]{1,5}(?:[.,][0-9]{1,2})?)(.*)$/);
+    if (!m) return null;
+    var digits = m[1].replace(',', '.');
+    var v = parseFloat(digits);
+    if (!isFinite(v)) return null;
+    return { v: v, digits: digits, suf: m[2] || '' };
+  }
+
+  function ocrValueCands(tok) {
+    var pn = ocrParseNum(tok);
+    if (!pn) return [];
+    var out = [];
+    if (/^[gGqQ]/.test(pn.suf)) {
+      out.push({ v: pn.v, exact: true });
+    } else {
+      out.push({ v: pn.v, exact: false });
+      /* g이 8·9로 잘못 읽히면 숫자에 붙는다: 18g → 188, 62g → 629 */
+      var d = pn.digits;
+      if (d.indexOf('.') < 0 && d.length >= 2 && /[89]$/.test(d)) {
+        out.push({ v: parseFloat(d.slice(0, -1)), exact: false });
+      }
+    }
+    return out.filter(function (c) { return isFinite(c.v) && c.v >= 0 && c.v <= 300; });
+  }
+
+  function ocrNutrientCands(lines, words, skipPrev) {
+    var cands = [];
+    for (var li = 0; li < lines.length; li++) {
+      var toks = ocrTokens(lines[li]);
+      var found = false;
+      for (var ti = 0; ti < toks.length; ti++) {
+        var t = toks[ti], hit = false;
+        for (var wi = 0; wi < words.length; wi++) {
+          if (t === words[wi] || t.indexOf(words[wi]) === 0) { hit = true; break; }
+        }
+        if (!hit) continue;
+        var prev = ti > 0 ? toks[ti - 1] : '';
+        if (skipPrev && /(트랜스|포화)$/.test(prev)) continue;
+
+        var valTok = null, unitNext = false;
+        if (toks[ti + 1] && /^[0-9]/.test(toks[ti + 1])) {
+          valTok = toks[ti + 1];
+          unitNext = /^[gG]$/.test(toks[ti + 2] || '');
+        }
+        if (!valTok) {
+          /* 값이 다음 줄로 내려간 표기 */
+          for (var k = 1; k <= 2 && li + k < lines.length; k++) {
+            var nx = ocrTokens(lines[li + k]);
+            if (!nx.length) continue;
+            if (/^[0-9]/.test(nx[0])) { valTok = nx[0]; unitNext = /^[gG]$/.test(nx[1] || ''); }
+            break;
+          }
+        }
+        if (!valTok) continue;
+        var cs = ocrValueCands(valTok);
+        if (unitNext) cs = cs.map(function (c) { return { v: c.v, exact: true }; });
+        cands = cands.concat(cs);
+        found = true;
+        break;
+      }
+      if (found) break;
+    }
+    var seen = {}, out = [];
+    cands.forEach(function (c) {
+      var kk = c.v + '|' + (c.exact ? 1 : 0);
+      if (!seen[kk]) { seen[kk] = 1; out.push(c); }
+    });
+    return out;
+  }
+
+  function ocrKcal(lines) {
+    var unitRe = /^(kcal|kca1|keal|kal|cal)$/i;
+    for (var li = 0; li < lines.length; li++) {
+      var toks = ocrTokens(lines[li]);
+      for (var ti = 0; ti < toks.length; ti++) {
+        var t = toks[ti];
+        var m = t.match(/^([0-9][0-9,]{0,6}(?:[.][0-9]{1,2})?)(kcal|kca1|keal|kal|cal)$/i);
+        if (m) {
+          var v = parseFloat(m[1].replace(/,/g, ''));
+          if (isFinite(v) && v > 0 && v <= 5000) return Math.round(v);
+        }
+        if (unitRe.test(t) && ti > 0) {
+          var pn = ocrParseNum(toks[ti - 1]);
+          if (pn && pn.v > 0 && pn.v <= 5000) return Math.round(pn.v);
+        }
+        if (t === '칼로리' || t.indexOf('열량') === 0) {
+          for (var j = ti + 1; j < toks.length; j++) {
+            if (unitRe.test(toks[j])) break;
+            var pn2 = ocrParseNum(toks[j]);
+            if (pn2) {
+              if (pn2.v > 0 && pn2.v <= 5000) return Math.round(pn2.v);
+              break;
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  /* 4·4·9 법칙으로 열량과 가장 잘 맞는 조합을 고른다 (g/8 오인식 교정) */
+  function pickMacros(kcal, pl, cl, fl) {
+    var sets = [pl.length ? pl : [null], cl.length ? cl : [null], fl.length ? fl : [null]];
+    var best = null;
+    for (var a = 0; a < sets[0].length; a++) {
+      for (var b = 0; b < sets[1].length; b++) {
+        for (var c = 0; c < sets[2].length; c++) {
+          var p = sets[0][a], cc = sets[1][b], ff = sets[2][c];
+          var pv = p ? p.v : 0, cv = cc ? cc.v : 0, fv = ff ? ff.v : 0;
+          var miss = (p ? 0 : 1) + (cc ? 0 : 1) + (ff ? 0 : 1);
+          var energy = 4 * pv + 4 * cv + 9 * fv;
+          var diff = kcal != null ? Math.abs(energy - kcal) : 0;
+          var exacts = (p && p.exact ? 1 : 0) + (cc && cc.exact ? 1 : 0) + (ff && ff.exact ? 1 : 0);
+          var score = (kcal != null ? diff : 0) + miss * 45 + (p ? 0 : 60) + (cc ? 0 : 60) + (ff ? 0 : 60) - exacts * 4;
+          if (pv > 120 || cv > 250 || fv > 120) score += 1000;
+          if (!best || score < best.score) best = { score: score, p: p, c: cc, f: ff, diff: diff };
+        }
+      }
+    }
+    return best || {};
+  }
+
+  function parseNutrition(text) {
+    var raw = ocrNormalize(text);
+    var lines = ocrLines(raw);
+    var out = { k: null, p: null, c: null, f: null, name: '', serv: '', miss: [], raw: raw };
+
+    out.k = ocrKcal(lines);
+
+    var pl = ocrNutrientCands(lines, ['단백질'], null);
+    var cl = ocrNutrientCands(lines, ['탄수화물', '탄수화물질', '탄수'], null);
+    var fl = ocrNutrientCands(lines, ['지방'], true);
+    var pick = pickMacros(out.k, pl, cl, fl);
+    if (pick.p) out.p = Math.round(pick.p.v * 10) / 10;
+    if (pick.c) out.c = Math.round(pick.c.v * 10) / 10;
+    if (pick.f) out.f = Math.round(pick.f.v * 10) / 10;
+
+    /* 1회 제공량 / 총 내용량 */
+    var flat = lines.join(' ');
+    var serv = flat.match(/(?:1회\s*제공량|1회분량|1회\s*당)[^0-9]{0,8}([0-9]{1,4}(?:[.,][0-9]{1,2})?)\s*(g|ml|mL|m1)/i);
+    var totalG = flat.match(/총\s*내용량[^0-9]{0,8}([0-9]{1,4}(?:[.,][0-9]{1,2})?)\s*(g|ml|mL|m1)/i);
+    if (serv) out.serv = '1회 제공량 ' + ocrNum(serv[1]) + (/(ml|m1)/i.test(serv[2]) ? 'ml' : 'g') + ' 기준 값이에요.';
+    else if (totalG) out.serv = '총 내용량 ' + ocrNum(totalG[1]) + (/(ml|m1)/i.test(totalG[2]) ? 'ml' : 'g') + ' 기준 값이에요.';
+
+    if (out.k == null) out.miss.push('열량');
+    if (out.p == null) out.miss.push('단백질');
+    if (out.c == null) out.miss.push('탄수화물');
+    if (out.f == null) out.miss.push('지방');
+
+    out.name = guessFoodName(raw);
+    return out;
+  }
+
+  /* 사진 위쪽의 상품명을 짐작한다 (틀리면 사용자가 고치는 전제) */
+  function guessFoodName(raw) {
+    var lines = ocrLines(raw);
+    var strict = [], loose = [];
+    for (var i = 0; i < lines.length && i < 8; i++) {
+      var line = lines[i];
+      var bare = line.replace(/[\s:·\-_,.()\[\]]/g, '');
+      if (bare.length < 2 || bare.length > 26) continue;
+      if (/[0-9]/.test(bare)) continue;
+      var stop = false;
+      for (var j = 0; j < OCR_STOP_WORDS.length; j++) {
+        if (bare.indexOf(OCR_STOP_WORDS[j]) >= 0) { stop = true; break; }
+      }
+      if (stop) continue;
+      var hangul = (bare.match(/[\uAC00-\uD7A3]/g) || []).length;
+      if (hangul < 2) continue;
+      var latin = (bare.match(/[A-Za-z]/g) || []).length;
+      var ratio = hangul / bare.length;
+      if (latin <= 1 && ratio >= 0.75) strict.push(line);
+      else if (latin <= 2 && ratio >= 0.5) loose.push(line);
+    }
+    var pick = strict[0] || loose[0] || '';
+    return pick.slice(0, 26);
+  }
+
+  function onOcrFile(input) {
+    var f = input.files && input.files[0];
+    try { input.value = ''; } catch (e) {}
+    if (!f) return;
+    if (!/^image\//.test(f.type || '')) {
+      if (f.type && f.type.indexOf('image') < 0) { toast('사진 파일을 골라줘'); return; }
+    }
+    startOcr(f);
   }
 
   /* ================= data io ================= */
@@ -3771,6 +4303,12 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
       syncOpt('mMeal', manualMeal);
     });
     $('btnAddManual').onclick = addManual;
+
+    /* 성분표 사진 */
+    $('btnOcr').onclick = pickOcrPhoto;
+    $('btnOcrCam').onclick = pickOcrPhoto;
+    $('fileOcr').onchange = function () { onOcrFile(this); };
+    $('btnOcrSkip').onclick = function () { closeSheets(); openManual(''); };
   }
 
   /* ================= init ================= */
@@ -3824,6 +4362,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     bestMatch: bestMatch,
     textScore: textScore,
     openManual: openManual,
+    ocrParse: parseNutrition,
+    ocrNameGuess: guessFoodName,
     openEdit: openEdit,
     createQuickFood: createQuickFood,
     saveEdit: saveEdit,

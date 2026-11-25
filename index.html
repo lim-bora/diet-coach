@@ -394,7 +394,18 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .preset .pre{font-size:14px;line-height:1}
 .preset .prn{font-size:12.5px;font-weight:700;color:#7A5A28;white-space:nowrap;letter-spacing:-0.02em}
 .preset .prk{font-size:11px;font-weight:800;color:#B4791F;font-variant-numeric:tabular-nums;letter-spacing:0}
-.head-actions{display:flex;align-items:center;gap:7px}
+.head-actions{display:flex;align-items:center;gap:7px;flex:0 1 auto;min-width:0}
+/* v4.5: 버튼이 세 개가 되어 좁은 화면에서도 한 줄에 유지 */
+#quickCard .card-head h2{flex:0 0 auto;white-space:nowrap}
+#quickCard .head-actions{flex-wrap:nowrap}
+#quickCard .head-actions .link-btn{white-space:nowrap;padding:5px 7px;font-size:11.5px}
+#quickCard .head-actions .link-btn.muted{padding:5px 4px}
+@media (max-width:344px){
+  #quickCard .card-head{gap:6px}
+  #quickCard .head-actions{gap:5px}
+  #quickCard .head-actions .link-btn{padding:5px 5px;font-size:10.5px;letter-spacing:-0.03em}
+  #quickCard .card-head h2{font-size:14px}
+}
 .link-btn.copy-btn{background:#EFF7F3;border-radius:9px;padding:5px 10px;font-size:12px;color:var(--em-d)}
 .link-btn.copy-btn:active{opacity:.6}
 .qnew input.err{border-color:#FF8F79;box-shadow:0 0 0 4px rgba(255,122,102,.18);background:#FFF8F6}

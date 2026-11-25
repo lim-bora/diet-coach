@@ -670,6 +670,73 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 }
 .toast .tm{max-width:220px}
 
+/* ===== v4.5: 내 요리 (재료 합산) ===== */
+.link-btn.recipe-btn{
+  display:inline-flex;align-items:center;gap:3px;background:#FFF3E8;color:#B4652A;
+  border-radius:9px;padding:5px 8px;font-size:12px;font-weight:800;letter-spacing:-0.02em;
+}
+.link-btn.recipe-btn:active{opacity:.6}
+.rc-addrow{display:flex;gap:7px;align-items:center}
+.rc-addrow .text-input{flex:1;min-width:0}
+.rc-add{
+  -webkit-appearance:none;border:0;flex:0 0 auto;border-radius:12px;padding:0 15px;height:46px;
+  background:linear-gradient(160deg,#14AD82,#0A8C67);color:#fff;font-size:13.5px;font-weight:800;
+}
+.rc-add:active{transform:scale(.96);opacity:.9}
+.rc-tools{display:flex;gap:7px;margin-top:8px}
+.rc-tool{
+  -webkit-appearance:none;flex:1;min-width:0;border:1px dashed #CFE6DD;background:#F7FCFA;
+  color:#2C7C63;border-radius:11px;padding:8px 6px;font-size:11.5px;font-weight:800;letter-spacing:-0.02em;
+}
+.rc-tool:active{background:#EDF8F3;border-color:#9EE0C8}
+.rc-res{display:flex;flex-direction:column;gap:5px;margin-top:8px;max-height:34vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.rc-row{
+  display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:13px;
+  background:#fff;border:1px solid #EDF2F1;text-align:left;width:100%;
+  -webkit-appearance:none;
+}
+.rc-row:active{background:#F4FCF8;border-color:#C9EEDE}
+.rc-row .rr-e{width:26px;height:26px;flex:0 0 auto;border-radius:8px;background:#F6FAF8;border:1px solid #EDF4F1;display:grid;place-items:center;font-size:13px}
+.rc-row .rr-b{flex:1;min-width:0}
+.rc-row .rr-n{font-size:13px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.rc-row .rr-s{font-size:10.5px;color:var(--ink3);font-weight:600;margin-top:1px;letter-spacing:0}
+.rc-row .rr-k{font-size:11.5px;font-weight:800;color:var(--ink2);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.rc-badge{
+  font-size:9.5px;font-weight:800;color:#2C7C63;background:#E9F7F1;border-radius:6px;
+  padding:1px 4px;letter-spacing:-0.01em;flex:0 0 auto;
+}
+.rc-tip{font-size:11px;color:var(--ink3);padding:2px 2px 0;line-height:1.5}
+.rc-new{margin-top:9px;background:#F8FBFA;border:1px solid #E6F1EC;border-radius:14px;padding:10px}
+.rc-new .text-input{height:42px;font-size:15px;background:#fff}
+.rc-newfoot{display:flex;align-items:center;gap:8px;margin-top:9px}
+.rc-check{padding:0;font-size:11.5px;flex:1;min-width:0;color:var(--ink2)}
+.rc-newfoot .btn-primary{padding:9px 15px;font-size:12.5px;border-radius:11px;flex:0 0 auto}
+.rc-items{display:flex;flex-direction:column;gap:6px}
+.rc-item{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;
+  background:#F8FBFA;border:1px solid #EDF4F1;
+}
+.rc-item .ri-e{width:28px;height:28px;flex:0 0 auto;border-radius:9px;background:#fff;border:1px solid #EDF4F1;display:grid;place-items:center;font-size:14px}
+.rc-item .ri-b{flex:1;min-width:0}
+.rc-item .ri-n{font-size:13px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.rc-item .ri-s{font-size:10.5px;color:var(--ink3);font-weight:600;margin-top:1px;letter-spacing:0;font-variant-numeric:tabular-nums}
+.rc-ctl{display:flex;align-items:center;gap:1px;background:#fff;border:1px solid #E7EEEB;border-radius:10px;padding:2px;flex:0 0 auto}
+.rc-ctl button{
+  -webkit-appearance:none;border:0;background:transparent;width:26px;height:26px;border-radius:8px;
+  color:var(--ink2);font-size:14px;font-weight:700;line-height:1;display:grid;place-items:center;padding:0;
+}
+.rc-ctl button:active{background:#EFF8F4;color:var(--em-d)}
+.rc-ctl .rc-q{min-width:34px;text-align:center;font-size:11.5px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:0}
+.rc-del{
+  -webkit-appearance:none;border:0;background:transparent;color:#C8D2D6;font-size:15px;font-weight:700;
+  width:24px;height:24px;border-radius:8px;display:grid;place-items:center;padding:0;flex:0 0 auto;
+}
+.rc-del:active{color:var(--coral);background:var(--coral-l)}
+.rc-empty{font-size:12px;color:var(--ink3);padding:9px 2px 2px;line-height:1.55}
+.rc-empty b{color:var(--ink2);font-weight:700}
+.rc-sum{margin-top:12px}
+.rc-sum .pb-kcal span#rcSumKcal{font-size:26px;font-weight:800;letter-spacing:-0.04em}
+
 @media (min-width:520px){
   html{background:#E7ECEE}
   #app{box-shadow:0 20px 60px -30px rgba(16,24,28,.45),0 0 0 1px rgba(20,26,28,.04)}
@@ -801,6 +868,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     <div class="card-head">
       <h2>빠른 기록</h2>
       <div class="head-actions">
+        <button class="link-btn recipe-btn" id="btnRecipe">🍳 내 요리</button>
         <button class="link-btn ocr-btn" id="btnOcr">📷 성분표</button>
         <button class="link-btn muted" id="btnChipsEdit">편집</button>
       </div>
@@ -997,7 +1065,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
       <pre class="ocr-raw" id="mOcrRawText"></pre>
     </details>
     <div class="field">
-      <label>음식 이름</label>
+      <label id="mNameLabel">음식 이름</label>
       <input class="text-input" id="mName" type="text" placeholder="예: 엄마표 김치볶음밥" autocomplete="off">
     </div>
     <div class="grid2">
@@ -1039,7 +1107,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
         <p class="pack-hint" id="mPackHint"></p>
       </div>
     </div>
-    <div class="field">
+    <div class="field" id="mMealField">
       <label>끼니</label>
       <div class="opt-pills" id="mMeal">
         <button class="opt" data-v="breakfast">아침</button>
@@ -1048,7 +1116,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
         <button class="opt" data-v="snack">간식</button>
       </div>
     </div>
-    <label class="check"><input type="checkbox" id="mFav"><span>자주 먹는 음식에 저장</span></label>
+    <label class="check"><input type="checkbox" id="mFav"><span id="mFavLabel">자주 먹는 음식에 저장</span></label>
   </div>
   <div class="sheet-foot"><button class="btn-primary block em" id="btnAddManual">추가하기</button></div>
 </section>
@@ -1130,7 +1198,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   <div class="sheet-grab"></div>
   <div class="sheet-head"><h3>빠른 기록 칩 설정</h3><button class="xbtn" data-close="favs" aria-label="닫기">&#10005;</button></div>
   <div class="sheet-body">
-    <div class="favs-sec"><b>음식 검색해서 추가</b><span>내장 333종 · 내 음식</span></div>
+    <div class="favs-sec"><b>음식 검색해서 추가</b><span id="favScope">내장 DB · 내 냉장고</span></div>
     <div class="favs-search">
       <input class="text-input" id="favSearch" type="search" autocomplete="off" placeholder="예: 마가렛트, 아메리카노, 닭가슴살">
       <button class="favs-clear" id="favSearchClear" aria-label="검색어 지우기" hidden>&#215;</button>
@@ -1154,6 +1222,79 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     <p class="formula" id="ocrNote" style="margin-top:12px">사진에서 열량·단백질·탄수화물·지방을 찾아 폼에 채워둘게요. 숫자는 넣기 전에 한 번 확인할 수 있어요.</p>
   </div>
   <div class="sheet-foot"><button class="btn-ghost" id="btnOcrSkip" style="width:100%">사진 없이 직접 입력</button></div>
+</section>
+
+<section class="sheet" id="sheetRecipe" role="dialog" aria-modal="true" aria-label="내 요리 만들기">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h3>🍳 내 요리</h3><button class="xbtn" data-close="recipe" aria-label="닫기">&#10005;</button></div>
+  <div class="sheet-body">
+    <div class="field">
+      <label>요리 이름</label>
+      <input class="text-input" id="rcName" type="text" placeholder="예: 닭가슴살 고추장 비빔밥" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>재료 넣기<span class="lab-opt">한 줄에 여러 개도 돼요</span></label>
+      <div class="rc-addrow">
+        <input class="text-input" id="rcInput" type="text" autocomplete="off" placeholder="저당고추장 1스푼 계란 2개 단백질밥 1공기">
+        <button class="rc-add" id="rcAdd">추가</button>
+      </div>
+      <div class="rc-tools">
+        <button class="rc-tool" id="rcOcr">📷 성분표로 재료 추가</button>
+        <button class="rc-tool" id="rcDirect">＋ 직접 재료 추가</button>
+      </div>
+      <div class="rc-res" id="rcResults"></div>
+      <div class="rc-new" id="rcNewBox" hidden>
+        <input class="text-input" id="rcNewName" type="text" placeholder="재료 이름 (예: 엄마표 양념장)" autocomplete="off">
+        <div class="grid2" style="margin-top:8px">
+          <div class="input-row"><input class="text-input" id="rcNewKcal" type="number" inputmode="numeric" step="1" placeholder="칼로리"><span class="unit">kcal</span></div>
+          <div class="input-row"><input class="text-input" id="rcNewP" type="number" inputmode="decimal" step="0.1" placeholder="단백질(선택)"><span class="unit">g</span></div>
+        </div>
+        <div class="grid2" style="margin-top:8px">
+          <div class="input-row"><input class="text-input" id="rcNewC" type="number" inputmode="decimal" step="0.1" placeholder="탄수(선택)"><span class="unit">g</span></div>
+          <div class="input-row"><input class="text-input" id="rcNewF" type="number" inputmode="decimal" step="0.1" placeholder="지방(선택)"><span class="unit">g</span></div>
+        </div>
+        <div class="rc-newfoot">
+          <label class="check rc-check"><input type="checkbox" id="rcNewSave" checked><span>내 냉장고에도 저장</span></label>
+          <button class="btn-primary em" id="rcNewAdd">재료로 담기</button>
+        </div>
+      </div>
+    </div>
+    <div class="favs-sec"><b>담은 재료</b><span id="rcCount">0개</span></div>
+    <div class="rc-items" id="rcItems"></div>
+    <div class="rc-empty" id="rcEmpty">아직 담은 재료가 없어요. 위에 한 줄로 적고 <b>추가</b>를 눌러줘.</div>
+    <div class="field" style="margin-top:14px">
+      <label>먹은 양</label>
+      <div class="opt-pills" id="rcPortion">
+        <button class="opt on" data-v="1">전체</button>
+        <button class="opt" data-v="0.5">절반</button>
+        <button class="opt" data-v="0.333">1/3</button>
+      </div>
+    </div>
+    <div class="plan-box rc-sum">
+      <div class="pb-top">
+        <span class="pb-k" id="rcSumLabel">이만큼 먹으면</span>
+        <div class="pb-kcal"><span id="rcSumKcal">0</span> <span class="pb-unit">kcal</span></div>
+      </div>
+      <div class="pb-macros">
+        <div class="pb-m"><b id="rcSumP">0</b><span>단백질 g</span></div>
+        <div class="pb-m"><b id="rcSumC">0</b><span>탄수 g</span></div>
+        <div class="pb-m"><b id="rcSumF">0</b><span>지방 g</span></div>
+      </div>
+      <div class="pb-sub" id="rcSumSub"></div>
+    </div>
+    <div class="field">
+      <label>끼니</label>
+      <div class="opt-pills" id="rcMeal">
+        <button class="opt" data-v="breakfast">아침</button>
+        <button class="opt" data-v="lunch">점심</button>
+        <button class="opt" data-v="dinner">저녁</button>
+        <button class="opt" data-v="snack">간식</button>
+      </div>
+    </div>
+    <label class="check"><input type="checkbox" id="rcSave" checked><span>내 냉장고에도 저장해 두기</span></label>
+    <p class="formula">담은 재료의 칼로리·탄단지를 합쳐서 기록해요. 저장해 두면 다음에 검색해서 바로 꺼내 쓸 수 있어요.</p>
+  </div>
+  <div class="sheet-foot"><button class="btn-primary block em" id="btnRecipeSave">이 요리로 기록하기</button></div>
 </section>
 
 <script>
@@ -1190,9 +1331,9 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     { n: '삶은계란', e: '🥚', k: 78, p: 6.3, c: 0.6, f: 5.3, u: '개', g: 50, a: ['삶은계란', '계란', '달걀', '삶은달걀', '에그'] },
     { n: '계란후라이', e: '🍳', k: 105, p: 6.5, c: 0.5, f: 8, u: '개', g: 50, a: ['계란후라이', '달걀후라이', '후라이', '반숙란'] },
     { n: '계란찜', e: '🥣', k: 110, p: 9, c: 3, f: 6.5, u: '인분', g: 150, a: ['계란찜', '달걀찜'] },
-    { n: '닭가슴살', e: '🍗', k: 115, p: 23, c: 0, f: 1.5, u: '100g', g: 100, a: ['닭가슴살', '닭참', '닭가슴'] },
+    { n: '닭가슴살', e: '🍗', k: 115, p: 23, c: 0, f: 1.5, u: '100g', g: 100, a: ['닭가슴살', '닭참', '닭가슴', '닭가슴살시판', '시판닭가슴살', '닭가슴살팩'] },
     { n: '닭가슴살샐러드', e: '🥗', k: 220, p: 25, c: 12, f: 7, u: '팩', g: 250, a: ['닭가슴살샐러드', '닭샐러드', '닭샐'] },
-    { n: '두부', e: '🤍', k: 130, p: 12, c: 4, f: 7, u: '150g', g: 150, a: ['두부', '찌개두부'] },
+    { n: '두부', e: '🤍', k: 130, p: 12, c: 4, f: 7, u: '150g', g: 150, a: ['두부', '찌개두부', '두부반모'] },
     { n: '참치캔', e: '🐟', k: 130, p: 24, c: 0, f: 4, u: '캔', g: 100, a: ['참치캔', '참치', '동원참치'] },
     { n: '연어', e: '🍣', k: 200, p: 20, c: 0, f: 13, u: '100g', g: 100, a: ['연어', '연어구이', '생연어'] },
     { n: '단백질쉐이크', e: '🥤', k: 120, p: 20, c: 5, f: 2, u: '병', g: 300, a: ['단백질쉐이크', '단쉐', '단쉐이크', '쉐이크', '프로틴', '프로틴쉐이크'] },
@@ -1520,7 +1661,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     /* ===== v3: 채소·과일·양념 ===== */
     { n: '상추', e: '🥬', k: 10, p: 0.8, c: 1.5, f: 0.1, u: '10장', g: 50, a: ['상추', '깻잎'] },
     { n: '시금치나물', e: '🥬', k: 40, p: 2, c: 4, f: 2, u: '인분', g: 70, a: ['시금치나물', '시금치'] },
-    { n: '콩나물무침', e: '🌱', k: 35, p: 3, c: 3, f: 1.5, u: '인분', g: 70, a: ['콩나물무침', '콩나물'] },
+    { n: '콩나물무침', e: '🌱', k: 35, p: 3, c: 3, f: 1.5, u: '인분', g: 70, a: ['콩나물무침', '콩나물나물'] },
     { n: '김', e: '🍙', k: 15, p: 1, c: 1, f: 1, u: '장', g: 3, a: ['김', '김한장', '구운김'] },
     { n: '미역', e: '🌿', k: 10, p: 0.5, c: 2, f: 0.1, u: '인분', g: 50, a: ['미역', '미역무침'] },
     { n: '포도', e: '🍇', k: 60, p: 0.6, c: 15, f: 0.2, u: '100g', g: 100, a: ['포도', '샤인머스캣', '거봉'] },
@@ -1532,8 +1673,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     { n: '곶감', e: '🟠', k: 70, p: 0.5, c: 18, f: 0.1, u: '개', g: 40, a: ['곶감', '반건시'] },
     { n: '건포도', e: '🍇', k: 60, p: 0.6, c: 15, f: 0.1, u: '한줌', g: 20, a: ['건포도', '레이즌'] },
     { n: '아몬드', e: '🥜', k: 140, p: 5, c: 5, f: 12, u: '20알', g: 24, a: ['아몬드', '아몬드한줌'] },
-    { n: '올리브유', e: '🫒', k: 40, p: 0, c: 0, f: 4.5, u: '스푼', g: 5, a: ['올리브유', '올리브오일'] },
-    { n: '참기름', e: '🫗', k: 40, p: 0, c: 0, f: 4.5, u: '스푼', g: 5, a: ['참기름', '들기름'] },
+    { n: '올리브유', e: '🫒', k: 120, p: 0, c: 0, f: 13.5, u: '큰술', g: 15, a: ['올리브유', '올리브오일', '엑스트라버진올리브유'] },
+    { n: '참기름', e: '🫗', k: 120, p: 0, c: 0, f: 13.5, u: '큰술', g: 15, a: ['참기름', '들기름'] },
     { n: '마요네즈', e: '🥄', k: 90, p: 0.2, c: 0.5, f: 10, u: '스푼', g: 12, a: ['마요네즈', '마요'] },
     { n: '케첩', e: '🍅', k: 20, p: 0.2, c: 5, f: 0, u: '스푼', g: 15, a: ['케첩', '토마토소스'] },
     { n: '고추장', e: '🌶', k: 35, p: 1, c: 7, f: 0.2, u: '스푼', g: 15, a: ['고추장', '초고추장'] },
@@ -1553,7 +1694,40 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     { n: '청국장', e: '🍲', k: 150, p: 12, c: 10, f: 7, u: '인분', g: 200, a: ['청국장', '청국장찌개'] },
     { n: '낫토', e: '🫘', k: 100, p: 8, c: 6, f: 5, u: '팩', g: 50, a: ['낫토', '나또'] },
     { n: '콘푸로스트', e: '🥣', k: 130, p: 2, c: 28, f: 0.5, u: '그릇', g: 30, a: ['콘푸로스트', '시리얼', '켈로그'] },
-    { n: '두유 그린', e: '🥛', k: 115, p: 7, c: 8, f: 6, u: '팩', g: 190, a: ['두유그린', '베지밀'] }
+    { n: '두유 그린', e: '🥛', k: 115, p: 7, c: 8, f: 6, u: '팩', g: 190, a: ['두유그린', '베지밀'] },
+
+    /* ===== v4.5: 요리 재료 · 조미료 (큰술 = 15g 기준) ===== */
+    { n: '저당고추장', e: '🌶', k: 20, p: 0.7, c: 3.5, f: 0.1, u: '큰술', g: 15, a: ['저당고추장', '저고추장', '저당초고추장'] },
+    { n: '된장', e: '🫘', k: 25, p: 1.7, c: 2.6, f: 0.9, u: '큰술', g: 15, a: ['된장', '재래된장', '집된장'] },
+    { n: '액젓', e: '🐟', k: 8, p: 1.5, c: 0.4, f: 0, u: '큰술', g: 15, a: ['액젓', '멸치액젓', '까나리액젓', '국산액젓'] },
+    { n: '간장', e: '🥢', k: 11, p: 1, c: 1.2, f: 0, u: '큰술', g: 15, a: ['간장', '진간장', '양조간장', '국간장', '맛간장'] },
+    { n: '굴소스', e: '🦪', k: 20, p: 0.4, c: 4.2, f: 0, u: '큰술', g: 15, a: ['굴소스'] },
+    { n: '식용유', e: '🫗', k: 120, p: 0, c: 0, f: 13.6, u: '큰술', g: 15, a: ['식용유', '카놀라유', '포도씨유', '해바라기유', '기름'] },
+    { n: '알룰로스', e: '🍬', k: 1, p: 0, c: 0.5, f: 0, u: '큰술', g: 15, a: ['알룰로스', '알룰로즈', '대체당', '제로칼로리당'] },
+    { n: '스리라차', e: '🌶', k: 15, p: 0.2, c: 3, f: 0.1, u: '큰술', g: 15, a: ['스리라차', '스리라차소스', '스리라챠'] },
+    { n: '저당케첩', e: '🍅', k: 10, p: 0.2, c: 2.2, f: 0, u: '큰술', g: 15, a: ['저당케첩', '제로케첩', '무설탕케첩'] },
+    { n: '하프마요', e: '🥄', k: 45, p: 0.2, c: 1, f: 4.6, u: '큰술', g: 12, a: ['하프마요', '하프마요네즈', '저칼로리마요', '저지방마요'] },
+    { n: '맛술', e: '🍶', k: 20, p: 0, c: 3.5, f: 0, u: '큰술', g: 15, a: ['맛술', '미림', '요리술', '조미료술'] },
+    { n: '다진마늘', e: '🧄', k: 20, p: 0.9, c: 4.2, f: 0.1, u: '큰술', g: 15, a: ['다진마늘', '간마늘', '마늘다진것'] },
+    { n: '다진생강', e: '🫚', k: 8, p: 0.2, c: 1.8, f: 0.1, u: '큰술', g: 10, a: ['다진생강', '간생강', '생강즙'] },
+    { n: '고춧가루', e: '🌶', k: 35, p: 1.5, c: 6, f: 1, u: '큰술', g: 10, a: ['고춧가루', '고추가루', '굵은고춧가루'] },
+    { n: '식초', e: '🍶', k: 3, p: 0, c: 0.5, f: 0, u: '큰술', g: 15, a: ['식초', '사과식초', '현미식초', '발사믹식초'] },
+    { n: '소금', e: '🧂', k: 0, p: 0, c: 0, f: 0, u: '작은술', g: 5, a: ['소금', '천일염', '꽃소금', '맛소금'] },
+    { n: '후추', e: '🧂', k: 5, p: 0.2, c: 1, f: 0.1, u: '작은술', g: 2, a: ['후추', '후춧가루', '흑후추'] },
+
+    /* ===== v4.5: 요리용 기본 재료 ===== */
+    { n: '단백질밥', e: '🍚', k: 300, p: 9, c: 63, f: 1.5, u: '공기', g: 210, a: ['단백질밥', '단백질시판밥', '단백질공기밥', '햇반단백질밥', '단백질쌀밥', '시판단백질밥'] },
+    { n: '김치', e: '🥬', k: 30, p: 1.5, c: 5, f: 0.5, u: '접시', g: 100, a: ['김치', '배추김치', '익은김치'] },
+    { n: '두부한모', e: '🤍', k: 260, p: 24, c: 8, f: 14, u: '모', g: 300, a: ['두부한모', '두부1모', '한모두부', '부침용두부'] },
+    { n: '대파', e: '🌿', k: 30, p: 1.6, c: 5, f: 0.3, u: '대', g: 100, a: ['대파', '쪽파', '실파', '파'] },
+    { n: '양파', e: '🧅', k: 80, p: 2, c: 18, f: 0.2, u: '개', g: 200, a: ['양파', '적양파'] },
+    { n: '마늘', e: '🧄', k: 12, p: 0.5, c: 2.5, f: 0, u: '쪽', g: 8, a: ['마늘', '통마늘', '깐마늘'] },
+    { n: '애호박', e: '🥒', k: 40, p: 2, c: 7, f: 0.5, u: '개', g: 200, a: ['애호박', '호박'] },
+    { n: '당근', e: '🥕', k: 40, p: 1, c: 9, f: 0.2, u: '개', g: 150, a: ['당근'] },
+    { n: '청양고추', e: '🌶', k: 10, p: 0.5, c: 2, f: 0.1, u: '개', g: 10, a: ['청양고추', '고추', '홍고추', '풋고추'] },
+    { n: '버섯', e: '🍄', k: 12, p: 1, c: 2, f: 0.2, u: '개', g: 30, a: ['버섯', '새송이버섯', '새송이', '표고버섯', '표고', '느타리버섯', '양송이버섯'] },
+    { n: '무', e: '🥬', k: 13, p: 0.6, c: 3, f: 0.1, u: '100g', g: 100, a: ['무', '무우', '조선무'] },
+    { n: '콩나물', e: '🌱', k: 45, p: 4.9, c: 4.3, f: 1.4, u: '100g', g: 100, a: ['콩나물', '콩나물생것', '시장콩나물'] }
   ];
 
   /* ================= 검색 색인 · 스마트 매칭 ================= */
@@ -1940,8 +2114,17 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   }
 
   /* ================= natural language parser ================= */
-  var UNITS = ['개입', '개', '알', '인분', '그릇', '공기', '잔', '장', '조각', '봉지', '봉', '팩', '컵', '캔', '병', '그램', 'ml', 'g', '미리'];
+  var UNITS = ['개입', '큰술', '작은술', '티스푼', '스푼', 'tbsp', 'tsp', '술', '모', '쪽', '대', '접시', '줌', '마리', '줄',
+    '개', '알', '인분', '그릇', '공기', '잔', '장', '조각', '봉지', '봉', '팩', '컵', '캔', '병', '그램', 'ml', 'g', '미리'];
   var KO_NUM = { '반': 0.5, '한': 1, '하나': 1, '두': 2, '둘': 2, '세': 3, '셋': 3, '네': 4, '넷': 4, '다섯': 5 };
+
+  /* 실제 요리 단위 구분: 같은 스푼이라도 큰술·작은술을 구분해 계산 */
+  function normUnit(u) {
+    var s = String(u == null ? '' : u).toLowerCase();
+    if (s === '큰술' || s === '술' || s === 'tbsp') return '스푼';
+    if (s === '티스푼' || s === 'tsp') return '작은술';
+    return s;
+  }
 
   function matchAt(s, i) {
     for (var k = 0; k < ALIASES.length; k++) {
@@ -1973,6 +2156,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     if (mHalf) return { n: 0.5, unit: '', end: j + mHalf[0].length };
     var mX = rest.match(new RegExp('^[x×]\\s*(\\d+(?:\\.\\d+)?)\\s*(' + unitAlt + ')?', 'i'));
     if (mX) return { n: parseFloat(mX[1]), unit: (mX[2] || '').toLowerCase(), end: j + mX[0].length };
+    var mHalfN = rest.match(new RegExp('^(\\d+(?:\\.\\d+)?)\\s*반\\s*(' + unitAlt + ')?', 'i'));
+    if (mHalfN) return { n: parseFloat(mHalfN[1]) * 0.5, unit: (mHalfN[2] || '').toLowerCase(), end: j + mHalfN[0].length };
     var m = rest.match(new RegExp('^(\\d+(?:\\.\\d+)?)\\s*(?:\\/\\s*(\\d+))?\\s*(' + unitAlt + ')?', 'i'));
     if (m) {
       var n = parseFloat(m[1]);
@@ -1988,11 +2173,22 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 
   function qtyToServing(food, n, unit) {
     if (!n || n <= 0) n = 1;
+    unit = normUnit(unit);
     if (unit === 'g' || unit === 'gram' || unit === '그램' || unit === 'ml') {
       var base = num(food.g, 0);
       if (base > 0) return n / base;
       return 1;
     }
+    /* 작은술: 큰술 기준 재료는 1/3, 중량이 있으면 5g 기준으로 환산 */
+    if (unit === '작은술') {
+      var su = String(food.u || '');
+      if (su.indexOf('큰술') >= 0) return n / 3;
+      if (su.indexOf('작은술') >= 0) return n;
+      var g5 = num(food.g, 0);
+      if (g5 > 0) return n * 5 / g5;
+    }
+    /* 큰술 단위인데 재료가 작은술 기준이면 3배 */
+    if (unit === '스푼' && String(food.u || '').indexOf('작은술') >= 0) return n * 3;
     /* '2조각', '10개', '0.5개' 처럼 1회 제공량이 여러 개인 음식 */
     var m = String(food.u || '').match(/^(\d+(?:\.\d+)?)(.+)$/);
     if (m && unit && unit === m[2].toLowerCase()) {
@@ -2023,11 +2219,21 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   }
 
   function wholeCoreMatch(s) {
+    var pool = allFoods();
+    /* 1) 문장 전체가 음식 이름·별칭과 정확히 같으면 수량을 떼지 않는다 ('두부한모' 를 '두부'+'한모'로 쪼개지 않게) */
+    var coreAll = coreOf(s);
+    if (coreAll) {
+      for (var a = 0; a < pool.length; a++) {
+        var ks = foodKeys(pool[a]);
+        for (var b = 0; b < ks.length; b++) {
+          if (coreOf(ks[b]) === coreAll) return { f: pool[a], qty: null };
+        }
+      }
+    }
     var q = tailQty(s);
     var body = q ? s.slice(0, s.length - q.raw.length) : s;
     var core = coreOf(body);
     if (!core) return null;
-    var pool = allFoods();
     for (var i = 0; i < pool.length; i++) {
       var keys = foodKeys(pool[i]);
       for (var j = 0; j < keys.length; j++) {
@@ -2513,7 +2719,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     if (!OFF.items.length) {
       return OFF.done ? '<div class="off-note">🌐 Open Food Facts에도 없었어. 아래에 칼로리만 적으면 돼.</div>' : '';
     }
-    var h = '<div class="off-note">🌐 <b>Open Food Facts</b>에서 찾았어 — 탭하면 기록하고 내 음식에 저장돼</div><div class="prev-list">';
+    var h = '<div class="off-note">🌐 <b>Open Food Facts</b>에서 찾았어 — 탭하면 기록하고 내 냉장고에 저장돼</div><div class="prev-list">';
     OFF.items.forEach(function (it, i) {
       h += '<div class="prev-row off" data-off="' + i + '">' +
         '<span class="pe">🌐</span><span class="pn">' + esc(it.n) + '</span>' +
@@ -2978,7 +3184,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     renderPackEdit();
   }
 
-  /* 분할해서 기록한 음식은 내 음식·칩도 1개 기준으로 맞춘다 */
+  /* 분할해서 기록한 음식은 내 냉장고·칩도 1개 기준으로 맞춘다 */
   function syncFoodFromItem(it) {
     var key = squash(it.name), changed = false;
     (state.customs || []).forEach(function (c) {
@@ -3408,6 +3614,9 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     state.ui.editChips = false;
     if ($('favSearch')) $('favSearch').value = '';
     if ($('favSearchClear')) $('favSearchClear').hidden = true;
+    if ($('favScope')) {
+      $('favScope').textContent = '내장 ' + DB.length + '종 · 내 냉장고 ' + (state.customs || []).length + '개';
+    }
     renderFavSheet();
     openSheet('favs');
   }
@@ -3509,6 +3718,248 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  /* ================= v4.5: 내 요리 (재료 합산) ================= */
+  var rcItems = [];
+  var rcPortion = 1;
+  var rcMeal = 'lunch';
+  var rcOcrMode = false;
+  var rcPickCache = [];
+
+  function rcTotal() {
+    var t = { kcal: 0, p: 0, c: 0, f: 0 };
+    rcItems.forEach(function (it) {
+      t.kcal += it.k * it.q;
+      t.p += it.p * it.q;
+      t.c += it.c * it.q;
+      t.f += it.f * it.q;
+    });
+    return t;
+  }
+
+  function rcQtyText(it) {
+    return qtyLabel({ n: it.q, mult: 1, u: it.u });
+  }
+
+  function rcUnitHint(f) {
+    var u = String((f && f.u) || '인분');
+    return /^\d/.test(u) ? '1회 ' + u : '1' + u;
+  }
+
+  function rcPortionLabel() {
+    if (Math.abs(rcPortion - 1) < 0.01) return '전체';
+    if (Math.abs(rcPortion - 0.5) < 0.01) return '절반';
+    if (Math.abs(rcPortion - 1 / 3) < 0.02) return '1/3';
+    return fmtQty(rcPortion) + '인분';
+  }
+
+  function rcAdd(food, q) {
+    if (!food || !food.n) return;
+    var n = num(q, 1);
+    if (!(n > 0)) n = 1;
+    var key = squash(food.n);
+    for (var i = 0; i < rcItems.length; i++) {
+      if (squash(rcItems[i].n) === key) {
+        /* 같은 이름이면 수량을 합치고, 영양값은 방금 담은 쪽으로 맞춘다 */
+        rcItems[i].q += n;
+        rcItems[i].e = food.e || rcItems[i].e;
+        rcItems[i].k = num(food.k, rcItems[i].k);
+        rcItems[i].p = num(food.p, rcItems[i].p);
+        rcItems[i].c = num(food.c, rcItems[i].c);
+        rcItems[i].f = num(food.f, rcItems[i].f);
+        rcItems[i].u = food.u || rcItems[i].u;
+        if (food.cu) rcItems[i].cu = 1;
+        return;
+      }
+    }
+    rcItems.push({
+      n: String(food.n), e: food.e || '🍽', k: num(food.k, 0), p: num(food.p, 0),
+      c: num(food.c, 0), f: num(food.f, 0), u: food.u || '인분', g: num(food.g, 0),
+      q: n, cu: food.cu ? 1 : 0
+    });
+  }
+
+  function rcRender() {
+    var box = $('rcItems');
+    if (!box) return;
+    var t = rcTotal();
+    if ($('rcEmpty')) $('rcEmpty').style.display = rcItems.length ? 'none' : 'block';
+    if ($('rcCount')) {
+      $('rcCount').textContent = rcItems.length
+        ? rcItems.length + '개 · ' + fmtInt(t.kcal) + 'kcal'
+        : '0개';
+    }
+    var html = '';
+    rcItems.forEach(function (it, i) {
+      html += '<div class="rc-item">' +
+        '<span class="ri-e">' + esc(it.e) + '</span>' +
+        '<div class="ri-b">' +
+          '<div class="ri-n">' + esc(it.n) + (it.cu ? '<span class="rc-badge">내 냉장고</span>' : '') + '</div>' +
+          '<div class="ri-s">' + esc(rcQtyText(it)) + ' · ' + fmtInt(it.k * it.q) + 'kcal</div>' +
+        '</div>' +
+        '<div class="rc-ctl">' +
+          '<button type="button" data-rci="' + i + '" data-rcstep="-0.5" aria-label="수량 줄이기">&#8722;</button>' +
+          '<b class="rc-q">' + fmtQty(it.q) + '</b>' +
+          '<button type="button" data-rci="' + i + '" data-rcstep="0.5" aria-label="수량 늘리기">+</button>' +
+        '</div>' +
+        '<button type="button" class="rc-del" data-rcdel="' + i + '" aria-label="삭제">&#215;</button>' +
+      '</div>';
+    });
+    box.innerHTML = html;
+
+    var pk = Math.round(t.kcal * rcPortion * 10) / 10;
+    if ($('rcSumKcal')) $('rcSumKcal').textContent = fmtInt(pk);
+    if ($('rcSumP')) $('rcSumP').textContent = fmt1(t.p * rcPortion);
+    if ($('rcSumC')) $('rcSumC').textContent = fmt1(t.c * rcPortion);
+    if ($('rcSumF')) $('rcSumF').textContent = fmt1(t.f * rcPortion);
+    if ($('rcSumLabel')) $('rcSumLabel').textContent = rcItems.length
+      ? (Math.abs(rcPortion - 1) < 0.01 ? '전체 먹으면' : rcPortionLabel() + '만 먹으면')
+      : '이만큼 먹으면';
+    if ($('rcSumSub')) {
+      $('rcSumSub').textContent = rcItems.length
+        ? '재료 ' + rcItems.length + '가지 전체 ' + fmtInt(t.kcal) + 'kcal · 탄 ' + fmt1(t.c) +
+          ' · 단 ' + fmt1(t.p) + ' · 지 ' + fmt1(t.f)
+        : '재료를 담으면 합계가 여기에 나와요.';
+    }
+    var btn = $('btnRecipeSave');
+    if (btn) {
+      btn.disabled = !rcItems.length;
+      btn.style.opacity = rcItems.length ? '' : '.45';
+    }
+  }
+
+  /* 내 냉장고(직접 등록·성분표로 저장) 음식을 먼저 보여준다 */
+  function rcFindList(query) {
+    var list = findFoods(query, 12);
+    list.sort(function (a, b) {
+      var ca = a.f.cu ? 1 : 0, cb = b.f.cu ? 1 : 0;
+      if (ca !== cb) return cb - ca;
+      return b.s - a.s;
+    });
+    return list.slice(0, 6);
+  }
+
+  function rcSearchRender() {
+    var box = $('rcResults');
+    if (!box) return;
+    var q = String($('rcInput').value || '').trim();
+    rcPickCache = [];
+    if (!q || q.length < 1 || /[0-9]/.test(q) || q.indexOf('+') >= 0) { box.innerHTML = ''; return; }
+    var list = rcFindList(q);
+    if (!list.length) {
+      box.innerHTML = '<div class="rc-tip">사전에 없어 — <b>＋ 직접 재료 추가</b>로 이름과 칼로리를 넣어줘.</div>';
+      return;
+    }
+    var html = '';
+    list.forEach(function (r, i) {
+      var f = r.f;
+      html += '<button type="button" class="rc-row" data-rcpick="' + i + '">' +
+        '<span class="rr-e">' + esc(f.e || '🍽') + '</span>' +
+        '<span class="rr-b">' +
+          '<span class="rr-n">' + esc(f.n) + (f.cu ? '<span class="rc-badge">내 냉장고</span>' : '') + '</span>' +
+          '<span class="rr-s">' + esc(rcUnitHint(f)) + ' · ' + fmtInt(f.k) + 'kcal</span>' +
+        '</span>' +
+        '<span class="rr-k">+ 담기</span>' +
+      '</button>';
+    });
+    box.innerHTML = html;
+    rcPickCache = list;
+  }
+
+  function rcOpenDirect(name) {
+    var box = $('rcNewBox');
+    if (!box) return;
+    box.hidden = false;
+    if (name) $('rcNewName').value = String(name);
+    setTimeout(function () { try { ($('rcNewKcal').value ? $('rcNewKcal') : (name ? $('rcNewKcal') : $('rcNewName'))).focus(); } catch (e) {} }, 40);
+  }
+
+  function rcParseAdd(text) {
+    var t = String(text == null ? '' : text).trim();
+    if (!t) { toast('재료를 적어줘'); try { $('rcInput').focus(); } catch (e) {} return; }
+    var r = parseQuick(t);
+    var names = [], miss = r.unknown.slice();
+    r.items.forEach(function (it) {
+      rcAdd(it.f, Math.max(0.5, it.n));
+      names.push(it.f.n);
+    });
+    if (!names.length) {
+      toast('처음 보는 재료야 · 칼로리를 넣어줄래?');
+      rcOpenDirect(t.replace(/[0-9.]+\s*(?:스푼|큰술|작은술|개|공기|g|인분|장|모|대|컵|팩|봉|캔|병)?/g, ' ').replace(/\s+/g, ' ').trim() || '');
+      return;
+    }
+    $('rcInput').value = '';
+    $('rcResults').innerHTML = '';
+    rcPickCache = [];
+    rcRender();
+    toast(names.length + '개 재료 담았어' + (miss.length ? ' · ' + miss.join('·') + '은 직접 추가로' : ''));
+  }
+
+  function rcAddDirect() {
+    var name = String($('rcNewName').value || '').trim();
+    var k = num($('rcNewKcal').value, null);
+    if (!name) { toast('재료 이름을 적어줘'); try { $('rcNewName').focus(); } catch (e) {} return; }
+    if (k == null || !isFinite(k) || k <= 0) { toast('칼로리를 적어줘'); try { $('rcNewKcal').focus(); } catch (e) {} return; }
+    var food = {
+      n: name, e: '🥄', k: k,
+      p: Math.max(0, num($('rcNewP').value, 0)),
+      c: Math.max(0, num($('rcNewC').value, 0)),
+      f: Math.max(0, num($('rcNewF').value, 0)),
+      u: '인분', g: 0
+    };
+    if ($('rcNewSave') && $('rcNewSave').checked) saveCustomFood(food, false);
+    rcAdd(food, 1);
+    $('rcNewName').value = '';
+    $('rcNewKcal').value = '';
+    $('rcNewP').value = '';
+    $('rcNewC').value = '';
+    $('rcNewF').value = '';
+    $('rcNewBox').hidden = true;
+    rcRender();
+    toast(name + ' 재료로 담았어');
+  }
+
+  function rcSaveMeal() {
+    if (!rcItems.length) { toast('재료를 먼저 담아줘'); return; }
+    var t = rcTotal();
+    var name = String($('rcName').value || '').trim() || '내 요리';
+    var food = {
+      n: name, e: '🍳',
+      k: Math.round(t.kcal * 10) / 10,
+      p: Math.round(t.p * 10) / 10,
+      c: Math.round(t.c * 10) / 10,
+      f: Math.round(t.f * 10) / 10,
+      u: '인분', g: 0
+    };
+    var wantSave = !!($('rcSave') && $('rcSave').checked);
+    if (wantSave) saveCustomFood(food, false);
+    var meal = rcMeal, part = rcPortion;
+    var pk = food.k * part;
+    addFood(food, part, meal);
+    closeSheets();
+    toast(name + ' ' + fmtInt(pk) + 'kcal 기록했어' + (wantSave ? ' · 내 냉장고에 저장' : ''));
+    rcItems = [];
+    rcPortion = 1;
+    $('rcName').value = '';
+    $('rcInput').value = '';
+    $('rcResults').innerHTML = '';
+    $('rcNewBox').hidden = true;
+    if ($('rcSave')) $('rcSave').checked = true;
+  }
+
+  function openRecipe() {
+    rcMeal = state.ui.meal;
+    rcPortion = 1;
+    rcPickCache = [];
+    $('rcInput').value = '';
+    $('rcResults').innerHTML = '';
+    $('rcNewBox').hidden = true;
+    syncOpt('rcPortion', '1');
+    syncOpt('rcMeal', rcMeal);
+    rcRender();
+    openSheet('recipe');
+    setTimeout(function () { try { $('rcInput').focus(); } catch (e) {} }, 380);
+  }
+
   /* ================= sheets ================= */
   function openSheet(name) {
     lockY = window.scrollY || window.pageYOffset || 0;
@@ -3528,6 +3979,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     if (c) c.classList.remove('open');
     if (d) d.classList.remove('open');
     if (e) e.classList.remove('open');
+    var f2 = $('sheetRecipe');
+    if (f2) f2.classList.remove('open');
     document.body.classList.remove('lock');
     document.body.style.top = '';
     window.scrollTo(0, lockY);
@@ -3547,8 +4000,17 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     if ($('mPack')) $('mPack').value = pre && pre.pack ? String(pre.pack) : '';
     manualEat = 1;
     renderPackManual();
-    $('mFav').checked = manualFromQuery;
-    if ($('mTitle')) $('mTitle').textContent = (pre && pre.ocr && !pre.error) ? '성분표 확인' : '직접 입력';
+    rcOcrMode = !!(pre && pre.recipe);
+    if ($('mFav')) $('mFav').checked = rcOcrMode ? true : manualFromQuery;
+    if ($('mTitle')) {
+      $('mTitle').textContent = rcOcrMode ? '성분표 · 재료 확인'
+        : ((pre && pre.ocr && !pre.error) ? '성분표 확인' : '직접 입력');
+    }
+    if ($('btnAddManual')) $('btnAddManual').textContent = rcOcrMode ? '재료로 담기' : '추가하기';
+    if ($('mNameLabel')) $('mNameLabel').textContent = rcOcrMode ? '재료 이름' : '음식 이름';
+    if ($('mName')) $('mName').placeholder = rcOcrMode ? '예: 시판 저당 소스' : '예: 엄마표 김치볶음밥';
+    if ($('mFavLabel')) $('mFavLabel').textContent = rcOcrMode ? '내 냉장고에도 저장하기' : '자주 먹는 음식에 저장';
+    if ($('mMealField')) $('mMealField').hidden = rcOcrMode;
     renderOcrHint(pre);
     syncOpt('mMeal', manualMeal);
     openSheet('manual');
@@ -3649,7 +4111,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   function addManual() {
     var name = $('mName').value.trim();
     var kcal = num($('mKcal').value, null);
-    if (!name) { toast('음식 이름을 적어줘'); $('mName').focus(); return; }
+    if (!name) { toast(rcOcrMode ? '재료 이름을 적어줘' : '음식 이름을 적어줘'); $('mName').focus(); return; }
     if (kcal == null || !isFinite(kcal) || kcal <= 0) { toast('칼로리를 적어줘'); $('mKcal').focus(); return; }
     var pack = packOf($('mPack') && $('mPack').value);
     var eat = pack ? Math.min(pack, Math.max(1, Math.round(manualEat || 1))) : 1;
@@ -3666,6 +4128,16 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     };
     var wantFav = !!$('mFav').checked;
     var meal = manualMeal;
+    /* 요리 시트에서 부른 경우: 기록 대신 재료 목록으로 되돌아간다 */
+    if (rcOcrMode) {
+      if ($('mFav').checked) saveCustomFood(food, false);
+      rcAdd(food, Math.max(0.5, eat));
+      rcOcrMode = false;
+      closeSheets();
+      openRecipe();
+      toast(food.n + ' 재료로 담았어 · ' + fmt1(food.k * Math.max(0.5, eat)) + 'kcal');
+      return;
+    }
     saveCustomFood(food, wantFav);
     if (manualFromQuery) { $('quickInput').value = ''; manualFromQuery = false; }
     closeSheets();
@@ -3831,9 +4303,10 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     if (!ocrReadable()) return; /* 사용자가 시트를 먼저 침으면 버린다 */
     var p = parseNutrition(text);
     var got = p.k != null || p.p != null || p.c != null || p.f != null;
+    var toRecipe = rcOcrMode;
     closeSheets();
     openManual('', {
-      ocr: true, k: p.k, p: p.p, c: p.c, f: p.f, pack: p.pack,
+      ocr: true, k: p.k, p: p.p, c: p.c, f: p.f, pack: p.pack, recipe: toRecipe,
       name: got ? p.name : '', text: text, miss: p.miss, serv: p.serv
     });
     toast(got ? '성분표에서 읽었어 · 확인하고 등록해줘' : '숫자를 못 읽었어 · 직접 넣어줄래?');
@@ -3842,8 +4315,9 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   function failOcr(err) {
     var msg = (err && err.message) ? err.message : '사진을 읽지 못했어요.';
     if (!ocrReadable()) return;
+    var toRecipe = rcOcrMode;
     closeSheets();
-    openManual('', { ocr: true, error: msg });
+    openManual('', { ocr: true, error: msg, recipe: toRecipe });
     toast('사진을 못 읽었어 · 직접 넣어줄게');
   }
 
@@ -4535,10 +5009,88 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     }
 
     /* 성분표 사진 */
-    $('btnOcr').onclick = pickOcrPhoto;
-    $('btnOcrCam').onclick = pickOcrPhoto;
+    $('btnOcr').onclick = function () { rcOcrMode = false; pickOcrPhoto(); };
+    $('btnOcrCam').onclick = function () { rcOcrMode = false; pickOcrPhoto(); };
     $('fileOcr').onchange = function () { onOcrFile(this); };
-    $('btnOcrSkip').onclick = function () { closeSheets(); openManual(''); };
+    $('btnOcrSkip').onclick = function () {
+      if (rcOcrMode) {
+        rcOcrMode = false;
+        closeSheets();
+        openRecipe();
+        toast('사진 없이 직접 재료를 넣어줘');
+        return;
+      }
+      closeSheets(); openManual('');
+    };
+
+    /* 내 요리 */
+    $('btnRecipe').onclick = openRecipe;
+    $('rcAdd').onclick = function () { rcParseAdd($('rcInput').value); };
+    $('rcInput').addEventListener('input', rcSearchRender);
+    $('rcInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); rcParseAdd($('rcInput').value); }
+    });
+    $('rcResults').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-rcpick]') : null;
+      if (!b) return;
+      var i = parseInt(b.getAttribute('data-rcpick'), 10);
+      var hit = rcPickCache[i];
+      if (!hit) return;
+      rcAdd(hit.f, 1);
+      $('rcInput').value = '';
+      $('rcResults').innerHTML = '';
+      rcPickCache = [];
+      rcRender();
+      toast(hit.f.n + ' 담았어');
+    });
+    $('rcItems').addEventListener('click', function (e) {
+      var t = e.target;
+      if (!t.closest) return;
+      var del = t.closest('[data-rcdel]');
+      if (del) {
+        var di = parseInt(del.getAttribute('data-rcdel'), 10);
+        if (rcItems[di]) {
+          var gone = rcItems[di].n;
+          rcItems.splice(di, 1);
+          rcRender();
+          toast(gone + ' 뺐어');
+        }
+        return;
+      }
+      var step = t.closest('[data-rcstep]');
+      if (!step) return;
+      var si = parseInt(step.getAttribute('data-rci'), 10);
+      var dv = parseFloat(step.getAttribute('data-rcstep')) || 0;
+      if (!rcItems[si]) return;
+      var nq = Math.round((rcItems[si].q + dv) * 100) / 100;
+      rcItems[si].q = nq < 0.5 ? 0.5 : nq;
+      rcRender();
+    });
+    $('rcPortion').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button[data-v]') : null;
+      if (!b) return;
+      rcPortion = parseFloat(b.getAttribute('data-v')) || 1;
+      syncOpt('rcPortion', b.getAttribute('data-v'));
+      rcRender();
+    });
+    $('rcMeal').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button[data-v]') : null;
+      if (!b) return;
+      rcMeal = b.getAttribute('data-v');
+      syncOpt('rcMeal', rcMeal);
+    });
+    $('rcDirect').onclick = function () {
+      var box = $('rcNewBox');
+      if (box && !box.hidden) { box.hidden = true; return; }
+      rcOpenDirect('');
+    };
+    $('rcNewAdd').onclick = rcAddDirect;
+    $('rcOcr').onclick = function () {
+      rcOcrMode = true;
+      closeSheets();
+      pickOcrPhoto();
+    };
+    $('btnRecipeSave').onclick = rcSaveMeal;
   }
 
   /* ================= init ================= */
@@ -4601,6 +5153,12 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     removeCustomFood: removeCustomFood,
     findFoodByName: findFoodByName,
     dayText: function () { return dayText(); },
+    openRecipe: openRecipe,
+    rcAdd: function (food, q) { rcAdd(food, q); rcRender(); },
+    rcItems: function () { return rcItems; },
+    rcTotal: function () { return rcTotal(); },
+    rcParseAdd: rcParseAdd,
+    rcSaveMeal: rcSaveMeal,
     state: function () { return state; }
   };
 })();

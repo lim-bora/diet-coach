@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>보라 다이어트 코치</title>
-<!-- v4.8: 🍳 자주 해 먹는 요리(레시피) 저장·불러오기 · 수분 기능 제거 · 메인 컬러 딥그린 -->
+<!-- v4.9: 그라데이션 전부 제거 · 단색 #006241 플랫 통일 · 레시피 워딩을 '내 레시피'로 -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -23,8 +23,8 @@
   --ink2:#5A686E;
   --ink3:#93A1A7;
   --line:#EBEFF0;
-  --em:#00704A;
-  --em-d:#005638;
+  --em:#006241;
+  --em-d:#004E34;
   --em-l:#EAF4F0;
   --coral:#FF7A66;
   --coral-l:#FFF1ED;
@@ -50,9 +50,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 
 #app{
   max-width:430px;margin:0 auto;position:relative;min-height:100vh;
-  background:
-    radial-gradient(130% 46% at 50% -6%, #E4F1EB 0%, rgba(228,241,235,0) 62%),
-    var(--bg);
+  background:var(--bg);
   padding-bottom:calc(150px + env(safe-area-inset-bottom, 0px));
   box-shadow:0 0 0 1px rgba(20,26,28,.03);
 }
@@ -91,17 +89,9 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 /* ---------- hero ---------- */
 .hero{
   margin:10px 14px 0;padding:16px 18px 15px;border-radius:26px;color:#fff;
-  position:relative;overflow:hidden;isolation:isolate;
-  background:linear-gradient(158deg,#00704A 0%,#005C3E 46%,#1E3932 100%);
-  box-shadow:0 18px 34px -18px rgba(0,86,56,.55), inset 0 1px 0 rgba(255,255,255,.10);
-}
-.hero::before{
-  content:"";position:absolute;width:250px;height:250px;right:-90px;top:-120px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.20),rgba(255,255,255,0) 66%);z-index:-1;
-}
-.hero::after{
-  content:"";position:absolute;width:200px;height:200px;left:-100px;bottom:-120px;border-radius:50%;
-  background:radial-gradient(circle,rgba(150,220,190,.16),rgba(255,255,255,0) 68%);z-index:-1;
+  position:relative;overflow:hidden;
+  background:#006241;
+  box-shadow:0 14px 28px -20px rgba(0,78,52,.50);
 }
 .hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
 .hero-top span{font-size:12px;font-weight:600;color:rgba(255,255,255,.72);letter-spacing:0}
@@ -113,9 +103,9 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 .ring-wrap{position:relative;width:172px;height:172px;margin:6px auto 2px}
 .ring-svg{width:172px;height:172px;display:block;transform:rotate(-90deg)}
 .ring-track{fill:none;stroke:rgba(255,255,255,.16);stroke-width:11}
-.ring-bar{fill:none;stroke:url(#ringGrad);stroke-width:11;stroke-linecap:round;
+.ring-bar{fill:none;stroke:#9CD5BB;stroke-width:11;stroke-linecap:round;
   transition:stroke-dashoffset .55s cubic-bezier(.22,.9,.24,1),stroke .3s ease}
-.ring-bar.over{stroke:url(#ringGradOver)}
+.ring-bar.over{stroke:#FF8B74}
 .ring-center{
   position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:1px;pointer-events:none;
@@ -134,9 +124,9 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 .macro-top b{font-size:11.5px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:0}
 .bar{height:5px;border-radius:3px;background:rgba(255,255,255,.17);overflow:hidden}
 .bar i{display:block;height:100%;border-radius:3px;transition:width .5s cubic-bezier(.22,.9,.24,1)}
-.bar.p i{background:linear-gradient(90deg,#3E9C77,#9CD5BB)}
-.bar.c i{background:linear-gradient(90deg,#FFE08A,#FFF2C8)}
-.bar.f i{background:linear-gradient(90deg,#FFB4A2,#FFD9CF)}
+.bar.p i{background:#9CD5BB}
+.bar.c i{background:#FFE08A}
+.bar.f i{background:#FFB4A2}
 
 /* ---------- cards ---------- */
 .card{
@@ -166,7 +156,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   background:#F4F7F7;border:1.6px solid transparent;border-radius:16px;
   transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
 }
-.qbox:focus-within{background:#fff;border-color:#B3D9C9;box-shadow:0 0 0 4px rgba(0,112,74,.10)}
+.qbox:focus-within{background:#fff;border-color:#B3D9C9;box-shadow:0 0 0 4px rgba(0,98,65,.10)}
 .qbox svg{width:19px;height:19px;flex:0 0 auto;color:#9DAAAF}
 .qbox input{
   flex:1;min-width:0;border:0;background:transparent;outline:none;
@@ -209,12 +199,12 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   padding:0 34px 0 12px;font-size:15px;font-weight:600;color:var(--ink);outline:none;letter-spacing:-0.01em;
 }
 .qnew .qn-name input{padding-right:12px}
-.qnew input:focus{border-color:#B3D9C9;box-shadow:0 0 0 4px rgba(0,112,74,.10)}
+.qnew input:focus{border-color:#B3D9C9;box-shadow:0 0 0 4px rgba(0,98,65,.10)}
 .qnew input::placeholder{color:#B4BFC3;font-weight:500}
 .qnew .qn-u{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--ink3)}
 .qnew .qn-go{
   margin-top:9px;width:100%;border:0;border-radius:13px;padding:13px;
-  background:linear-gradient(160deg,#00704A,#005638);color:#fff;font-size:14px;font-weight:800;letter-spacing:-0.01em;
+  background:#006241;color:#fff;font-size:14px;font-weight:800;letter-spacing:-0.01em;
 }
 .qnew .qn-go:active{transform:scale(.985);opacity:.92}
 .qnew .qn-opt{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:11.5px;font-weight:600;color:var(--ink2);letter-spacing:-0.01em}
@@ -243,7 +233,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .meal-group.drop-target{
   background:var(--em-l);border-radius:14px;
   outline:2px dashed var(--em);outline-offset:3px;
-  box-shadow:0 0 0 7px rgba(0,112,74,.06);
+  box-shadow:0 0 0 7px rgba(0,98,65,.06);
 }
 .meal-group.drop-target .meal-head .mn,
 .meal-group.drop-target .meal-head .mk{color:var(--em-d)}
@@ -342,24 +332,24 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .chips-empty{font-size:12.5px;color:var(--ink3);margin:12px 0 0}
 
 #quickCard{transition:box-shadow .3s ease,border-color .3s ease}
-#quickCard.flash{border-color:#A9D9C6;box-shadow:0 0 0 3px rgba(0,112,74,.18), var(--sh)}
+#quickCard.flash{border-color:#A9D9C6;box-shadow:0 0 0 3px rgba(0,98,65,.18), var(--sh)}
 
 /* ===== v3: sticky quick bar · 대충 컷 · 복사 ===== */
 .qbar{
   position:sticky;top:calc(46px + env(safe-area-inset-top, 0px));z-index:32;
   padding:7px 14px 9px;
-  background:linear-gradient(180deg,rgba(242,245,243,.97) 58%,rgba(242,245,243,.82) 100%);
+  background:rgba(242,245,243,.97);
   -webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);
   border-bottom:1px solid rgba(20,26,28,.035);
 }
 .qwrap{position:relative}
 .qbar .qbox{height:50px;background:#fff;border-color:#E5EDE9;box-shadow:0 2px 10px -6px rgba(16,24,28,.26)}
-.qbar .qbox:focus-within{border-color:#9CCDB9;box-shadow:0 0 0 4px rgba(0,112,74,.12)}
+.qbar .qbox:focus-within{border-color:#9CCDB9;box-shadow:0 0 0 4px rgba(0,98,65,.12)}
 .qbox.err{border-color:#FF9A88;box-shadow:0 0 0 4px rgba(255,122,102,.18);animation:shake .32s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}60%{transform:translateX(4px)}80%{transform:translateX(-2px)}}
 .qgo{
   -webkit-appearance:none;border:0;flex:0 0 auto;width:36px;height:36px;border-radius:12px;padding:0;
-  background:linear-gradient(160deg,#00704A,#005638);color:#fff;font-size:16px;line-height:1;
+  background:#006241;color:#fff;font-size:16px;line-height:1;
   display:grid;place-items:center;transition:transform .12s ease,opacity .12s ease;
 }
 .qgo:active{transform:scale(.93);opacity:.9}
@@ -552,9 +542,9 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .fab{
   -webkit-appearance:none;border:0;position:absolute;left:50%;bottom:calc(54px + env(safe-area-inset-bottom, 0px));
   width:54px;height:54px;border-radius:50%;z-index:41;
-  background:linear-gradient(160deg,#00704A,#005638);color:#fff;
+  background:#006241;color:#fff;
   display:grid;place-items:center;transform:translateX(-50%);margin:0;
-  box-shadow:0 10px 20px -8px rgba(0,86,56,.55),0 0 0 5px rgba(252,253,253,.9),inset 0 1px 0 rgba(255,255,255,.25);
+  box-shadow:0 10px 20px -8px rgba(0,78,52,.45),0 0 0 5px rgba(252,253,253,.9);
   transition:transform .14s ease;
 }
 .fab:active{transform:translateX(-50%) scale(.93)}
@@ -594,7 +584,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   padding:0 13px;font-size:16px;font-weight:600;color:var(--ink);outline:none;
   transition:border-color .15s,background .15s;
 }
-.text-input:focus{border-color:#B3D9C9;background:#fff;box-shadow:0 0 0 4px rgba(0,112,74,.10)}
+.text-input:focus{border-color:#B3D9C9;background:#fff;box-shadow:0 0 0 4px rgba(0,98,65,.10)}
 .text-input::placeholder{color:#B4BFC3;font-weight:500}
 .unit{font-size:13px;font-weight:700;color:var(--ink3);flex:0 0 auto;width:26px}
 .opt-pills{display:flex;gap:6px;flex-wrap:wrap}
@@ -603,7 +593,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   border-radius:12px;padding:10px 6px;font-size:12.5px;font-weight:600;color:var(--ink2);
   transition:all .15s ease;letter-spacing:-0.02em;
 }
-.opt.on{border-color:var(--em);background:#EAF4F0;color:var(--em-d);font-weight:700;box-shadow:0 0 0 3px rgba(0,112,74,.08)}
+.opt.on{border-color:var(--em);background:#EAF4F0;color:var(--em-d);font-weight:700;box-shadow:0 0 0 3px rgba(0,98,65,.08)}
 .opt small{display:block;font-size:10px;font-weight:600;color:var(--ink3);margin-top:2px;letter-spacing:0}
 .opt.on small{color:#4B8A71}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -634,7 +624,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .pack-hint{margin:8px 0 0;font-size:11.5px;font-weight:800;color:var(--em-d);letter-spacing:0;line-height:1.5}
 .pack-hint .pk-sub{display:block;font-weight:600;color:var(--ink3);margin-top:3px}
 .pack-hint .pk-sub b{font-weight:800;color:var(--ink2)}
-.plan-box{background:linear-gradient(160deg,#F3FBF7,#EDF7F3);border:1px solid #DCEBE4;border-radius:18px;padding:14px;margin:4px 0 14px}
+.plan-box{background:#EAF4F0;border:1px solid #DCEBE4;border-radius:18px;padding:14px;margin:4px 0 14px}
 .plan-box .pb-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
 .plan-box .pb-k{font-size:12px;font-weight:700;color:#1E5B48;letter-spacing:0}
 .plan-box .pb-kcal{font-size:26px;font-weight:800;letter-spacing:-0.04em;color:var(--ink)}
@@ -686,13 +676,13 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .rc-addrow .text-input{flex:1;min-width:0}
 .rc-add{
   -webkit-appearance:none;border:0;flex:0 0 auto;border-radius:12px;padding:0 15px;height:46px;
-  background:linear-gradient(160deg,#00704A,#005638);color:#fff;font-size:13.5px;font-weight:800;
+  background:#006241;color:#fff;font-size:13.5px;font-weight:800;
 }
 .rc-add:active{transform:scale(.96);opacity:.9}
 .rc-tools{display:flex;gap:7px;margin-top:8px}
 .rc-tool{
   -webkit-appearance:none;flex:1;min-width:0;border:1px dashed #C8DDD2;background:#F4FAF6;
-  color:#005638;border-radius:11px;padding:8px 6px;font-size:11.5px;font-weight:800;letter-spacing:-0.02em;
+  color:#004E34;border-radius:11px;padding:8px 6px;font-size:11.5px;font-weight:800;letter-spacing:-0.02em;
 }
 .rc-tool:active{background:#E7F2ED;border-color:#9CCDB9}
 .rc-res{display:flex;flex-direction:column;gap:5px;margin-top:8px;max-height:34vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
@@ -708,7 +698,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .rc-row .rr-s{font-size:10.5px;color:var(--ink3);font-weight:600;margin-top:1px;letter-spacing:0}
 .rc-row .rr-k{font-size:11.5px;font-weight:800;color:var(--ink2);font-variant-numeric:tabular-nums;flex:0 0 auto}
 .rc-badge{
-  font-size:9.5px;font-weight:800;color:#005638;background:#E7F1EC;border-radius:6px;
+  font-size:9.5px;font-weight:800;color:#004E34;background:#EAF4F0;border-radius:6px;
   padding:1px 4px;letter-spacing:-0.01em;flex:0 0 auto;
 }
 .rc-tip{font-size:11px;color:var(--ink3);padding:2px 2px 0;line-height:1.5}
@@ -750,7 +740,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 /* ===== v4.3: 성분표 사진 인식 ===== */
 .qbox .cam{
   -webkit-appearance:none;border:0;flex:0 0 auto;width:34px;height:34px;padding:0;border-radius:11px;
-  background:#E7F1EC;color:#005638;display:grid;place-items:center;
+  background:#EAF4F0;color:#004E34;display:grid;place-items:center;
   transition:transform .12s ease,background .15s ease;
 }
 .qbox .cam:active{transform:scale(.92);background:#D2E9DE}
@@ -769,7 +759,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .ocr-status{font-size:14px;font-weight:800;color:var(--ink);letter-spacing:-0.025em}
 .ocr-sub{font-size:11.5px;color:var(--ink3);margin-top:5px;line-height:1.5;min-height:17px}
 .ocr-bar{height:6px;border-radius:3px;background:#EAF0EE;overflow:hidden;margin:11px 0 0}
-.ocr-bar i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#9CD5BB,#00704A);transition:width .3s ease}
+.ocr-bar i{display:block;height:100%;width:0;border-radius:3px;background:#006241;transition:width .3s ease}
 .ocr-hint{
   margin:0 0 14px;padding:10px 12px;border-radius:12px;background:#F2FBF7;
   border:1px solid #CFE7DB;font-size:11.5px;color:#03412F;line-height:1.6;letter-spacing:-0.01em;
@@ -930,7 +920,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
 .frb-empty b{color:var(--ink2)}
 .frb-nores{padding:20px 6px;text-align:center;font-size:12.5px;color:var(--ink3);letter-spacing:0}
 
-/* ===== v4.8: 자주 해 먹는 요리 (레시피 저장·불러오기) ===== */
+/* ===== v4.8: 내 레시피 (레시피 저장·불러오기) ===== */
 .rc-tabs{grid-template-columns:1fr 1fr}
 .rc-tabs .frb-tab i{margin-left:5px}
 .rc-saved{display:flex;flex-direction:column;gap:9px}
@@ -1025,17 +1015,6 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     </div>
     <div class="ring-wrap">
       <svg class="ring-svg" viewBox="0 0 172 172" aria-hidden="true">
-        <defs>
-          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#DDF1E7"/>
-            <stop offset="55%" stop-color="#9CD5BB"/>
-            <stop offset="100%" stop-color="#2E9B72"/>
-          </linearGradient>
-          <linearGradient id="ringGradOver" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#FFD3C8"/>
-            <stop offset="100%" stop-color="#FF8B74"/>
-          </linearGradient>
-        </defs>
         <circle class="ring-track" cx="86" cy="86" r="70"></circle>
         <circle class="ring-bar" id="ringBar" cx="86" cy="86" r="70" stroke-dasharray="439.82" stroke-dashoffset="439.82"></circle>
       </svg>
@@ -1413,7 +1392,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   <div class="sheet-body">
     <div class="frb-tabs rc-tabs" id="rcTabs">
       <button class="frb-tab on" data-rctab="build">새 요리 만들기</button>
-      <button class="frb-tab" data-rctab="saved">자주 해 먹는 요리<i id="rcTabCount">0</i></button>
+      <button class="frb-tab" data-rctab="saved">내 레시피<i id="rcTabCount">0</i></button>
     </div>
     <div id="rcBuildPane">
     <div class="field">
@@ -1481,7 +1460,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
         <button class="opt" data-v="snack">간식</button>
       </div>
     </div>
-    <label class="check"><input type="checkbox" id="rcSave" checked><span>자주 해 먹는 요리로 저장해 두기</span></label>
+    <label class="check"><input type="checkbox" id="rcSave" checked><span>내 레시피로 저장해 두기</span></label>
     <p class="formula">담은 재료의 칼로리·탄단지를 합쳐서 기록해요. 저장해 두면 다음에 재료 조합 그대로 불러와 계란 개수처럼 살짝 바꿔 쓸 수 있어요.</p>
     </div>
     <div id="rcSavedPane" hidden></div>
@@ -2804,14 +2783,11 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     var area = line + ' L' + co[co.length - 1].x.toFixed(1) + ' ' + H + ' L' + co[0].x.toFixed(1) + ' ' + H + ' Z';
     var dots = co.map(function (c, idx) {
       var last = idx === co.length - 1;
-      return '<circle cx="' + c.x.toFixed(1) + '" cy="' + c.y.toFixed(1) + '" r="' + (last ? 4 : 2.6) + '" fill="' + (last ? '#00704A' : '#fff') + '" stroke="#00704A" stroke-width="2"/>';
+      return '<circle cx="' + c.x.toFixed(1) + '" cy="' + c.y.toFixed(1) + '" r="' + (last ? 4 : 2.6) + '" fill="' + (last ? '#006241' : '#fff') + '" stroke="#006241" stroke-width="2"/>';
     }).join('');
     box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">' +
-      '<defs><linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="#00704A" stop-opacity="0.18"/><stop offset="100%" stop-color="#00704A" stop-opacity="0"/>' +
-      '</linearGradient></defs>' +
-      '<path d="' + area + '" fill="url(#sparkGrad)"/>' +
-      '<path d="' + line + '" fill="none" stroke="#00704A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>' +
+      '<path d="' + area + '" fill="#006241" fill-opacity="0.12"/>' +
+      '<path d="' + line + '" fill="none" stroke="#006241" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>' +
       dots + '</svg>';
     $('sparkX').innerHTML = '<span>' + mdLabel(pts[0].k) + ' ' + fmt1(pts[0].w) + '</span>' +
       '<span>' + mdLabel(pts[pts.length - 1].k) + ' ' + fmt1(pts[pts.length - 1].w) + '</span>';
@@ -4213,7 +4189,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
       f: Math.round(t.f * 10) / 10,
       u: '인분', g: 0
     };
-    /* v4.8: 레시피는 내 냉장고가 아니라 '자주 해 먹는 요리'에만 저장한다 */
+    /* v4.8: 레시피는 내 냉장고가 아니라 '내 레시피'에만 저장한다 */
     var wantRecipe = !!($('rcSave') && $('rcSave').checked);
     var note = '';
     if (wantRecipe) {
@@ -4244,7 +4220,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     if ($('rcSave')) $('rcSave').checked = true;
   }
 
-  /* ================= v4.8: 자주 해 먹는 요리 (레시피 저장·불러오기) ================= */
+  /* ================= v4.8: 내 레시피 (레시피 저장·불러오기) ================= */
   var rcTab = 'build';
 
   function recipesAll() { return Array.isArray(state.recipes) ? state.recipes : []; }
@@ -4327,7 +4303,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     if (!box) return;
     if (!all.length) {
       box.innerHTML = '<div class="rc-saved-empty"><span class="se-e">🍳</span>' +
-        '아직 저장한 레시피가 없어요.<br>재료를 담고 <b>자주 해 먹는 요리로 저장</b>해 두면<br>다음에 재료 조합 그대로 불러올 수 있어요.' +
+        '아직 내 레시피가 없어요.<br>재료를 담고 <b>내 레시피로 저장</b>해 두면<br>다음에 재료 조합 그대로 불러올 수 있어요.' +
         '<button class="btn-ghost" type="button" data-rctab="build">새 요리 만들기</button></div>';
       return;
     }

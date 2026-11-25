@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <title>보라 다이어트 코치</title>
-<!-- v4.7: ✨ '일반 기준으로 채우기' 버튼 + 집반찬 DB 보강 -->
+<!-- v4.8: 🍳 자주 해 먹는 요리(레시피) 저장·불러오기 · 수분 기능 제거 · 메인 컬러 딥그린 -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="다이어트">
-<meta name="theme-color" content="#F4F6F7">
+<meta name="theme-color" content="#F2F5F3">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <meta name="format-detection" content="telephone=no">
@@ -17,15 +17,15 @@
 <link rel="icon" type="image/png" sizes="180x180" href="./apple-touch-icon.png?v=5">
 <style>
 :root{
-  --bg:#F4F6F7;
+  --bg:#F2F5F3;
   --card:#FFFFFF;
   --ink:#12181A;
   --ink2:#5A686E;
   --ink3:#93A1A7;
   --line:#EBEFF0;
-  --em:#0FB981;
-  --em-d:#0A8C67;
-  --em-l:#E9F9F2;
+  --em:#00704A;
+  --em-d:#005638;
+  --em-l:#EAF4F0;
   --coral:#FF7A66;
   --coral-l:#FFF1ED;
   --amber:#F2A93B;
@@ -33,12 +33,12 @@
   --sh:0 1px 2px rgba(16,24,28,.04), 0 10px 26px -18px rgba(16,24,28,.30);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{background:#E9EEEF;color-scheme:light}
+html{background:#E9EEEC;color-scheme:light}
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
   color:var(--ink);
-  background:#E7ECEE;
+  background:#E9EEEC;
   -webkit-font-smoothing:antialiased;
   -webkit-text-size-adjust:100%;
   letter-spacing:-0.01em;
@@ -51,9 +51,9 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 #app{
   max-width:430px;margin:0 auto;position:relative;min-height:100vh;
   background:
-    radial-gradient(130% 46% at 50% -6%, #DFF5EB 0%, rgba(223,245,235,0) 62%),
+    radial-gradient(130% 46% at 50% -6%, #E4F1EB 0%, rgba(228,241,235,0) 62%),
     var(--bg);
-  padding-bottom:calc(118px + env(safe-area-inset-bottom, 0px));
+  padding-bottom:calc(150px + env(safe-area-inset-bottom, 0px));
   box-shadow:0 0 0 1px rgba(20,26,28,.03);
 }
 
@@ -62,7 +62,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   position:sticky;top:0;z-index:30;
   display:flex;align-items:center;gap:6px;
   padding:calc(6px + env(safe-area-inset-top, 0px)) 12px 6px;
-  background:rgba(244,246,247,.78);
+  background:rgba(242,245,243,.78);
   -webkit-backdrop-filter:saturate(180%) blur(18px);
   backdrop-filter:saturate(180%) blur(18px);
   border-bottom:1px solid rgba(20,26,28,.04);
@@ -92,8 +92,8 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 .hero{
   margin:10px 14px 0;padding:16px 18px 15px;border-radius:26px;color:#fff;
   position:relative;overflow:hidden;isolation:isolate;
-  background:linear-gradient(158deg,#14AD82 0%,#0C916E 46%,#0A6E58 100%);
-  box-shadow:0 18px 34px -18px rgba(9,105,83,.60), inset 0 1px 0 rgba(255,255,255,.10);
+  background:linear-gradient(158deg,#00704A 0%,#005C3E 46%,#1E3932 100%);
+  box-shadow:0 18px 34px -18px rgba(0,86,56,.55), inset 0 1px 0 rgba(255,255,255,.10);
 }
 .hero::before{
   content:"";position:absolute;width:250px;height:250px;right:-90px;top:-120px;border-radius:50%;
@@ -101,7 +101,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 }
 .hero::after{
   content:"";position:absolute;width:200px;height:200px;left:-100px;bottom:-120px;border-radius:50%;
-  background:radial-gradient(circle,rgba(120,255,214,.16),rgba(255,255,255,0) 68%);z-index:-1;
+  background:radial-gradient(circle,rgba(150,220,190,.16),rgba(255,255,255,0) 68%);z-index:-1;
 }
 .hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
 .hero-top span{font-size:12px;font-weight:600;color:rgba(255,255,255,.72);letter-spacing:0}
@@ -134,7 +134,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 .macro-top b{font-size:11.5px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:0}
 .bar{height:5px;border-radius:3px;background:rgba(255,255,255,.17);overflow:hidden}
 .bar i{display:block;height:100%;border-radius:3px;transition:width .5s cubic-bezier(.22,.9,.24,1)}
-.bar.p i{background:linear-gradient(90deg,#7CF8CE,#C8FFEC)}
+.bar.p i{background:linear-gradient(90deg,#3E9C77,#9CD5BB)}
 .bar.c i{background:linear-gradient(90deg,#FFE08A,#FFF2C8)}
 .bar.f i{background:linear-gradient(90deg,#FFB4A2,#FFD9CF)}
 
@@ -166,7 +166,7 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
   background:#F4F7F7;border:1.6px solid transparent;border-radius:16px;
   transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
 }
-.qbox:focus-within{background:#fff;border-color:#B9EBD9;box-shadow:0 0 0 4px rgba(15,185,129,.10)}
+.qbox:focus-within{background:#fff;border-color:#B3D9C9;box-shadow:0 0 0 4px rgba(0,112,74,.10)}
 .qbox svg{width:19px;height:19px;flex:0 0 auto;color:#9DAAAF}
 .qbox input{
   flex:1;min-width:0;border:0;background:transparent;outline:none;
@@ -185,36 +185,36 @@ input,select{font-family:inherit;letter-spacing:-0.01em}
 .preview.show{display:block;animation:pop .2s ease both}
 @keyframes pop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .prev-list{display:flex;flex-direction:column;gap:6px}
-.prev-row{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#F7FAF9;border-radius:12px;border:1px solid #EDF3F1;font:inherit;color:inherit;text-align:left;width:100%;letter-spacing:-0.01em}
-.prev-row:active{background:#EFF8F4;border-color:#D9EFE6}
+.prev-row{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#F7FAF9;border-radius:12px;border:1px solid #E8F1EC;font:inherit;color:inherit;text-align:left;width:100%;letter-spacing:-0.01em}
+.prev-row:active{background:#E7F2ED;border-color:#D5E7DE}
 .prev-row .pe{font-size:15px}
 .prev-row .pn{font-size:13.5px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .prev-row .pq{font-size:11.5px;color:var(--ink3);font-weight:600}
 .prev-row .pk{font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink2)}
 .prev-none{font-size:12.5px;color:var(--ink3);padding:9px 2px;line-height:1.5}
 .prev-none b{color:var(--ink2)}
-.prev-row.direct{background:#fff;border-style:dashed;border-color:#CFE7DD;margin-top:8px}
+.prev-row.direct{background:#fff;border-style:dashed;border-color:#C8DDD2;margin-top:8px}
 .prev-row.direct .pn{font-weight:700;color:var(--em-d)}
 .prev-row.direct .pk{color:var(--em-d);font-size:14px}
 
 /* ---------- quick new food ---------- */
-.qnew{margin-top:9px;padding:13px;border:1.5px dashed #CFE7DD;background:#F7FCFA;border-radius:16px}
+.qnew{margin-top:9px;padding:13px;border:1.5px dashed #C8DDD2;background:#F4FAF6;border-radius:16px}
 .qnew .qn-t{font-size:13px;font-weight:800;color:var(--em-d);letter-spacing:-0.02em}
 .qnew .qn-s{font-size:11.5px;color:var(--ink3);margin:3px 0 10px;line-height:1.5;letter-spacing:0}
 .qnew .qn-name{margin-bottom:8px}
 .qnew .qn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .qnew .qn-f{position:relative;display:block}
 .qnew input{
-  width:100%;height:44px;border:1.4px solid #E3ECEA;background:#fff;border-radius:12px;
+  width:100%;height:44px;border:1.4px solid #E5EDE9;background:#fff;border-radius:12px;
   padding:0 34px 0 12px;font-size:15px;font-weight:600;color:var(--ink);outline:none;letter-spacing:-0.01em;
 }
 .qnew .qn-name input{padding-right:12px}
-.qnew input:focus{border-color:#B9EBD9;box-shadow:0 0 0 4px rgba(15,185,129,.09)}
+.qnew input:focus{border-color:#B3D9C9;box-shadow:0 0 0 4px rgba(0,112,74,.10)}
 .qnew input::placeholder{color:#B4BFC3;font-weight:500}
 .qnew .qn-u{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--ink3)}
 .qnew .qn-go{
   margin-top:9px;width:100%;border:0;border-radius:13px;padding:13px;
-  background:linear-gradient(160deg,#14AD82,#0A8C67);color:#fff;font-size:14px;font-weight:800;letter-spacing:-0.01em;
+  background:linear-gradient(160deg,#00704A,#005638);color:#fff;font-size:14px;font-weight:800;letter-spacing:-0.01em;
 }
 .qnew .qn-go:active{transform:scale(.985);opacity:.92}
 .qnew .qn-opt{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:11.5px;font-weight:600;color:var(--ink2);letter-spacing:-0.01em}
@@ -243,14 +243,14 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .meal-group.drop-target{
   background:var(--em-l);border-radius:14px;
   outline:2px dashed var(--em);outline-offset:3px;
-  box-shadow:0 0 0 7px rgba(15,185,129,.05);
+  box-shadow:0 0 0 7px rgba(0,112,74,.06);
 }
 .meal-group.drop-target .meal-head .mn,
 .meal-group.drop-target .meal-head .mk{color:var(--em-d)}
 .drag-ghost{
   position:fixed;left:0;top:0;z-index:9999;pointer-events:none;
   display:flex;align-items:center;gap:9px;padding:10px 14px;border-radius:16px;
-  background:#fff;border:1.5px solid #BDEDD9;
+  background:#fff;border:1.5px solid #B3D9C9;
   box-shadow:0 18px 40px -14px rgba(16,24,28,.45),0 2px 8px rgba(16,24,28,.10);
   transform:scale(1.02);will-change:left,top,transform;
 }
@@ -261,13 +261,13 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .favs-list{display:flex;flex-direction:column;gap:6px;margin:2px 0 4px}
 .favs-row{
   display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;
-  background:#F8FBFA;border:1px solid #EDF4F1;
+  background:#F6FAF7;border:1px solid #E7F1EB;
 }
-.favs-row .fr-e{width:28px;height:28px;flex:0 0 auto;border-radius:9px;background:#fff;display:grid;place-items:center;font-size:14px;border:1px solid #EDF4F1}
+.favs-row .fr-e{width:28px;height:28px;flex:0 0 auto;border-radius:9px;background:#fff;display:grid;place-items:center;font-size:14px;border:1px solid #E7F1EB}
 .favs-row .fr-n{flex:1;min-width:0;font-size:13.5px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .favs-row .fr-k{font-size:11.5px;font-weight:700;color:var(--ink3);font-variant-numeric:tabular-nums;flex:0 0 auto}
 .favs-row .fr-btn{
-  -webkit-appearance:none;border:1px solid #E6EDEA;background:#fff;color:var(--ink2);
+  -webkit-appearance:none;border:1px solid #E4EEE8;background:#fff;color:var(--ink2);
   width:28px;height:28px;border-radius:9px;padding:0;display:grid;place-items:center;
   font-size:12px;font-weight:800;flex:0 0 auto;
 }
@@ -281,7 +281,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   -webkit-appearance:none;border:0;border-radius:10px;padding:6px 10px;flex:0 0 auto;
   background:var(--em-l);color:var(--em-d);font-size:11.5px;font-weight:800;letter-spacing:-0.01em;
 }
-.favs-add:active{background:#D8F4E8}
+.favs-add:active{background:#D2E9DE}
 .favs-add.on{background:#F1F4F5;color:var(--ink3)}
 .favs-empty{font-size:12px;color:var(--ink3);padding:9px 2px;line-height:1.5}
 .favs-sec{display:flex;align-items:baseline;justify-content:space-between;margin:14px 0 6px}
@@ -296,7 +296,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   width:30px;height:30px;border-radius:50%;background:#F1F4F5;color:var(--ink2);
   font-size:15px;line-height:1;display:grid;place-items:center;padding:0;
 }
-.favs-clear:active{background:#E6EDEA}
+.favs-clear:active{background:#E4EEE8}
 
 .prev-foot{display:flex;align-items:center;gap:10px;margin-top:9px}
 .prev-total{flex:1;font-size:12.5px;color:var(--ink2);font-variant-numeric:tabular-nums}
@@ -327,39 +327,39 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   box-shadow:0 1px 2px rgba(16,24,28,.04);transition:transform .12s ease,background .15s ease,border-color .15s ease;
   position:relative;
 }
-.chip:active{transform:scale(.955);background:#F0FBF6;border-color:#C6EEDE}
+.chip:active{transform:scale(.955);background:#EAF4F0;border-color:#C2DCCF}
 .chip .ce{font-size:15px;line-height:1}
 .chip .cn{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;letter-spacing:-0.02em}
 .chip .ck{font-size:10.5px;font-weight:700;color:var(--ink3);letter-spacing:0;font-variant-numeric:tabular-nums}
-.chip.edit{border-color:#C6EEDE;background:#F4FCF9}
+.chip.edit{border-color:#C2DCCF;background:#F0F8F4}
 .chip .delx{
   display:none;position:absolute;top:-6px;right:-5px;width:18px;height:18px;border-radius:50%;
   background:var(--coral);color:#fff;font-size:11px;line-height:1;border:2px solid #fff;place-items:center;padding:0;
 }
 .chip.edit .delx{display:grid}
-.chip.add{border-style:dashed;border-color:#9EE0C8;background:#F2FCF8;color:var(--em-d)}
+.chip.add{border-style:dashed;border-color:#9CCDB9;background:#EFF8F3;color:var(--em-d)}
 .chip.add .cn{color:var(--em-d);font-weight:700}
 .chips-empty{font-size:12.5px;color:var(--ink3);margin:12px 0 0}
 
 #quickCard{transition:box-shadow .3s ease,border-color .3s ease}
-#quickCard.flash{border-color:#B7EBD8;box-shadow:0 0 0 3px rgba(15,185,129,.20), var(--sh)}
+#quickCard.flash{border-color:#A9D9C6;box-shadow:0 0 0 3px rgba(0,112,74,.18), var(--sh)}
 
 /* ===== v3: sticky quick bar · 대충 컷 · 복사 ===== */
 .qbar{
   position:sticky;top:calc(46px + env(safe-area-inset-top, 0px));z-index:32;
   padding:7px 14px 9px;
-  background:linear-gradient(180deg,rgba(244,246,247,.97) 58%,rgba(244,246,247,.82) 100%);
+  background:linear-gradient(180deg,rgba(242,245,243,.97) 58%,rgba(242,245,243,.82) 100%);
   -webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);
   border-bottom:1px solid rgba(20,26,28,.035);
 }
 .qwrap{position:relative}
-.qbar .qbox{height:50px;background:#fff;border-color:#E3ECEA;box-shadow:0 2px 10px -6px rgba(16,24,28,.26)}
-.qbar .qbox:focus-within{border-color:#9BE3C9;box-shadow:0 0 0 4px rgba(15,185,129,.12)}
+.qbar .qbox{height:50px;background:#fff;border-color:#E5EDE9;box-shadow:0 2px 10px -6px rgba(16,24,28,.26)}
+.qbar .qbox:focus-within{border-color:#9CCDB9;box-shadow:0 0 0 4px rgba(0,112,74,.12)}
 .qbox.err{border-color:#FF9A88;box-shadow:0 0 0 4px rgba(255,122,102,.18);animation:shake .32s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}60%{transform:translateX(4px)}80%{transform:translateX(-2px)}}
 .qgo{
   -webkit-appearance:none;border:0;flex:0 0 auto;width:36px;height:36px;border-radius:12px;padding:0;
-  background:linear-gradient(160deg,#14AD82,#0A8C67);color:#fff;font-size:16px;line-height:1;
+  background:linear-gradient(160deg,#00704A,#005638);color:#fff;font-size:16px;line-height:1;
   display:grid;place-items:center;transition:transform .12s ease,opacity .12s ease;
 }
 .qgo:active{transform:scale(.93);opacity:.9}
@@ -433,8 +433,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .item{display:flex;gap:9px;align-items:flex-start;padding:9px 0}
 .item+.item{border-top:1px solid #F4F7F7}
 .item-e{
-  width:34px;height:34px;flex:0 0 auto;border-radius:11px;background:#F3F9F6;
-  display:grid;place-items:center;font-size:16px;border:1px solid #EDF4F1;
+  width:34px;height:34px;flex:0 0 auto;border-radius:11px;background:#F3F8F5;
+  display:grid;place-items:center;font-size:16px;border:1px solid #E7F1EB;
 }
 .item-body{flex:1;min-width:0}
 .item-l1{display:flex;align-items:baseline;gap:6px}
@@ -493,32 +493,10 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .to-goal .tg-t{font-size:12px;color:var(--ink2);letter-spacing:0;line-height:1.4}
 .to-goal .tg-t b{color:var(--em-d);font-weight:700}
 
-/* ---------- water ---------- */
-.water-top{display:flex;align-items:baseline;gap:6px;margin-bottom:10px}
-.water-num{font-size:26px;font-weight:800;letter-spacing:-0.04em;font-variant-numeric:tabular-nums}
-.water-unit{font-size:12.5px;font-weight:700;color:var(--ink3);letter-spacing:0}
-.water-goal{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--ink3);letter-spacing:0;font-variant-numeric:tabular-nums}
-.glasses{display:flex;gap:6px}
-.glass{
-  -webkit-appearance:none;flex:1;height:52px;border-radius:11px;border:1.5px solid #E3ECEA;background:#F8FBFB;
-  position:relative;overflow:hidden;padding:0;transition:transform .12s ease,border-color .2s ease;
-}
-.glass::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:0%;background:linear-gradient(180deg,#3FD3A5,#0FB981);
-  transition:height .35s cubic-bezier(.22,.9,.24,1);
-}
-.glass.on{border-color:#9BE3CA}
-.glass.on::after{height:100%}
-.glass:active{transform:scale(.94)}
-.glass span{position:relative;z-index:2;font-size:10px;font-weight:700;color:#A9B6B8;font-variant-numeric:tabular-nums}
-.glass.on span{color:transparent}
-.glass .drop{position:absolute;inset:0;display:grid;place-items:center;z-index:3;font-size:13px;opacity:0;transition:opacity .25s}
-.glass.on .drop{opacity:1}
-
 /* ---------- exercise ---------- */
 .ex-row{display:flex;align-items:center;gap:10px;padding:10px 0}
 .ex-row+.ex-row{border-top:1px solid #F4F7F7}
-.ex-ic{width:36px;height:36px;border-radius:12px;background:#F5F9F8;border:1px solid #EDF3F1;display:grid;place-items:center;font-size:17px;flex:0 0 auto}
+.ex-ic{width:36px;height:36px;border-radius:12px;background:#F5F9F8;border:1px solid #E8F1EC;display:grid;place-items:center;font-size:17px;flex:0 0 auto}
 .ex-info{flex:1;min-width:0}
 .ex-name{font-size:14px;font-weight:600;letter-spacing:-0.02em}
 .ex-desc{font-size:10.5px;color:var(--ink3);margin-top:2px;letter-spacing:0}
@@ -554,8 +532,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 /* ---------- dock ---------- */
 .dock{
   position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:430px;z-index:40;
-  display:flex;align-items:flex-end;gap:2px;
-  padding:7px 10px calc(6px + env(safe-area-inset-bottom, 0px));
+  display:flex;align-items:center;gap:2px;
+  padding:10px 10px calc(8px + env(safe-area-inset-bottom, 0px));
   background:rgba(252,253,253,.88);
   -webkit-backdrop-filter:saturate(180%) blur(20px);
   backdrop-filter:saturate(180%) blur(20px);
@@ -572,13 +550,14 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .dock-btn.on{color:var(--em-d)}
 .dock-btn:active{opacity:.6}
 .fab{
-  -webkit-appearance:none;border:0;flex:0 0 auto;width:54px;height:54px;border-radius:50%;
-  margin:0 6px -2px;background:linear-gradient(160deg,#16B98A,#0A8C67);color:#fff;
-  display:grid;place-items:center;transform:translateY(-14px);
-  box-shadow:0 10px 20px -8px rgba(10,140,103,.7),0 0 0 5px rgba(252,253,253,.9),inset 0 1px 0 rgba(255,255,255,.25);
+  -webkit-appearance:none;border:0;position:absolute;left:50%;bottom:calc(54px + env(safe-area-inset-bottom, 0px));
+  width:54px;height:54px;border-radius:50%;z-index:41;
+  background:linear-gradient(160deg,#00704A,#005638);color:#fff;
+  display:grid;place-items:center;transform:translateX(-50%);margin:0;
+  box-shadow:0 10px 20px -8px rgba(0,86,56,.55),0 0 0 5px rgba(252,253,253,.9),inset 0 1px 0 rgba(255,255,255,.25);
   transition:transform .14s ease;
 }
-.fab:active{transform:translateY(-14px) scale(.93)}
+.fab:active{transform:translateX(-50%) scale(.93)}
 .fab svg{width:25px;height:25px}
 
 /* ---------- sheet ---------- */
@@ -611,11 +590,11 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .field>label{display:block;font-size:11.5px;font-weight:700;color:var(--ink3);margin-bottom:6px;letter-spacing:0}
 .input-row{display:flex;align-items:center;gap:8px}
 .text-input{
-  width:100%;height:46px;border:1.5px solid var(--line);background:#FAFCFC;border-radius:13px;
+  width:100%;height:46px;border:1.5px solid var(--line);background:#F8FBFA;border-radius:13px;
   padding:0 13px;font-size:16px;font-weight:600;color:var(--ink);outline:none;
   transition:border-color .15s,background .15s;
 }
-.text-input:focus{border-color:#B9EBD9;background:#fff;box-shadow:0 0 0 4px rgba(15,185,129,.09)}
+.text-input:focus{border-color:#B3D9C9;background:#fff;box-shadow:0 0 0 4px rgba(0,112,74,.10)}
 .text-input::placeholder{color:#B4BFC3;font-weight:500}
 .unit{font-size:13px;font-weight:700;color:var(--ink3);flex:0 0 auto;width:26px}
 .opt-pills{display:flex;gap:6px;flex-wrap:wrap}
@@ -624,14 +603,14 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   border-radius:12px;padding:10px 6px;font-size:12.5px;font-weight:600;color:var(--ink2);
   transition:all .15s ease;letter-spacing:-0.02em;
 }
-.opt.on{border-color:var(--em);background:#F0FBF6;color:var(--em-d);font-weight:700;box-shadow:0 0 0 3px rgba(15,185,129,.06)}
+.opt.on{border-color:var(--em);background:#EAF4F0;color:var(--em-d);font-weight:700;box-shadow:0 0 0 3px rgba(0,112,74,.08)}
 .opt small{display:block;font-size:10px;font-weight:600;color:var(--ink3);margin-top:2px;letter-spacing:0}
-.opt.on small{color:#62B79C}
+.opt.on small{color:#4B8A71}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .formula{font-size:11px;color:var(--ink3);line-height:1.6;margin:2px 0 0;letter-spacing:0}
 /* ===== v4.7: 일반 기준으로 채우기 ===== */
 .preset-btn{
-  width:100%;margin-top:8px;height:44px;border:1px solid #CFEBDD;background:var(--em-l);
+  width:100%;margin-top:8px;height:44px;border:1px solid #C8DDD2;background:var(--em-l);
   color:var(--em-d);font-size:13.5px;font-weight:700;border-radius:12px;font-family:inherit;
   display:flex;align-items:center;justify-content:center;gap:5px;letter-spacing:-.2px;cursor:pointer;
   -webkit-appearance:none;appearance:none;
@@ -639,12 +618,12 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .preset-btn:active{transform:scale(.985);opacity:.9}
 .preset-hint{
   margin:7px 0 10px;font-size:11.5px;line-height:1.5;color:var(--em-d);letter-spacing:-.1px;
-  background:#F1FBF7;border:1px solid #DAF2E8;border-radius:10px;padding:7px 9px;
+  background:#F1FBF7;border:1px solid #DCEBE4;border-radius:10px;padding:7px 9px;
 }
 .preset-hint.warn{color:#B4661F;background:#FFF8EE;border-color:#F5E4C9}
 /* v4.4: 박스 · 개수 분할 */
 .lab-opt{font-weight:600;color:#B4BFC3;font-size:10.5px;letter-spacing:0;margin-left:5px}
-.pack-box{margin-top:9px;background:#F7FBFA;border:1px solid #E4F2EC;border-radius:14px;padding:10px 12px}
+.pack-box{margin-top:9px;background:#F5FAF6;border:1px solid #DEEEE6;border-radius:14px;padding:10px 12px}
 .pk-row{display:flex;align-items:center;gap:10px}
 .pk-lb{font-size:11.5px;font-weight:700;color:var(--ink3);letter-spacing:0}
 .eat-box{display:flex;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:2px;margin-left:auto}
@@ -655,18 +634,18 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .pack-hint{margin:8px 0 0;font-size:11.5px;font-weight:800;color:var(--em-d);letter-spacing:0;line-height:1.5}
 .pack-hint .pk-sub{display:block;font-weight:600;color:var(--ink3);margin-top:3px}
 .pack-hint .pk-sub b{font-weight:800;color:var(--ink2)}
-.plan-box{background:linear-gradient(160deg,#F3FBF7,#EDF7F3);border:1px solid #DEF2E9;border-radius:18px;padding:14px;margin:4px 0 14px}
+.plan-box{background:linear-gradient(160deg,#F3FBF7,#EDF7F3);border:1px solid #DCEBE4;border-radius:18px;padding:14px;margin:4px 0 14px}
 .plan-box .pb-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
-.plan-box .pb-k{font-size:12px;font-weight:700;color:#3E8E75;letter-spacing:0}
+.plan-box .pb-k{font-size:12px;font-weight:700;color:#1E5B48;letter-spacing:0}
 .plan-box .pb-kcal{font-size:26px;font-weight:800;letter-spacing:-0.04em;color:var(--ink)}
 .plan-box .pb-kcal span{font-size:26px;font-weight:800;letter-spacing:-0.04em;color:var(--ink)}
 .plan-box .pb-kcal .pb-unit{font-size:12px;font-weight:700;color:var(--ink3);letter-spacing:0}
 .pb-macros{display:flex;gap:6px}
-.pb-m{flex:1;background:rgba(255,255,255,.75);border-radius:11px;padding:8px 6px;text-align:center;border:1px solid #E4F2EC}
+.pb-m{flex:1;background:rgba(255,255,255,.75);border-radius:11px;padding:8px 6px;text-align:center;border:1px solid #DEEEE6}
 .pb-m b{display:block;font-size:14px;font-weight:800;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
 .pb-m span{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:0}
-.pb-sub{font-size:11px;color:#5F8E7E;margin-top:10px;line-height:1.55;letter-spacing:0}
-.pb-sub b{font-weight:700;color:#35725E}
+.pb-sub{font-size:11px;color:#4A6F61;margin-top:10px;line-height:1.55;letter-spacing:0}
+.pb-sub b{font-weight:700;color:#1E4A3C}
 .data-row{display:flex;gap:8px;margin-top:6px}
 .data-row button{flex:1}
 .file-in{display:none}
@@ -682,7 +661,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 
 /* toast */
 .toast{
-  position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom, 0px));z-index:80;
+  position:fixed;left:50%;bottom:calc(118px + env(safe-area-inset-bottom, 0px));z-index:80;
   transform:translateX(-50%) translateY(14px);opacity:0;pointer-events:none;
   display:flex;align-items:center;gap:10px;
   background:rgba(18,24,26,.94);color:#fff;padding:11px 14px 11px 16px;border-radius:15px;
@@ -692,7 +671,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
 .toast .tu{
-  -webkit-appearance:none;border:0;background:rgba(255,255,255,.16);color:#8AF7CE;
+  -webkit-appearance:none;border:0;background:rgba(255,255,255,.16);color:#A9E3C8;
   font-size:12px;font-weight:800;padding:6px 10px;border-radius:9px;letter-spacing:0;
 }
 .toast .tm{max-width:220px}
@@ -707,33 +686,33 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .rc-addrow .text-input{flex:1;min-width:0}
 .rc-add{
   -webkit-appearance:none;border:0;flex:0 0 auto;border-radius:12px;padding:0 15px;height:46px;
-  background:linear-gradient(160deg,#14AD82,#0A8C67);color:#fff;font-size:13.5px;font-weight:800;
+  background:linear-gradient(160deg,#00704A,#005638);color:#fff;font-size:13.5px;font-weight:800;
 }
 .rc-add:active{transform:scale(.96);opacity:.9}
 .rc-tools{display:flex;gap:7px;margin-top:8px}
 .rc-tool{
-  -webkit-appearance:none;flex:1;min-width:0;border:1px dashed #CFE6DD;background:#F7FCFA;
-  color:#2C7C63;border-radius:11px;padding:8px 6px;font-size:11.5px;font-weight:800;letter-spacing:-0.02em;
+  -webkit-appearance:none;flex:1;min-width:0;border:1px dashed #C8DDD2;background:#F4FAF6;
+  color:#005638;border-radius:11px;padding:8px 6px;font-size:11.5px;font-weight:800;letter-spacing:-0.02em;
 }
-.rc-tool:active{background:#EDF8F3;border-color:#9EE0C8}
+.rc-tool:active{background:#E7F2ED;border-color:#9CCDB9}
 .rc-res{display:flex;flex-direction:column;gap:5px;margin-top:8px;max-height:34vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .rc-row{
   display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:13px;
-  background:#fff;border:1px solid #EDF2F1;text-align:left;width:100%;
+  background:#fff;border:1px solid #E9F1EC;text-align:left;width:100%;
   -webkit-appearance:none;
 }
-.rc-row:active{background:#F4FCF8;border-color:#C9EEDE}
-.rc-row .rr-e{width:26px;height:26px;flex:0 0 auto;border-radius:8px;background:#F6FAF8;border:1px solid #EDF4F1;display:grid;place-items:center;font-size:13px}
+.rc-row:active{background:#F0F8F4;border-color:#C2DCCF}
+.rc-row .rr-e{width:26px;height:26px;flex:0 0 auto;border-radius:8px;background:#F4F9F6;border:1px solid #E7F1EB;display:grid;place-items:center;font-size:13px}
 .rc-row .rr-b{flex:1;min-width:0}
 .rc-row .rr-n{font-size:13px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:5px}
 .rc-row .rr-s{font-size:10.5px;color:var(--ink3);font-weight:600;margin-top:1px;letter-spacing:0}
 .rc-row .rr-k{font-size:11.5px;font-weight:800;color:var(--ink2);font-variant-numeric:tabular-nums;flex:0 0 auto}
 .rc-badge{
-  font-size:9.5px;font-weight:800;color:#2C7C63;background:#E9F7F1;border-radius:6px;
+  font-size:9.5px;font-weight:800;color:#005638;background:#E7F1EC;border-radius:6px;
   padding:1px 4px;letter-spacing:-0.01em;flex:0 0 auto;
 }
 .rc-tip{font-size:11px;color:var(--ink3);padding:2px 2px 0;line-height:1.5}
-.rc-new{margin-top:9px;background:#F8FBFA;border:1px solid #E6F1EC;border-radius:14px;padding:10px}
+.rc-new{margin-top:9px;background:#F6FAF7;border:1px solid #E0EEE7;border-radius:14px;padding:10px}
 .rc-new .text-input{height:42px;font-size:15px;background:#fff}
 .rc-newfoot{display:flex;align-items:center;gap:8px;margin-top:9px}
 .rc-check{padding:0;font-size:11.5px;flex:1;min-width:0;color:var(--ink2)}
@@ -741,18 +720,18 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .rc-items{display:flex;flex-direction:column;gap:6px}
 .rc-item{
   display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;
-  background:#F8FBFA;border:1px solid #EDF4F1;
+  background:#F6FAF7;border:1px solid #E7F1EB;
 }
-.rc-item .ri-e{width:28px;height:28px;flex:0 0 auto;border-radius:9px;background:#fff;border:1px solid #EDF4F1;display:grid;place-items:center;font-size:14px}
+.rc-item .ri-e{width:28px;height:28px;flex:0 0 auto;border-radius:9px;background:#fff;border:1px solid #E7F1EB;display:grid;place-items:center;font-size:14px}
 .rc-item .ri-b{flex:1;min-width:0}
 .rc-item .ri-n{font-size:13px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:5px}
 .rc-item .ri-s{font-size:10.5px;color:var(--ink3);font-weight:600;margin-top:1px;letter-spacing:0;font-variant-numeric:tabular-nums}
-.rc-ctl{display:flex;align-items:center;gap:1px;background:#fff;border:1px solid #E7EEEB;border-radius:10px;padding:2px;flex:0 0 auto}
+.rc-ctl{display:flex;align-items:center;gap:1px;background:#fff;border:1px solid #E4EEE8;border-radius:10px;padding:2px;flex:0 0 auto}
 .rc-ctl button{
   -webkit-appearance:none;border:0;background:transparent;width:26px;height:26px;border-radius:8px;
   color:var(--ink2);font-size:14px;font-weight:700;line-height:1;display:grid;place-items:center;padding:0;
 }
-.rc-ctl button:active{background:#EFF8F4;color:var(--em-d)}
+.rc-ctl button:active{background:#E7F2ED;color:var(--em-d)}
 .rc-ctl .rc-q{min-width:34px;text-align:center;font-size:11.5px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:0}
 .rc-del{
   -webkit-appearance:none;border:0;background:transparent;color:#C8D2D6;font-size:15px;font-weight:700;
@@ -765,19 +744,19 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .rc-sum .pb-kcal span#rcSumKcal{font-size:26px;font-weight:800;letter-spacing:-0.04em}
 
 @media (min-width:520px){
-  html{background:#E7ECEE}
+  html{background:#E9EEEC}
   #app{box-shadow:0 20px 60px -30px rgba(16,24,28,.45),0 0 0 1px rgba(20,26,28,.04)}
 }
 /* ===== v4.3: 성분표 사진 인식 ===== */
 .qbox .cam{
   -webkit-appearance:none;border:0;flex:0 0 auto;width:34px;height:34px;padding:0;border-radius:11px;
-  background:#EAF7F1;color:#0B8E69;display:grid;place-items:center;
+  background:#E7F1EC;color:#005638;display:grid;place-items:center;
   transition:transform .12s ease,background .15s ease;
 }
-.qbox .cam:active{transform:scale(.92);background:#DCF1E8}
+.qbox .cam:active{transform:scale(.92);background:#D2E9DE}
 .qbox .cam svg{width:19px;height:19px;color:inherit}
 .link-btn.ocr-btn{
-  display:inline-flex;align-items:center;gap:4px;background:#EAF7F1;color:var(--em-d);
+  display:inline-flex;align-items:center;gap:4px;background:#E7F1EC;color:var(--em-d);
   border-radius:9px;padding:5px 9px;font-size:12px;font-weight:800;letter-spacing:-0.01em;
 }
 .link-btn.ocr-btn:active{opacity:.6}
@@ -790,10 +769,10 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 .ocr-status{font-size:14px;font-weight:800;color:var(--ink);letter-spacing:-0.025em}
 .ocr-sub{font-size:11.5px;color:var(--ink3);margin-top:5px;line-height:1.5;min-height:17px}
 .ocr-bar{height:6px;border-radius:3px;background:#EAF0EE;overflow:hidden;margin:11px 0 0}
-.ocr-bar i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#7BF2CB,#14AD82);transition:width .3s ease}
+.ocr-bar i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#9CD5BB,#00704A);transition:width .3s ease}
 .ocr-hint{
   margin:0 0 14px;padding:10px 12px;border-radius:12px;background:#F2FBF7;
-  border:1px solid #D3F0E3;font-size:11.5px;color:#0B6B51;line-height:1.6;letter-spacing:-0.01em;
+  border:1px solid #CFE7DB;font-size:11.5px;color:#03412F;line-height:1.6;letter-spacing:-0.01em;
 }
 .ocr-hint b{font-weight:800}
 .ocr-hint.warn{background:#FFF8F1;border-color:#F3E2CE;color:#8A5A20}
@@ -867,11 +846,11 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   box-shadow:0 1px 2px rgba(16,24,28,.04);
   transition:background .15s ease,border-color .15s ease,transform .12s ease;
 }
-.qg-btn:active{background:var(--em-l);border-color:#C6EEDE;transform:scale(.985)}
+.qg-btn:active{background:var(--em-l);border-color:#C2DCCF;transform:scale(.985)}
 .qg-btn .qg-e{font-size:18px;line-height:1;flex:0 0 auto}
 .qg-btn .qg-t{flex:1 1 auto;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.qg-btn .qg-n{font-size:11.5px;font-weight:800;color:#5FB89E;font-variant-numeric:tabular-nums;flex:0 0 auto;letter-spacing:0}
-.qg-btn.fridge{background:#F1FBF6;border-color:#DDF3EA;color:var(--em-d)}
+.qg-btn .qg-n{font-size:11.5px;font-weight:800;color:#4B8A71;font-variant-numeric:tabular-nums;flex:0 0 auto;letter-spacing:0}
+.qg-btn.fridge{background:#EDF5F1;border-color:#D9EAE2;color:var(--em-d)}
 .qg-btn.muted{color:var(--ink2)}
 
 /* --- 내 냉장고 시트 --- */
@@ -893,13 +872,13 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
 .frb-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
 .frb-act{
   -webkit-appearance:none;display:flex;align-items:center;justify-content:center;min-width:0;min-height:48px;
-  border:1px solid #E6EDEA;background:#fff;border-radius:13px;padding:0 8px;
+  border:1px solid #E4EEE8;background:#fff;border-radius:13px;padding:0 8px;
   font-size:13px;font-weight:800;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   letter-spacing:-0.02em;
 }
-.frb-act:active{background:var(--em-l);color:var(--em-d);border-color:#C6EEDE}
-.frb-act.primary{background:var(--em-l);border-color:#C6EEDE;color:var(--em-d)}
-.frb-add{background:#F7FBFA;border:1px solid #E4F2EC;border-radius:16px;padding:12px;margin:0 0 12px}
+.frb-act:active{background:var(--em-l);color:var(--em-d);border-color:#C2DCCF}
+.frb-act.primary{background:var(--em-l);border-color:#C2DCCF;color:var(--em-d)}
+.frb-add{background:#F5FAF6;border:1px solid #DEEEE6;border-radius:16px;padding:12px;margin:0 0 12px}
 .frb-add .text-input,.frb-edit .text-input{height:46px;font-size:15.5px;border-radius:12px}
 .frb-maclab{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;margin-top:11px;padding:0 4px;font-size:10.5px;font-weight:700;color:#AAB7BB;letter-spacing:0}
 .frb-maclab+.frb-grid4{margin-top:5px}
@@ -921,12 +900,12 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   border-radius:12px;padding:0 6px;font-size:13px;font-weight:700;color:var(--ink2);
   white-space:nowrap;letter-spacing:-0.02em;
 }
-.frb-cat button.on{border-color:var(--em);background:#F0FBF6;color:var(--em-d);font-weight:800}
+.frb-cat button.on{border-color:var(--em);background:#EAF4F0;color:var(--em-d);font-weight:800}
 .frb-list{display:flex;flex-direction:column;gap:9px}
-.frb-item{border:1px solid #EDF4F1;border-radius:16px;padding:11px 12px;background:#fff}
-.frb-item.editing{border-color:#C6EEDE;background:#FBFEFC}
+.frb-item{border:1px solid #E7F1EB;border-radius:16px;padding:11px 12px;background:#fff}
+.frb-item.editing{border-color:#C2DCCF;background:#FAFDFB}
 .frb-top{display:flex;align-items:center;gap:9px;min-width:0}
-.frb-e{width:34px;height:34px;flex:0 0 auto;border-radius:11px;background:#F3F9F6;border:1px solid #EDF4F1;display:grid;place-items:center;font-size:17px}
+.frb-e{width:34px;height:34px;flex:0 0 auto;border-radius:11px;background:#F3F8F5;border:1px solid #E7F1EB;display:grid;place-items:center;font-size:17px}
 .frb-b{flex:1;min-width:0}
 .frb-n{font-size:15px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .frb-k{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink2);flex:0 0 auto;letter-spacing:0}
@@ -937,19 +916,50 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
 .frb-tag.prod{background:#EFF4FF;color:#5A78B8}
 .frb-btns{display:grid;grid-template-columns:1fr 1fr 54px;gap:7px;margin-top:10px}
 .frb-btn{
-  -webkit-appearance:none;min-width:0;min-height:44px;border:1px solid #E6EDEA;background:#fff;border-radius:11px;
+  -webkit-appearance:none;min-width:0;min-height:44px;border:1px solid #E4EEE8;background:#fff;border-radius:11px;
   padding:0 4px;font-size:13px;font-weight:800;color:var(--ink2);letter-spacing:-0.02em;
 }
 .frb-btn:active{background:#F6F8F8}
-.frb-btn.rec{background:var(--em-l);border-color:#C6EEDE;color:var(--em-d)}
-.frb-btn.rec:active{background:#D8F4E8}
+.frb-btn.rec{background:var(--em-l);border-color:#C2DCCF;color:var(--em-d)}
+.frb-btn.rec:active{background:#D2E9DE}
 .frb-btn.del{color:#8E9DA2}
 .frb-btn.del:active{color:var(--coral);background:var(--coral-l);border-color:#F6DFD8}
-.frb-edit{margin-top:11px;border-top:1px solid #E8F3EE;padding-top:11px}
+.frb-edit{margin-top:11px;border-top:1px solid #DEEDE5;padding-top:11px}
 .frb-empty{padding:26px 10px;text-align:center;font-size:13px;line-height:1.75;color:var(--ink3);letter-spacing:0}
 .frb-empty .fe-e{display:block;font-size:28px;margin-bottom:9px;opacity:.75}
 .frb-empty b{color:var(--ink2)}
 .frb-nores{padding:20px 6px;text-align:center;font-size:12.5px;color:var(--ink3);letter-spacing:0}
+
+/* ===== v4.8: 자주 해 먹는 요리 (레시피 저장·불러오기) ===== */
+.rc-tabs{grid-template-columns:1fr 1fr}
+.rc-tabs .frb-tab i{margin-left:5px}
+.rc-saved{display:flex;flex-direction:column;gap:9px}
+.rc-card{border:1px solid #E7F1EB;border-radius:16px;padding:11px 12px;background:#fff}
+.rc-card-top{display:flex;align-items:center;gap:9px;min-width:0}
+.rc-card-e{width:34px;height:34px;flex:0 0 auto;border-radius:11px;background:#FFF6EC;border:1px solid #F6EADB;display:grid;place-items:center;font-size:17px}
+.rc-card-b{flex:1;min-width:0}
+.rc-card-n{font-size:15px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rc-card-sub{font-size:11.5px;color:var(--ink3);margin-top:3px;letter-spacing:0;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rc-card-k{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink2);flex:0 0 auto;letter-spacing:0}
+.rc-card-k small{font-size:10px;font-weight:700;color:var(--ink3);margin-left:1px}
+.rc-card-mac{font-size:11.5px;color:var(--ink3);font-variant-numeric:tabular-nums;margin-top:4px;letter-spacing:0}
+.rc-card-btns{display:grid;grid-template-columns:1fr 1fr 54px;gap:7px;margin-top:10px}
+.rc-card-btn{
+  -webkit-appearance:none;min-width:0;min-height:44px;border:1px solid #E4EEE8;background:#fff;border-radius:11px;
+  padding:0 4px;font-size:13px;font-weight:800;color:var(--ink2);letter-spacing:-0.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rc-card-btn:active{background:#F6F8F8}
+.rc-card-btn.rec{background:var(--em-l);border-color:#C2DCCF;color:var(--em-d)}
+.rc-card-btn.rec:active{background:#D2E9DE}
+.rc-card-btn.del{color:#8E9DA2}
+.rc-card-btn.del:active{color:var(--coral);background:var(--coral-l);border-color:#F6DFD8}
+.rc-saved-empty{padding:26px 10px;text-align:center;font-size:13px;line-height:1.75;color:var(--ink3);letter-spacing:0}
+.rc-saved-empty .se-e{display:block;font-size:28px;margin-bottom:9px;opacity:.75}
+.rc-saved-empty b{color:var(--ink2)}
+.rc-saved-empty .btn-ghost{margin-top:14px;width:100%}
+.rc-foot{display:grid;gap:8px}
+.rc-foot[hidden]{display:none}
 
 @media (max-width:344px){
   .quick-grid{gap:7px}
@@ -963,6 +973,9 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   .frb-act{font-size:12px}
   .frb-btn{font-size:12px}
   .frb-btns{grid-template-columns:1fr 1fr 46px;gap:6px}
+  .rc-card-btn{font-size:12px}
+  .rc-card-btns{grid-template-columns:1fr 1fr 46px;gap:6px}
+  .rc-card-k{font-size:13px}
   .frb-k{font-size:13px}
   .frb-mac{white-space:normal;overflow:visible;line-height:1.45}
   .frb-addfoot .text-input,.frb-editfoot .text-input{width:72px}
@@ -1014,9 +1027,9 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
       <svg class="ring-svg" viewBox="0 0 172 172" aria-hidden="true">
         <defs>
           <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#C6FFEC"/>
-            <stop offset="55%" stop-color="#7BF2CB"/>
-            <stop offset="100%" stop-color="#43E3B2"/>
+            <stop offset="0%" stop-color="#DDF1E7"/>
+            <stop offset="55%" stop-color="#9CD5BB"/>
+            <stop offset="100%" stop-color="#2E9B72"/>
           </linearGradient>
           <linearGradient id="ringGradOver" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#FFD3C8"/>
@@ -1104,19 +1117,6 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     <div class="to-goal" id="toGoal"></div>
   </section>
 
-  <section class="card" id="waterCard">
-    <div class="card-head">
-      <h2>수분</h2>
-      <span class="head-sub">250ml씩 &middot; 8잔 목표</span>
-    </div>
-    <div class="water-top">
-      <span class="water-num" id="waterNum">0</span>
-      <span class="water-unit">ml</span>
-      <span class="water-goal" id="waterCups">0잔 / 2,000ml</span>
-    </div>
-    <div class="glasses" id="glasses"></div>
-  </section>
-
   <section class="card" id="exerciseCard">
     <div class="card-head">
       <h2>운동</h2>
@@ -1148,10 +1148,6 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   </button>
   <button class="fab" id="fab" aria-label="빠른 기록">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M12 5.5v13"/><path d="M5.5 12h13"/></svg>
-  </button>
-  <button class="dock-btn" data-goto="waterCard" data-spy="waterCard">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2s6.2 6.5 6.2 10.6A6.2 6.2 0 0 1 5.8 13.8C5.8 9.7 12 3.2 12 3.2Z"/></svg>
-    <span>수분</span>
   </button>
   <button class="dock-btn" data-goto="exerciseCard" data-spy="exerciseCard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12h2.8l2-5.2 3.2 10.4 2.6-6.4 1.6 3.2h4.8"/></svg>
@@ -1415,6 +1411,11 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   <div class="sheet-grab"></div>
   <div class="sheet-head"><h3>🍳 내 요리</h3><button class="xbtn" data-close="recipe" aria-label="닫기">&#10005;</button></div>
   <div class="sheet-body">
+    <div class="frb-tabs rc-tabs" id="rcTabs">
+      <button class="frb-tab on" data-rctab="build">새 요리 만들기</button>
+      <button class="frb-tab" data-rctab="saved">자주 해 먹는 요리<i id="rcTabCount">0</i></button>
+    </div>
+    <div id="rcBuildPane">
     <div class="field">
       <label>요리 이름</label>
       <input class="text-input" id="rcName" type="text" placeholder="예: 닭가슴살 고추장 비빔밥" autocomplete="off">
@@ -1480,10 +1481,15 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
         <button class="opt" data-v="snack">간식</button>
       </div>
     </div>
-    <label class="check"><input type="checkbox" id="rcSave" checked><span>내 냉장고에도 저장해 두기</span></label>
-    <p class="formula">담은 재료의 칼로리·탄단지를 합쳐서 기록해요. 저장해 두면 다음에 검색해서 바로 꺼내 쓸 수 있어요.</p>
+    <label class="check"><input type="checkbox" id="rcSave" checked><span>자주 해 먹는 요리로 저장해 두기</span></label>
+    <p class="formula">담은 재료의 칼로리·탄단지를 합쳐서 기록해요. 저장해 두면 다음에 재료 조합 그대로 불러와 계란 개수처럼 살짝 바꿔 쓸 수 있어요.</p>
+    </div>
+    <div id="rcSavedPane" hidden></div>
   </div>
-  <div class="sheet-foot"><button class="btn-primary block em" id="btnRecipeSave">이 요리로 기록하기</button></div>
+  <div class="sheet-foot rc-foot" id="rcFoot">
+    <button class="btn-primary block em" id="btnRecipeSave">이 요리로 기록하기</button>
+    <button class="btn-ghost" id="btnRecipeSaveOnly" type="button">레시피만 저장</button>
+  </div>
 </section>
 
 <section class="sheet" id="sheetFridge" role="dialog" aria-modal="true" aria-label="내 냉장고">
@@ -2186,6 +2192,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     days: {},
     favs: [],
     customs: [],
+    recipes: [],
     ui: { date: '', meal: 'lunch', editChips: false }
   };
   var draft = null;
@@ -2215,7 +2222,6 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
         s.days[k] = {
           meals: Array.isArray(d.meals) ? d.meals.map(normItem).filter(Boolean) : [],
           weight: (d.weight == null || d.weight === '' ? null : clamp(num(d.weight, null), 30, 200)),
-          water: clamp(Math.round(num(d.water, 0)), 0, 30),
           ex: normEx(d.ex)
         };
       });
@@ -2243,7 +2249,37 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     if (o.ui && typeof o.ui === 'object') {
       s.ui = { date: '', meal: MEALS.some(function (m) { return m.k === o.ui.meal; }) ? o.ui.meal : 'lunch', editChips: false };
     }
+    s.recipes = Array.isArray(o.recipes) ? o.recipes.map(normRecipe).filter(Boolean) : [];
     return s;
+  }
+
+  /* v4.8: 저장된 레시피 한 건 정규화 */
+  function normRecipe(r) {
+    if (!r || !r.name) return null;
+    var items = Array.isArray(r.items) ? r.items.map(function (it) {
+      if (!it || !it.n) return null;
+      return {
+        n: String(it.n), e: it.e || '🍽', k: num(it.k, 0), p: num(it.p, 0), c: num(it.c, 0),
+        f: num(it.f, 0), u: it.u || '인분', g: num(it.g, 0),
+        q: Math.max(0.1, num(it.q, 1)), cu: it.cu ? 1 : 0
+      };
+    }).filter(Boolean) : [];
+    if (!items.length) return null;
+    var t = { k: 0, p: 0, c: 0, f: 0 };
+    items.forEach(function (it) {
+      var q = num(it.q, 1);
+      t.k += it.k * q; t.p += it.p * q; t.c += it.c * q; t.f += it.f * q;
+    });
+    return {
+      id: r.id ? String(r.id) : uid(),
+      name: String(r.name),
+      items: items,
+      totalKcal: Math.round(t.k * 10) / 10,
+      c: Math.round(t.c * 10) / 10,
+      p: Math.round(t.p * 10) / 10,
+      f: Math.round(t.f * 10) / 10,
+      updatedAt: num(r.updatedAt, 0) || Date.now()
+    };
   }
 
   function normItem(it) {
@@ -2273,7 +2309,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   }
 
   function blankDay() {
-    return { meals: [], weight: null, water: 0, ex: normEx(null) };
+    return { meals: [], weight: null, ex: normEx(null) };
   }
 
   function curKey() { return state.ui.date || todayKey(); }
@@ -2768,29 +2804,17 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     var area = line + ' L' + co[co.length - 1].x.toFixed(1) + ' ' + H + ' L' + co[0].x.toFixed(1) + ' ' + H + ' Z';
     var dots = co.map(function (c, idx) {
       var last = idx === co.length - 1;
-      return '<circle cx="' + c.x.toFixed(1) + '" cy="' + c.y.toFixed(1) + '" r="' + (last ? 4 : 2.6) + '" fill="' + (last ? '#0FB981' : '#fff') + '" stroke="#0FB981" stroke-width="2"/>';
+      return '<circle cx="' + c.x.toFixed(1) + '" cy="' + c.y.toFixed(1) + '" r="' + (last ? 4 : 2.6) + '" fill="' + (last ? '#00704A' : '#fff') + '" stroke="#00704A" stroke-width="2"/>';
     }).join('');
     box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">' +
       '<defs><linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="#0FB981" stop-opacity="0.18"/><stop offset="100%" stop-color="#0FB981" stop-opacity="0"/>' +
+      '<stop offset="0%" stop-color="#00704A" stop-opacity="0.18"/><stop offset="100%" stop-color="#00704A" stop-opacity="0"/>' +
       '</linearGradient></defs>' +
       '<path d="' + area + '" fill="url(#sparkGrad)"/>' +
-      '<path d="' + line + '" fill="none" stroke="#0FB981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>' +
+      '<path d="' + line + '" fill="none" stroke="#00704A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>' +
       dots + '</svg>';
     $('sparkX').innerHTML = '<span>' + mdLabel(pts[0].k) + ' ' + fmt1(pts[0].w) + '</span>' +
       '<span>' + mdLabel(pts[pts.length - 1].k) + ' ' + fmt1(pts[pts.length - 1].w) + '</span>';
-  }
-
-  function renderWater() {
-    var d = curDay(), n = clamp(Math.round(num(d.water, 0)), 0, 8);
-    $('waterNum').textContent = fmtInt(n * 250);
-    $('waterCups').textContent = n + '잔 / 2,000ml';
-    var html = '';
-    for (var i = 1; i <= 8; i++) {
-      html += '<button class="glass' + (i <= n ? ' on' : '') + '" data-g="' + i + '" aria-label="' + (i * 250) + 'ml">' +
-        '<span class="drop">💧</span></button>';
-    }
-    $('glasses').innerHTML = html;
   }
 
   function renderExercise() {
@@ -3165,7 +3189,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
       box.className = 'preview show';
       box.innerHTML = '<div class="qn-t">복사가 안 돼서 여기 띄웠어</div>' +
         '<div class="qn-s" style="margin:4px 0 8px">길게 눌러 전체 선택 → 복사해 줘</div>' +
-        '<textarea id="copyFallback" style="width:100%;height:190px;border:1.4px solid #E3ECEA;border-radius:12px;padding:10px;font:inherit;font-size:12.5px;line-height:1.5" readonly>' + esc(txt) + '</textarea>';
+        '<textarea id="copyFallback" style="width:100%;height:190px;border:1.4px solid #E5EDE9;border-radius:12px;padding:10px;font:inherit;font-size:12.5px;line-height:1.5" readonly>' + esc(txt) + '</textarea>';
       var ta = $('copyFallback');
       try { ta.focus(); ta.select(); } catch (e) {}
     });
@@ -3180,7 +3204,6 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     renderChips();
     syncFridgeCount();
     renderWeight();
-    renderWater();
     renderExercise();
     renderPreview();
     updateSpy();
@@ -3952,15 +3975,6 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     renderAll();
   }
 
-  function addWater(i) {
-    var d = curDay();
-    var cur = Math.round(num(d.water, 0));
-    d.water = (i === cur) ? i - 1 : i;
-    save();
-    renderAll();
-    if (d.water === 8) toast('물 2L 완료 💧');
-  }
-
   function stepEx(type, delta) {
     var d = curDay();
     var e = d.ex[type] || { min: 0, apply: true };
@@ -4197,15 +4211,30 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
       p: Math.round(t.p * 10) / 10,
       c: Math.round(t.c * 10) / 10,
       f: Math.round(t.f * 10) / 10,
-      u: '인분', g: 0, cat: 'prod'
+      u: '인분', g: 0
     };
-    var wantSave = !!($('rcSave') && $('rcSave').checked);
-    if (wantSave) saveCustomFood(food, false);
+    /* v4.8: 레시피는 내 냉장고가 아니라 '자주 해 먹는 요리'에만 저장한다 */
+    var wantRecipe = !!($('rcSave') && $('rcSave').checked);
+    var note = '';
+    if (wantRecipe) {
+      var cur = recipeFind(name);
+      if (!cur) {
+        recipeSave(name, rcItems);
+        note = ' · 레시피 저장';
+      } else if (recipeSameItems(cur.items, rcItems)) {
+        cur.updatedAt = Date.now();
+        note = '';
+      } else {
+        note = ' · 기존 레시피는 그대로';
+      }
+    }
     var meal = rcMeal, part = rcPortion;
     var pk = food.k * part;
     addFood(food, part, meal);
+    save();
     closeSheets();
-    toast(name + ' ' + fmtInt(pk) + 'kcal 기록했어' + (wantSave ? ' · 내 냉장고에 저장' : ''));
+    renderRecipes();
+    toast(name + ' ' + fmtInt(pk) + 'kcal 기록했어' + note);
     rcItems = [];
     rcPortion = 1;
     $('rcName').value = '';
@@ -4213,6 +4242,199 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     $('rcResults').innerHTML = '';
     $('rcNewBox').hidden = true;
     if ($('rcSave')) $('rcSave').checked = true;
+  }
+
+  /* ================= v4.8: 자주 해 먹는 요리 (레시피 저장·불러오기) ================= */
+  var rcTab = 'build';
+
+  function recipesAll() { return Array.isArray(state.recipes) ? state.recipes : []; }
+
+  function recipeFind(name) {
+    var key = squash(name);
+    var all = recipesAll();
+    for (var i = 0; i < all.length; i++) if (squash(all[i].name) === key) return all[i];
+    return null;
+  }
+
+  function recipeById(id) {
+    var all = recipesAll();
+    for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i];
+    return null;
+  }
+
+  function recipeCopyItems(items) {
+    return (items || []).map(function (it) {
+      return {
+        n: String(it.n), e: it.e || '🍽', k: num(it.k, 0), p: num(it.p, 0), c: num(it.c, 0),
+        f: num(it.f, 0), u: it.u || '인분', g: num(it.g, 0),
+        q: Math.max(0.1, num(it.q, 1)), cu: it.cu ? 1 : 0
+      };
+    });
+  }
+
+  function recipeSave(name, items) {
+    if (!Array.isArray(state.recipes)) state.recipes = [];
+    var nm = String(name == null ? '' : name).trim() || '내 요리';
+    var copy = recipeCopyItems(items);
+    if (!copy.length) return null;
+    var t = { k: 0, p: 0, c: 0, f: 0 };
+    copy.forEach(function (it) {
+      var q = num(it.q, 1);
+      t.k += it.k * q; t.p += it.p * q; t.c += it.c * q; t.f += it.f * q;
+    });
+    t = {
+      k: Math.round(t.k * 10) / 10, p: Math.round(t.p * 10) / 10,
+      c: Math.round(t.c * 10) / 10, f: Math.round(t.f * 10) / 10
+    };
+    var cur = recipeFind(nm);
+    if (!cur) {
+      cur = { id: uid(), name: nm, items: copy, totalKcal: t.k, c: t.c, p: t.p, f: t.f, updatedAt: Date.now() };
+      state.recipes.push(cur);
+      return cur;
+    }
+    cur.name = nm;
+    cur.items = copy;
+    cur.totalKcal = t.k; cur.c = t.c; cur.p = t.p; cur.f = t.f;
+    cur.updatedAt = Date.now();
+    return cur;
+  }
+
+  function recipeSameItems(a, b) {
+    if (!a || !b || a.length !== b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (squash(a[i].n) !== squash(b[i].n)) return false;
+      if (Math.abs(num(a[i].q, 0) - num(b[i].q, 0)) > 0.001) return false;
+    }
+    return true;
+  }
+
+  function recipeSummary(r) {
+    var its = (r && r.items) || [];
+    var head = its.slice(0, 3).map(function (it) {
+      return esc(it.n) + ' ' + esc(qtyLabel({ n: it.q, mult: 1, u: it.u }));
+    }).join(' · ');
+    return head + (its.length > 3 ? ' 외 ' + (its.length - 3) + '개' : '');
+  }
+
+  function recipeSorted() {
+    return recipesAll().slice().sort(function (a, b) { return num(b.updatedAt, 0) - num(a.updatedAt, 0); });
+  }
+
+  function renderRecipes() {
+    var all = recipesAll();
+    if ($('rcTabCount')) $('rcTabCount').textContent = String(all.length);
+    var box = $('rcSavedPane');
+    if (!box) return;
+    if (!all.length) {
+      box.innerHTML = '<div class="rc-saved-empty"><span class="se-e">🍳</span>' +
+        '아직 저장한 레시피가 없어요.<br>재료를 담고 <b>자주 해 먹는 요리로 저장</b>해 두면<br>다음에 재료 조합 그대로 불러올 수 있어요.' +
+        '<button class="btn-ghost" type="button" data-rctab="build">새 요리 만들기</button></div>';
+      return;
+    }
+    var html = '<div class="rc-saved">';
+    recipeSorted().forEach(function (r) {
+      html += '<div class="rc-card">' +
+        '<div class="rc-card-top">' +
+          '<span class="rc-card-e">🍳</span>' +
+          '<div class="rc-card-b">' +
+            '<div class="rc-card-n">' + esc(r.name) + '</div>' +
+            '<div class="rc-card-sub">' + recipeSummary(r) + '</div>' +
+          '</div>' +
+          '<div class="rc-card-k">' + fmtInt(num(r.totalKcal, 0)) + '<small>kcal</small></div>' +
+        '</div>' +
+        '<div class="rc-card-mac">탄 ' + fmt1(num(r.c, 0)) + ' · 단 ' + fmt1(num(r.p, 0)) + ' · 지 ' + fmt1(num(r.f, 0)) + 'g</div>' +
+        '<div class="rc-card-btns">' +
+          '<button class="rc-card-btn rec" type="button" data-rcrec="' + esc(r.id) + '">바로 기록</button>' +
+          '<button class="rc-card-btn" type="button" data-rcload="' + esc(r.id) + '">불러와 수정</button>' +
+          '<button class="rc-card-btn del" type="button" data-rcdelr="' + esc(r.id) + '">삭제</button>' +
+        '</div>' +
+      '</div>';
+    });
+    box.innerHTML = html + '</div>';
+  }
+
+  function rcSetTab(tab) {
+    rcTab = tab === 'saved' ? 'saved' : 'build';
+    var tabs = $('rcTabs');
+    if (tabs) {
+      var bs = tabs.getElementsByTagName('button');
+      for (var i = 0; i < bs.length; i++) {
+        bs[i].className = 'frb-tab' + (bs[i].getAttribute('data-rctab') === rcTab ? ' on' : '');
+      }
+    }
+    if ($('rcBuildPane')) $('rcBuildPane').hidden = rcTab !== 'build';
+    if ($('rcSavedPane')) $('rcSavedPane').hidden = rcTab !== 'saved';
+    if ($('rcFoot')) $('rcFoot').hidden = rcTab !== 'build';
+    var body = document.querySelector('#sheetRecipe .sheet-body');
+    if (body) body.scrollTop = 0;
+    if (rcTab === 'saved') renderRecipes();
+  }
+
+  function rcLoadRecipe(id) {
+    var r = recipeById(id);
+    if (!r) return;
+    if (rcItems.length && !window.confirm("'" + r.name + "' 레시피를 불러올까? 지금 담은 재료는 지워져")) return;
+    rcItems = recipeCopyItems(r.items);
+    rcPortion = 1;
+    if ($('rcName')) $('rcName').value = r.name;
+    syncOpt('rcPortion', '1');
+    rcSetTab('build');
+    rcRender();
+    toast("'" + r.name + "' 레시피 불러왔어 · 재료 " + rcItems.length + '개');
+    setTimeout(function () {
+      try { if ($('rcItems')) $('rcItems').scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) {}
+    }, 80);
+  }
+
+  function rcRecordRecipe(id) {
+    var r = recipeById(id);
+    if (!r) return;
+    var meal = state.ui.meal;
+    var food = {
+      n: r.name, e: '🍳', k: num(r.totalKcal, 0), p: num(r.p, 0),
+      c: num(r.c, 0), f: num(r.f, 0), u: '인분', g: 0
+    };
+    var item = itemFromFood(food, 1, meal);
+    curDay().meals.push(item);
+    r.updatedAt = Date.now();
+    save();
+    renderAll();
+    closeSheets();
+    toast(r.name + ' ' + fmtInt(num(r.totalKcal, 0)) + 'kcal · ' + frMealName(meal) + '에 기록했어', function () {
+      var dd = curDay();
+      dd.meals = dd.meals.filter(function (x) { return x.id !== item.id; });
+      save(); renderAll();
+    });
+  }
+
+  function rcDeleteRecipe(id) {
+    var all = recipesAll(), idx = -1;
+    for (var i = 0; i < all.length; i++) if (all[i].id === id) { idx = i; break; }
+    if (idx < 0) return;
+    var gone = state.recipes.splice(idx, 1)[0];
+    save();
+    renderRecipes();
+    toast("'" + gone.name + "' 레시피 지웠어", function () {
+      if (!Array.isArray(state.recipes)) state.recipes = [];
+      state.recipes.splice(Math.min(idx, state.recipes.length), 0, gone);
+      save();
+      renderRecipes();
+    });
+  }
+
+  /* 기록하지 않고 레시피만 저장 */
+  function rcSaveRecipeOnly() {
+    if (!rcItems.length) { toast('재료를 먼저 담아줘'); return; }
+    var name = String($('rcName').value || '').trim();
+    if (!name) { toast('요리 이름을 먼저 정해줘'); try { $('rcName').focus(); } catch (e) {} return; }
+    var existed = !!recipeFind(name);
+    var r = recipeSave(name, rcItems);
+    if (!r) return;
+    save();
+    renderRecipes();
+    rcSetTab('saved');
+    toast((existed ? "'" + name + "' 레시피 업데이트했어 · " : "'" + name + "' 레시피 저장했어 · ") +
+      fmtInt(r.totalKcal) + 'kcal');
   }
 
   function openRecipe() {
@@ -4225,6 +4447,9 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     presetHideHint(['rcPresetHint']);
     syncOpt('rcPortion', '1');
     syncOpt('rcMeal', rcMeal);
+    if ($('rcSave')) $('rcSave').checked = true;
+    renderRecipes();
+    rcSetTab('build');
     rcRender();
     openSheet('recipe');
     setTimeout(function () { try { $('rcInput').focus(); } catch (e) {} }, 380);
@@ -5480,6 +5705,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
       days: {},
       favs: DEFAULT_FAVS.slice(),
       customs: [],
+      recipes: [],
       ui: { date: '', meal: autoMeal(), editChips: false }
     };
     rebuildAliases();
@@ -5500,7 +5726,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
 
   var spyTick = 0;
   function updateSpy() {
-    var ids = ['mealsCard', 'weightCard', 'waterCard', 'exerciseCard'];
+    var ids = ['mealsCard', 'weightCard', 'exerciseCard'];
     var y = (window.scrollY || 0) + 160;
     var active = ids[0];
     ids.forEach(function (id) {
@@ -5716,12 +5942,6 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
       setWeight(v);
     });
 
-    $('glasses').addEventListener('click', function (e) {
-      var g = e.target.closest ? e.target.closest('[data-g]') : null;
-      if (!g) return;
-      addWater(parseInt(g.getAttribute('data-g'), 10));
-    });
-
     $('exBody').addEventListener('click', function (e) {
       var btn = e.target.closest ? e.target.closest('[data-act]') : null;
       if (!btn) return;
@@ -5926,6 +6146,32 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
       pickOcrPhoto();
     };
     $('btnRecipeSave').onclick = rcSaveMeal;
+    if ($('btnRecipeSaveOnly')) $('btnRecipeSaveOnly').onclick = rcSaveRecipeOnly;
+
+    /* v4.8: 레시피 탭 · 저장한 레시피 카드 */
+    var rcTabsEl = $('rcTabs');
+    if (rcTabsEl) {
+      rcTabsEl.addEventListener('click', function (e) {
+        var b = e.target && e.target.closest ? e.target.closest('button[data-rctab]') : null;
+        if (!b) return;
+        rcSetTab(b.getAttribute('data-rctab'));
+      });
+    }
+    var rcSavedEl = $('rcSavedPane');
+    if (rcSavedEl) {
+      rcSavedEl.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        var rec = t.closest('[data-rcrec]');
+        if (rec) { rcRecordRecipe(rec.getAttribute('data-rcrec')); return; }
+        var ld = t.closest('[data-rcload]');
+        if (ld) { rcLoadRecipe(ld.getAttribute('data-rcload')); return; }
+        var dl = t.closest('[data-rcdelr]');
+        if (dl) { rcDeleteRecipe(dl.getAttribute('data-rcdelr')); return; }
+        var tb = t.closest('[data-rctab]');
+        if (tb) { rcSetTab(tb.getAttribute('data-rctab')); return; }
+      });
+    }
 
     /* 내 냉장고 */
     bindFridge();
@@ -5997,6 +6243,14 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     rcTotal: function () { return rcTotal(); },
     rcParseAdd: rcParseAdd,
     rcSaveMeal: rcSaveMeal,
+    rcSaveRecipeOnly: rcSaveRecipeOnly,
+    recipes: function () { return state.recipes; },
+    renderRecipes: renderRecipes,
+    recipeSave: function (name, items) { var r = recipeSave(name, items); save(); renderRecipes(); return r; },
+    rcLoadRecipe: rcLoadRecipe,
+    rcRecordRecipe: rcRecordRecipe,
+    rcDeleteRecipe: rcDeleteRecipe,
+    recipeTab: function (t) { if (t) rcSetTab(t); return rcTab; },
     openFridge: openFridge,
     renderFridge: renderFridge,
     inferCat: inferCat,

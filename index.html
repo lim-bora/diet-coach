@@ -3,12 +3,15 @@
 <head>
 <meta charset="utf-8">
 <title>보라 다이어트 코치</title>
+<!-- v4.6: 🧊 내 냉장고 전용 시트 (요리 재료 · 시판·완제품 분리) -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="다이어트">
 <meta name="theme-color" content="#F4F6F7">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <meta name="format-detection" content="telephone=no">
 <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=5">
 <link rel="icon" type="image/png" sizes="180x180" href="./apple-touch-icon.png?v=5">
@@ -800,6 +803,161 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
 }
+
+/* ===== v4.6: Pretendard · UI 스케일 업 · 내 냉장고 ===== */
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'SF Pro Display','Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif}
+button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif}
+
+/* --- 터치 타깃 · 글자 한 단계 업 --- */
+.card-head h2{font-size:16.5px}
+.text-input{height:48px;font-size:16px;border-radius:14px;padding:0 14px}
+.btn-primary{padding:12px 20px;font-size:15px;border-radius:14px}
+.btn-primary.block{padding:16px 18px;font-size:15.5px;border-radius:16px}
+.btn-ghost{min-height:48px;padding:0 18px;font-size:14.5px;border-radius:14px}
+.opt{padding:12px 6px;font-size:13.5px;border-radius:13px}
+.opt-pills{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:7px}
+.pills{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.pills button{padding:10px 2px;min-height:44px;font-size:14px}
+.preset-head .ph-t{font-size:13.5px}
+.qbox{height:54px;border-radius:16px}
+.qbox input{font-size:16px}
+.preset{padding:12px 12px}
+.preset .prn{font-size:13px}
+.preset .prk{font-size:11.5px}
+.chip{padding:11px 15px;min-height:44px;border-radius:16px}
+.chip .cn{font-size:13.5px}
+.chip .ck{font-size:11px}
+.item-e{width:36px;height:36px;font-size:17px}
+.item-name{font-size:15px}
+.item-kcal{font-size:14px}
+.item-mac{font-size:11.5px}
+.sheet-head h3{font-size:18px}
+.toast{font-size:13px}
+.favs-row{padding:10px 12px;border-radius:15px}
+.favs-row .fr-n{font-size:14px}
+.favs-row .fr-e{width:30px;height:30px;font-size:15px}
+.favs-row .fr-btn{width:32px;height:32px;border-radius:10px}
+.favs-add{padding:8px 12px;font-size:12.5px}
+.rc-add{height:48px;padding:0 17px;font-size:14px;border-radius:13px}
+.rc-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rc-tool{padding:12px 8px;min-height:46px;font-size:12.5px;border-radius:12px}
+.data-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.data-row .btn-primary,.data-row .btn-ghost{width:100%}
+
+/* --- 빠른 기록 액션 2×2 그리드 --- */
+.quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:0 0 12px}
+.qg-btn{
+  -webkit-appearance:none;display:flex;align-items:center;gap:8px;
+  min-height:50px;padding:0 13px;border-radius:15px;border:1px solid #E8EDEE;background:#fff;
+  color:var(--ink);font-size:14px;font-weight:700;letter-spacing:-0.02em;
+  box-shadow:0 1px 2px rgba(16,24,28,.04);
+  transition:background .15s ease,border-color .15s ease,transform .12s ease;
+}
+.qg-btn:active{background:var(--em-l);border-color:#C6EEDE;transform:scale(.985)}
+.qg-btn .qg-e{font-size:18px;line-height:1;flex:0 0 auto}
+.qg-btn .qg-t{flex:1 1 auto;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qg-btn .qg-n{font-size:11.5px;font-weight:800;color:#5FB89E;font-variant-numeric:tabular-nums;flex:0 0 auto;letter-spacing:0}
+.qg-btn.fridge{background:#F1FBF6;border-color:#DDF3EA;color:var(--em-d)}
+.qg-btn.muted{color:var(--ink2)}
+
+/* --- 내 냉장고 시트 --- */
+.frb-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#F1F4F5;padding:4px;border-radius:14px;margin:0 0 12px}
+.frb-tab{
+  -webkit-appearance:none;border:0;background:transparent;min-width:0;min-height:40px;
+  border-radius:11px;padding:6px 4px;font-size:12px;font-weight:700;color:var(--ink3);
+  letter-spacing:-0.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:background .16s ease,color .16s ease,box-shadow .16s ease;
+}
+.frb-tab i{font-style:normal;font-size:10.5px;font-weight:800;opacity:.6;margin-left:3px;letter-spacing:0}
+.frb-tab.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,24,28,.10)}
+.frb-tab.on i{color:var(--em-d);opacity:.95}
+.frb-search{position:relative;margin-bottom:10px}
+.frb-search .text-input{padding-right:46px;height:48px;font-size:15.5px}
+.frb-search #frSearch::-webkit-search-cancel-button,
+.frb-search #frSearch::-webkit-search-decoration{-webkit-appearance:none;display:none}
+.frb-search .favs-clear{width:34px;height:34px;right:8px;font-size:16px}
+.frb-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
+.frb-act{
+  -webkit-appearance:none;display:flex;align-items:center;justify-content:center;min-width:0;min-height:48px;
+  border:1px solid #E6EDEA;background:#fff;border-radius:13px;padding:0 8px;
+  font-size:13px;font-weight:800;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  letter-spacing:-0.02em;
+}
+.frb-act:active{background:var(--em-l);color:var(--em-d);border-color:#C6EEDE}
+.frb-act.primary{background:var(--em-l);border-color:#C6EEDE;color:var(--em-d)}
+.frb-add{background:#F7FBFA;border:1px solid #E4F2EC;border-radius:16px;padding:12px;margin:0 0 12px}
+.frb-add .text-input,.frb-edit .text-input{height:46px;font-size:15.5px;border-radius:12px}
+.frb-maclab{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;margin-top:11px;padding:0 4px;font-size:10.5px;font-weight:700;color:#AAB7BB;letter-spacing:0}
+.frb-maclab+.frb-grid4{margin-top:5px}
+.frb-grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;margin-top:9px}
+.frb-grid4 .text-input{padding:0 8px;font-size:13.5px;height:44px}
+.frb-addfoot,.frb-editfoot{display:flex;align-items:center;gap:8px;margin-top:10px}
+.frb-addfoot .lab,.frb-editfoot .lab{font-size:11.5px;font-weight:700;color:var(--ink3);flex:0 0 auto;letter-spacing:0}
+.frb-addfoot .text-input,.frb-editfoot .text-input{height:44px;width:88px;flex:0 0 auto;padding:0 10px;font-size:14.5px}
+.frb-save{
+  -webkit-appearance:none;margin-left:auto;border-radius:12px;min-height:46px;padding:0 18px;
+  font-size:14px;font-weight:800;display:flex;align-items:center;flex:0 0 auto;
+  background:var(--em-d);color:#fff;border:0;
+}
+.frb-save:active{opacity:.88}
+.frb-cancel{-webkit-appearance:none;border:0;background:transparent;color:var(--ink3);font-size:12.5px;font-weight:700;padding:8px 2px;flex:0 0 auto}
+.frb-cat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.frb-cat button{
+  -webkit-appearance:none;min-width:0;min-height:44px;border:1.5px solid var(--line);background:#fff;
+  border-radius:12px;padding:0 6px;font-size:13px;font-weight:700;color:var(--ink2);
+  white-space:nowrap;letter-spacing:-0.02em;
+}
+.frb-cat button.on{border-color:var(--em);background:#F0FBF6;color:var(--em-d);font-weight:800}
+.frb-list{display:flex;flex-direction:column;gap:9px}
+.frb-item{border:1px solid #EDF4F1;border-radius:16px;padding:11px 12px;background:#fff}
+.frb-item.editing{border-color:#C6EEDE;background:#FBFEFC}
+.frb-top{display:flex;align-items:center;gap:9px;min-width:0}
+.frb-e{width:34px;height:34px;flex:0 0 auto;border-radius:11px;background:#F3F9F6;border:1px solid #EDF4F1;display:grid;place-items:center;font-size:17px}
+.frb-b{flex:1;min-width:0}
+.frb-n{font-size:15px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.frb-k{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink2);flex:0 0 auto;letter-spacing:0}
+.frb-k small{font-size:10px;font-weight:700;color:var(--ink3);margin-left:1px}
+.frb-mac{font-size:11.5px;color:var(--ink3);font-variant-numeric:tabular-nums;margin-top:3px;letter-spacing:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.frb-tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:0;padding:2px 6px;border-radius:6px;margin-right:5px;background:#F1F4F5;color:var(--ink3)}
+.frb-tag.ing{background:#FFF4E4;color:#B4791F}
+.frb-tag.prod{background:#EFF4FF;color:#5A78B8}
+.frb-btns{display:grid;grid-template-columns:1fr 1fr 54px;gap:7px;margin-top:10px}
+.frb-btn{
+  -webkit-appearance:none;min-width:0;min-height:44px;border:1px solid #E6EDEA;background:#fff;border-radius:11px;
+  padding:0 4px;font-size:13px;font-weight:800;color:var(--ink2);letter-spacing:-0.02em;
+}
+.frb-btn:active{background:#F6F8F8}
+.frb-btn.rec{background:var(--em-l);border-color:#C6EEDE;color:var(--em-d)}
+.frb-btn.rec:active{background:#D8F4E8}
+.frb-btn.del{color:#8E9DA2}
+.frb-btn.del:active{color:var(--coral);background:var(--coral-l);border-color:#F6DFD8}
+.frb-edit{margin-top:11px;border-top:1px solid #E8F3EE;padding-top:11px}
+.frb-empty{padding:26px 10px;text-align:center;font-size:13px;line-height:1.75;color:var(--ink3);letter-spacing:0}
+.frb-empty .fe-e{display:block;font-size:28px;margin-bottom:9px;opacity:.75}
+.frb-empty b{color:var(--ink2)}
+.frb-nores{padding:20px 6px;text-align:center;font-size:12.5px;color:var(--ink3);letter-spacing:0}
+
+@media (max-width:344px){
+  .quick-grid{gap:7px}
+  .qg-btn{min-height:48px;padding:0 10px;font-size:13px;gap:6px}
+  .qg-btn .qg-e{font-size:16px}
+  .qg-btn .qg-n{display:none}
+  .pills button{font-size:13px;padding:10px 1px}
+  .preset .prn{font-size:12px}
+  .frb-tab{font-size:11px;padding:6px 2px}
+  .frb-tab i{font-size:9.5px;margin-left:2px}
+  .frb-act{font-size:12px}
+  .frb-btn{font-size:12px}
+  .frb-btns{grid-template-columns:1fr 1fr 46px;gap:6px}
+  .frb-k{font-size:13px}
+  .frb-addfoot .text-input,.frb-editfoot .text-input{width:72px}
+  .frb-save{padding:0 13px;font-size:13px}
+  .rc-tool{font-size:11.5px}
+  .macro{padding:0 7px}
+  .macro-top{flex-direction:column;align-items:flex-start;gap:2px}
+  .macro-top span{font-size:10.5px}
+  .macro-top b{font-size:11.5px;white-space:nowrap}
+}
 </style>
 </head>
 <body>
@@ -878,11 +1036,12 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   <section class="card" id="quickCard">
     <div class="card-head">
       <h2>빠른 기록</h2>
-      <div class="head-actions">
-        <button class="link-btn recipe-btn" id="btnRecipe">🍳 내 요리</button>
-        <button class="link-btn ocr-btn" id="btnOcr">📷 성분표</button>
-        <button class="link-btn muted" id="btnChipsEdit">편집</button>
-      </div>
+    </div>
+    <div class="quick-grid">
+      <button class="qg-btn" id="btnRecipe"><span class="qg-e">🍳</span><span class="qg-t">내 요리</span></button>
+      <button class="qg-btn fridge" id="btnFridge"><span class="qg-e">🧊</span><span class="qg-t">내 냉장고</span><span class="qg-n" id="fridgeCount">0개</span></button>
+      <button class="qg-btn" id="btnOcr"><span class="qg-e">📷</span><span class="qg-t">성분표</span></button>
+      <button class="qg-btn muted" id="btnChipsEdit"><span class="qg-e">⚙️</span><span class="qg-t">칩 설정</span></button>
     </div>
     <div class="preset-head"><span class="ph-t">대충 컷</span><span class="ph-s">메뉴가 기억 안 나면 한 번에</span></div>
     <div class="presets" id="presetRow"></div>
@@ -1306,6 +1465,48 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     <p class="formula">담은 재료의 칼로리·탄단지를 합쳐서 기록해요. 저장해 두면 다음에 검색해서 바로 꺼내 쓸 수 있어요.</p>
   </div>
   <div class="sheet-foot"><button class="btn-primary block em" id="btnRecipeSave">이 요리로 기록하기</button></div>
+</section>
+
+<section class="sheet" id="sheetFridge" role="dialog" aria-modal="true" aria-label="내 냉장고">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h3>🧊 내 냉장고 <span class="head-sub" id="frCount">0개</span></h3><button class="xbtn" data-close="fridge" aria-label="닫기">&#10005;</button></div>
+  <div class="sheet-body">
+    <div class="frb-tabs" id="frTabs">
+      <button class="frb-tab on" data-cat="all">전체<i>0</i></button>
+      <button class="frb-tab" data-cat="ing">요리 재료<i>0</i></button>
+      <button class="frb-tab" data-cat="prod">시판·완제품<i>0</i></button>
+    </div>
+    <div class="frb-search">
+      <input class="text-input" id="frSearch" type="search" autocomplete="off" placeholder="이름으로 찾기 (예: 액젓, 참치캔)">
+      <button class="favs-clear" id="frSearchClear" aria-label="검색어 지우기" hidden>&#215;</button>
+    </div>
+    <div class="frb-actions">
+      <button class="frb-act primary" id="frAddToggle">＋ 새 제품 추가</button>
+      <button class="frb-act" id="frOcrAdd">📷 성분표로 추가</button>
+    </div>
+    <div class="frb-add" id="frAddBox" hidden>
+      <input class="text-input" id="frNewName" type="text" autocomplete="off" placeholder="이름 (예: 3분 카레, 굴소스)">
+      <div class="frb-maclab"><span>kcal</span><span>탄수</span><span>단백질</span><span>지방</span></div>
+      <div class="frb-grid4">
+        <input class="text-input" id="frNewK" type="number" inputmode="numeric" step="1" placeholder="kcal">
+        <input class="text-input" id="frNewC" type="number" inputmode="decimal" step="0.1" placeholder="탄수">
+        <input class="text-input" id="frNewP" type="number" inputmode="decimal" step="0.1" placeholder="단백">
+        <input class="text-input" id="frNewF" type="number" inputmode="decimal" step="0.1" placeholder="지방">
+      </div>
+      <div class="frb-cat" id="frNewCat">
+        <button data-frcat="ing">요리 재료</button>
+        <button data-frcat="prod" class="on">시판·완제품</button>
+      </div>
+      <div class="frb-addfoot">
+        <span class="lab">기준</span>
+        <input class="text-input" id="frNewU" type="text" value="인분" autocomplete="off" aria-label="기준 단위">
+        <button class="frb-save" id="frNewSave">담기</button>
+      </div>
+      <p class="formula">적은 값은 1회(1인분) 기준으로 담겨요. 소스·액젓·간장처럼 요리에 넣는 이름은 요리 재료로 자동으로 잡혀요.</p>
+    </div>
+    <div class="frb-list" id="frList"></div>
+  </div>
+  <div class="sheet-foot"><button class="btn-primary block em" id="frDone">완료</button></div>
 </section>
 
 <script>
@@ -1987,7 +2188,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
         if (!f || !f.n) return null;
         return {
           n: String(f.n), e: f.e || '🍽', k: num(f.k, 0), p: num(f.p, 0), c: num(f.c, 0),
-          f: num(f.f, 0), u: f.u || '인분', g: num(f.g, 0), cu: 1
+          f: num(f.f, 0), u: f.u || '인분', g: num(f.g, 0), cu: 1,
+          cat: f.cat === 'ing' ? 'ing' : 'prod'
         };
       }).filter(Boolean);
     }
@@ -2449,7 +2651,11 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     html += '<button class="chip add" data-manual="1"><span class="ce">＋</span><span class="cn">직접 추가</span></button>';
     $('chipsRow').innerHTML = html;
     $('chipsEmpty').style.display = favs.length ? 'none' : 'block';
-    $('btnChipsEdit').textContent = edit ? '완료' : '칩 설정';
+    var cbe = $('btnChipsEdit');
+    if (cbe) {
+      var cbt = cbe.getElementsByClassName('qg-t')[0];
+      if (cbt) cbt.textContent = edit ? '완료' : '칩 설정'; else cbe.textContent = edit ? '완료' : '칩 설정';
+    }
   }
 
   function renderWeight() {
@@ -2925,6 +3131,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     renderPills();
     renderMeals();
     renderChips();
+    syncFridgeCount();
     renderWeight();
     renderWater();
     renderExercise();
@@ -3036,7 +3243,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
       if (squash(state.customs[i].n) === key) { found = state.customs[i]; break; }
     }
     if (!found) {
-      found = { n: food.n, e: food.e || '🍽', k: 0, p: 0, c: 0, f: 0, u: '인분', g: 0, cu: 1 };
+      found = { n: food.n, e: food.e || '🍽', k: 0, p: 0, c: 0, f: 0, u: '인분', g: 0, cu: 1,
+        cat: (food.cat === 'ing' || food.cat === 'prod') ? food.cat : inferCat(food.n) };
       state.customs.push(found);
     }
     found.e = food.e || '🍽';
@@ -3047,6 +3255,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     found.u = food.u || '인분';
     found.g = num(food.g, 0);
     found.cu = 1;
+    if (food.cat === 'ing' || food.cat === 'prod') found.cat = food.cat;
+    else if (found.cat !== 'ing' && found.cat !== 'prod') found.cat = inferCat(food.n);
     rebuildAliases();
     if (wantFav) addFav(found);
   }
@@ -3915,7 +4125,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
       p: Math.max(0, num($('rcNewP').value, 0)),
       c: Math.max(0, num($('rcNewC').value, 0)),
       f: Math.max(0, num($('rcNewF').value, 0)),
-      u: '인분', g: 0
+      u: '인분', g: 0, cat: 'ing'
     };
     if ($('rcNewSave') && $('rcNewSave').checked) saveCustomFood(food, false);
     rcAdd(food, 1);
@@ -3939,7 +4149,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
       p: Math.round(t.p * 10) / 10,
       c: Math.round(t.c * 10) / 10,
       f: Math.round(t.f * 10) / 10,
-      u: '인분', g: 0
+      u: '인분', g: 0, cat: 'prod'
     };
     var wantSave = !!($('rcSave') && $('rcSave').checked);
     if (wantSave) saveCustomFood(food, false);
@@ -3971,6 +4181,367 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     setTimeout(function () { try { $('rcInput').focus(); } catch (e) {} }, 380);
   }
 
+  /* ================= v4.6: 내 냉장고 (요리 재료 · 시판·완제품) ================= */
+  var FR_LABEL = { all: '전체', ing: '요리 재료', prod: '시판·완제품' };
+  /* 소스·양념·기본 재료로 자동 분류할 말들 */
+  var ING_WORDS = ['소스', '액젓', '간장', '오일', '식초', '고추장', '된장', '쌈장', '참기름', '들기름',
+    '매실', '맛술', '미림', '설탕', '소금', '후추', '다시다', '굴소스', '스리라차', '마요', '케첩',
+    '드레싱', '전분', '밀가루', '가루', '참깨', '식용유', '기름', '젓갈', '육수', '청양', '마늘',
+    '대파', '쪽파', '양파', '버섯', '버터', '두부', '콩나물', '숙주', '브로콜리', '호박', '당근', '양상추'];
+
+  function inferCat(name) {
+    var k = squash(name);
+    if (!k) return 'prod';
+    for (var i = 0; i < ING_WORDS.length; i++) {
+      if (ING_WORDS[i] && k.indexOf(ING_WORDS[i]) >= 0) return 'ing';
+    }
+    return 'prod';
+  }
+
+  function frCatOf(f) { return (f && f.cat === 'ing') ? 'ing' : 'prod'; }
+  function frAll() { return Array.isArray(state.customs) ? state.customs : []; }
+
+  function frCounts() {
+    var all = frAll(), ing = 0;
+    for (var i = 0; i < all.length; i++) if (frCatOf(all[i]) === 'ing') ing++;
+    return { all: all.length, ing: ing, prod: all.length - ing };
+  }
+
+  function syncFridgeCount() {
+    var c = frCounts();
+    if ($('fridgeCount')) $('fridgeCount').textContent = c.all + '개';
+    if ($('frCount')) $('frCount').textContent = c.all + '개';
+  }
+
+  function frFind(key) {
+    var all = frAll();
+    for (var i = 0; i < all.length; i++) if (squash(all[i].n) === key) return all[i];
+    return null;
+  }
+
+  function frMealName(k) {
+    for (var i = 0; i < MEALS.length; i++) if (MEALS[i].k === k) return MEALS[i].n;
+    return '오늘';
+  }
+
+  var frQuery = '', frTab = 'all', frEditKey = null, frEditCat = 'prod';
+  var frNewCat = 'prod', frNewCatTouched = false;
+  var fridgeOcr = false, manualFromFridge = false;
+
+  function renderFridge() {
+    var box = $('frList');
+    if (!box) return;
+    syncFridgeCount();
+    var cnt = frCounts();
+    var tabs = $('frTabs');
+    if (tabs) {
+      var btns = tabs.getElementsByTagName('button');
+      for (var i = 0; i < btns.length; i++) {
+        var ck = btns[i].getAttribute('data-cat') || 'all';
+        btns[i].className = 'frb-tab' + (frTab === ck ? ' on' : '');
+        var nEl = btns[i].getElementsByTagName('i')[0];
+        if (nEl) nEl.textContent = String(ck === 'ing' ? cnt.ing : (ck === 'prod' ? cnt.prod : cnt.all));
+      }
+    }
+    var all = frAll(), q = squash(frQuery), rows = [];
+    for (var j = all.length - 1; j >= 0; j--) {
+      var f = all[j];
+      if (frTab !== 'all' && frCatOf(f) !== frTab) continue;
+      if (q && squash(f.n).indexOf(q) < 0) continue;
+      rows.push(f);
+    }
+    if (!all.length) {
+      box.innerHTML = '<div class="frb-empty"><span class="fe-e">🧊</span>' +
+        '아직 내 냉장고에 담아 둔 제품이나 요리가 없어요.<br>' +
+        '성분표 사진이나 직접 추가, <b>내 요리</b> 저장 시 여기에 모여요.</div>';
+      return;
+    }
+    if (!rows.length) {
+      box.innerHTML = '<div class="frb-nores">' +
+        (q ? '이 이름으로 담아 둔 게 없어요'
+          : (frTab === 'ing' ? '아직 요리 재료로 담아 둔 게 없어요' : '아직 시판·완제품으로 담아 둔 게 없어요')) +
+        '</div>';
+      return;
+    }
+    var html = '', showTag = (frTab === 'all');
+    rows.forEach(function (f) {
+      var key = squash(f.n), editing = (frEditKey === key), cat = frCatOf(f);
+      html += '<div class="frb-item' + (editing ? ' editing' : '') + '">' +
+        '<div class="frb-top">' +
+        '<span class="frb-e">' + esc(f.e || '🍽') + '</span>' +
+        '<div class="frb-b"><div class="frb-n">' + esc(f.n) + '</div>' +
+        '<div class="frb-mac">' +
+        (showTag ? '<span class="frb-tag ' + cat + '">' + FR_LABEL[cat] + '</span>' : '') +
+        '1' + esc(f.u || '인분') + ' 기준 · 탄 ' + fmt1(num(f.c, 0)) + ' · 단 ' + fmt1(num(f.p, 0)) +
+        ' · 지 ' + fmt1(num(f.f, 0)) + 'g</div></div>' +
+        '<div class="frb-k">' + fmtInt(num(f.k, 0)) + '<small>kcal</small></div>' +
+        '</div>';
+      if (editing) {
+        html += '<div class="frb-edit">' +
+          '<input class="text-input" id="feName" type="text" autocomplete="off" value="' + esc(f.n) + '" placeholder="이름">' +
+          '<div class="frb-maclab"><span>kcal</span><span>탄수</span><span>단백질</span><span>지방</span></div>' +
+          '<div class="frb-grid4">' +
+          '<input class="text-input" id="feK" type="number" inputmode="numeric" step="1" value="' + fmt1(num(f.k, 0)) + '" placeholder="kcal">' +
+          '<input class="text-input" id="feC" type="number" inputmode="decimal" step="0.1" value="' + fmt1(num(f.c, 0)) + '" placeholder="탄수">' +
+          '<input class="text-input" id="feP" type="number" inputmode="decimal" step="0.1" value="' + fmt1(num(f.p, 0)) + '" placeholder="단백">' +
+          '<input class="text-input" id="feF" type="number" inputmode="decimal" step="0.1" value="' + fmt1(num(f.f, 0)) + '" placeholder="지방">' +
+          '</div>' +
+          '<div class="frb-cat" id="feCat">' +
+          '<button data-fecat="ing"' + (frEditCat === 'ing' ? ' class="on"' : '') + '>요리 재료</button>' +
+          '<button data-fecat="prod"' + (frEditCat !== 'ing' ? ' class="on"' : '') + '>시판·완제품</button>' +
+          '</div>' +
+          '<div class="frb-editfoot"><span class="lab">기준</span>' +
+          '<input class="text-input" id="feU" type="text" autocomplete="off" value="' + esc(f.u || '인분') + '" aria-label="기준 단위">' +
+          '<button class="frb-cancel" data-frcancel="1">취소</button>' +
+          '<button class="frb-save" data-frsave="1">저장</button></div>' +
+          '</div>';
+      } else {
+        html += '<div class="frb-btns">' +
+          '<button class="frb-btn rec" data-frrec="' + key + '">기록</button>' +
+          '<button class="frb-btn" data-fredit="' + key + '">수정</button>' +
+          '<button class="frb-btn del" data-frdel="' + key + '">삭제</button>' +
+          '</div>';
+      }
+      html += '</div>';
+    });
+    box.innerHTML = html;
+  }
+
+  function frRecord(key) {
+    var f = frFind(key);
+    if (!f) return;
+    var food = { n: f.n, e: f.e || '🍽', k: num(f.k, 0), p: num(f.p, 0), c: num(f.c, 0), f: num(f.f, 0), u: f.u || '인분' };
+    var item = itemFromFood(food, 1, state.ui.meal);
+    curDay().meals.push(item);
+    save();
+    renderAll();
+    toast(f.n + ' ' + fmtInt(num(f.k, 0)) + 'kcal · ' + frMealName(state.ui.meal) + '에 기록했어', function () {
+      var dd = curDay();
+      dd.meals = dd.meals.filter(function (x) { return x.id !== item.id; });
+      save(); renderAll();
+    });
+  }
+
+  function frDelete(key) {
+    var all = frAll(), idx = -1;
+    for (var i = 0; i < all.length; i++) if (squash(all[i].n) === key) { idx = i; break; }
+    if (idx < 0) return;
+    var gone = all.splice(idx, 1)[0];
+    if (frEditKey === key) frEditKey = null;
+    rebuildAliases();
+    save();
+    renderChips();
+    renderFridge();
+    toast(gone.n + ' 냉장고에서 뺐어', function () {
+      var list = frAll();
+      list.splice(Math.min(idx, list.length), 0, gone);
+      rebuildAliases();
+      save();
+      renderChips();
+      renderFridge();
+    });
+  }
+
+  function frStartEdit(key) {
+    var f = frFind(key);
+    if (!f) return;
+    frEditKey = key;
+    frEditCat = frCatOf(f);
+    renderFridge();
+    setTimeout(function () {
+      try { if ($('feName')) { $('feName').focus(); $('feName').select(); } } catch (e) {}
+      try {
+        var body = document.querySelector('#sheetFridge .sheet-body');
+        var card = $('frList') && $('frList').querySelector('.frb-item.editing');
+        if (body && card) {
+          var over = card.getBoundingClientRect().bottom - (body.getBoundingClientRect().bottom - 14);
+          if (over > 0) body.scrollTop += over;
+        }
+      } catch (e) {}
+    }, 120);
+  }
+
+  function frSaveEdit() {
+    var all = frAll(), idx = -1;
+    for (var i = 0; i < all.length; i++) if (squash(all[i].n) === frEditKey) { idx = i; break; }
+    if (idx < 0) { frEditKey = null; renderFridge(); return; }
+    var f = all[idx];
+    var name = String(($('feName') && $('feName').value) || '').trim();
+    var k = num($('feK') && $('feK').value, null);
+    if (!name) { toast('이름을 적어줘'); try { $('feName').focus(); } catch (e) {} return; }
+    if (k == null || !isFinite(k) || k <= 0) { toast('칼로리를 적어줘'); try { $('feK').focus(); } catch (e) {} return; }
+    var nk = squash(name);
+    for (var j = 0; j < all.length; j++) {
+      if (j !== idx && squash(all[j].n) === nk) { toast('같은 이름이 이미 냉장고에 있어'); return; }
+    }
+    f.n = name;
+    f.k = k;
+    f.c = Math.max(0, num($('feC') && $('feC').value, 0));
+    f.p = Math.max(0, num($('feP') && $('feP').value, 0));
+    f.f = Math.max(0, num($('feF') && $('feF').value, 0));
+    f.u = String(($('feU') && $('feU').value) || '').trim() || '인분';
+    f.cat = frEditCat;
+    f.cu = 1;
+    frEditKey = null;
+    rebuildAliases();
+    save();
+    renderChips();
+    renderFridge();
+    toast(name + ' 수정했어 · ' + FR_LABEL[frCatOf(f)]);
+  }
+
+  function syncNewCat() {
+    var box = $('frNewCat');
+    if (!box) return;
+    var bs = box.getElementsByTagName('button');
+    for (var i = 0; i < bs.length; i++) bs[i].className = (bs[i].getAttribute('data-frcat') === frNewCat) ? 'on' : '';
+  }
+
+  function frResetNew() {
+    ['frNewName', 'frNewK', 'frNewC', 'frNewP', 'frNewF'].forEach(function (id) { if ($(id)) $(id).value = ''; });
+    if ($('frNewU')) $('frNewU').value = '인분';
+    frNewCat = 'prod';
+    frNewCatTouched = false;
+    syncNewCat();
+  }
+
+  function frAddNew() {
+    var nameEl = $('frNewName');
+    var name = String((nameEl && nameEl.value) || '').trim();
+    var k = num($('frNewK') && $('frNewK').value, null);
+    if (!name) { toast('제품 이름을 적어줘'); try { nameEl.focus(); } catch (e) {} return; }
+    if (k == null || !isFinite(k) || k <= 0) { toast('칼로리를 적어줘'); try { $('frNewK').focus(); } catch (e) {} return; }
+    var cat = frNewCat === 'ing' ? 'ing' : 'prod';
+    var food = {
+      n: name, e: cat === 'ing' ? '🥄' : '🥫', k: k,
+      c: Math.max(0, num($('frNewC') && $('frNewC').value, 0)),
+      p: Math.max(0, num($('frNewP') && $('frNewP').value, 0)),
+      f: Math.max(0, num($('frNewF') && $('frNewF').value, 0)),
+      u: String(($('frNewU') && $('frNewU').value) || '').trim() || '인분',
+      g: 0, cat: cat
+    };
+    var existed = !!frFind(squash(name));
+    saveCustomFood(food, false);
+    save();
+    renderChips();
+    if (frTab !== 'all' && frTab !== cat) frTab = cat;
+    if ($('frAddBox')) $('frAddBox').hidden = true;
+    frResetNew();
+    renderFridge();
+    toast(name + ' ' + FR_LABEL[cat] + '로 담았어 · ' + fmtInt(k) + 'kcal' + (existed ? ' (기존 항목 갱신)' : ''));
+  }
+
+  function openFridge(tab) {
+    if (!Array.isArray(state.customs)) state.customs = [];
+    frQuery = '';
+    frEditKey = null;
+    frTab = (tab === 'ing' || tab === 'prod') ? tab : 'all';
+    if ($('frSearch')) $('frSearch').value = '';
+    if ($('frSearchClear')) $('frSearchClear').hidden = true;
+    if ($('frAddBox')) $('frAddBox').hidden = true;
+    frResetNew();
+    renderFridge();
+    openSheet('fridge');
+  }
+
+  function bindFridge() {
+    if ($('btnFridge')) $('btnFridge').onclick = function () { openFridge(); };
+    if ($('frDone')) $('frDone').onclick = closeSheets;
+    var tabs = $('frTabs');
+    if (tabs) {
+      tabs.addEventListener('click', function (e) {
+        var b = e.target && e.target.closest ? e.target.closest('button[data-cat]') : null;
+        if (!b) return;
+        frTab = b.getAttribute('data-cat') || 'all';
+        frEditKey = null;
+        renderFridge();
+      });
+    }
+    var s = $('frSearch');
+    if (s) {
+      s.addEventListener('input', function () {
+        frQuery = this.value;
+        if ($('frSearchClear')) $('frSearchClear').hidden = !this.value;
+        renderFridge();
+      });
+    }
+    if ($('frSearchClear')) {
+      $('frSearchClear').onclick = function () {
+        if ($('frSearch')) $('frSearch').value = '';
+        this.hidden = true;
+        frQuery = '';
+        renderFridge();
+      };
+    }
+    if ($('frAddToggle')) {
+      $('frAddToggle').onclick = function () {
+        var box = $('frAddBox');
+        if (!box) return;
+        var willOpen = box.hidden;
+        box.hidden = !willOpen;
+        if (willOpen) {
+          frResetNew();
+          try { $('frNewName').focus(); } catch (e) {}
+        }
+      };
+    }
+    if ($('frNewCat')) {
+      $('frNewCat').addEventListener('click', function (e) {
+        var b = e.target && e.target.closest ? e.target.closest('button[data-frcat]') : null;
+        if (!b) return;
+        frNewCat = b.getAttribute('data-frcat') === 'ing' ? 'ing' : 'prod';
+        frNewCatTouched = true;
+        syncNewCat();
+      });
+    }
+    if ($('frNewName')) {
+      $('frNewName').addEventListener('input', function () {
+        if (frNewCatTouched) return;
+        frNewCat = inferCat(this.value);
+        syncNewCat();
+      });
+    }
+    ['frNewName', 'frNewK', 'frNewU'].forEach(function (id) {
+      if (!$(id)) return;
+      $(id).addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); frAddNew(); }
+      });
+    });
+    if ($('frNewSave')) $('frNewSave').onclick = frAddNew;
+    if ($('frOcrAdd')) {
+      $('frOcrAdd').onclick = function () {
+        closeSheets();
+        fridgeOcr = true;
+        pickOcrPhoto();
+      };
+    }
+    var list = $('frList');
+    if (list) {
+      list.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        var rec = t.closest('[data-frrec]');
+        if (rec) { frRecord(rec.getAttribute('data-frrec')); return; }
+        var ed = t.closest('[data-fredit]');
+        if (ed) { frStartEdit(ed.getAttribute('data-fredit')); return; }
+        var dl = t.closest('[data-frdel]');
+        if (dl) { frDelete(dl.getAttribute('data-frdel')); return; }
+        var fc = t.closest('[data-fecat]');
+        if (fc) {
+          frEditCat = fc.getAttribute('data-fecat') === 'ing' ? 'ing' : 'prod';
+          var catBox = $('feCat');
+          if (catBox) {
+            var bs = catBox.getElementsByTagName('button');
+            for (var i = 0; i < bs.length; i++) bs[i].className = (bs[i].getAttribute('data-fecat') === frEditCat) ? 'on' : '';
+          }
+          return;
+        }
+        if (t.closest('[data-frsave]')) { frSaveEdit(); return; }
+        if (t.closest('[data-frcancel]')) { frEditKey = null; renderFridge(); return; }
+      });
+    }
+  }
+
   /* ================= sheets ================= */
   function openSheet(name) {
     lockY = window.scrollY || window.pageYOffset || 0;
@@ -3992,6 +4563,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     if (e) e.classList.remove('open');
     var f2 = $('sheetRecipe');
     if (f2) f2.classList.remove('open');
+    var f3 = $('sheetFridge');
+    if (f3) f3.classList.remove('open');
     document.body.classList.remove('lock');
     document.body.style.top = '';
     window.scrollTo(0, lockY);
@@ -4012,6 +4585,9 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     manualEat = 1;
     renderPackManual();
     rcOcrMode = !!(pre && pre.recipe);
+    /* fridgeOcr: 내 냉장고의 '성분표로 추가'에서 시작한 OCR인지 */
+    manualFromFridge = !!fridgeOcr && !rcOcrMode;
+    fridgeOcr = false;
     if ($('mFav')) $('mFav').checked = rcOcrMode ? true : manualFromQuery;
     if ($('mTitle')) {
       $('mTitle').textContent = rcOcrMode ? '성분표 · 재료 확인'
@@ -4139,8 +4715,20 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     };
     var wantFav = !!$('mFav').checked;
     var meal = manualMeal;
+    /* 내 냉장고에서 '성분표로 추가'로 부른 경우: 기록 없이 냉장고에만 담는다 */
+    if (manualFromFridge && !rcOcrMode) {
+      manualFromFridge = false;
+      saveCustomFood(food, false);
+      save();
+      renderChips();
+      closeSheets();
+      toast(name + ' 내 냉장고에 담았어 · ' + fmtInt(food.k) + 'kcal');
+      openFridge(frCatOf(food));
+      return;
+    }
     /* 요리 시트에서 부른 경우: 기록 대신 재료 목록으로 되돌아간다 */
     if (rcOcrMode) {
+      food.cat = 'ing';
       if ($('mFav').checked) saveCustomFood(food, false);
       rcAdd(food, Math.max(0.5, eat));
       rcOcrMode = false;
@@ -5020,8 +5608,8 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     }
 
     /* 성분표 사진 */
-    $('btnOcr').onclick = function () { rcOcrMode = false; pickOcrPhoto(); };
-    $('btnOcrCam').onclick = function () { rcOcrMode = false; pickOcrPhoto(); };
+    $('btnOcr').onclick = function () { rcOcrMode = false; fridgeOcr = false; pickOcrPhoto(); };
+    $('btnOcrCam').onclick = function () { rcOcrMode = false; fridgeOcr = false; pickOcrPhoto(); };
     $('fileOcr').onchange = function () { onOcrFile(this); };
     $('btnOcrSkip').onclick = function () {
       if (rcOcrMode) {
@@ -5098,10 +5686,14 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     $('rcNewAdd').onclick = rcAddDirect;
     $('rcOcr').onclick = function () {
       rcOcrMode = true;
+      fridgeOcr = false;
       closeSheets();
       pickOcrPhoto();
     };
     $('btnRecipeSave').onclick = rcSaveMeal;
+
+    /* 내 냉장고 */
+    bindFridge();
   }
 
   /* ================= init ================= */
@@ -5116,7 +5708,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     }
     if (!state.ui.meal) state.ui.meal = autoMeal();
     if (!Array.isArray(state.customs)) state.customs = [];
-    state.customs = state.customs.filter(function (c) { return !shadowedByBuiltin(c); });
+    /* v4.6: 내장 DB와 이름이 겹치는 내 냉장고 항목도 목록에서 지우지 않는다 */
     if (!state.favs || !state.favs.length) {
       if (!raw) state.favs = clone(DEFAULT_FAVS);
     }
@@ -5170,6 +5762,10 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
     rcTotal: function () { return rcTotal(); },
     rcParseAdd: rcParseAdd,
     rcSaveMeal: rcSaveMeal,
+    openFridge: openFridge,
+    renderFridge: renderFridge,
+    inferCat: inferCat,
+    fridgeTab: function (t) { if (t) { frTab = t; renderFridge(); } return frTab; },
     state: function () { return state; }
   };
 })();

@@ -3649,6 +3649,9 @@ input,textarea,select{font-size:16px}
         toast(f.n + ' ' + fmtInt(f.k) + 'kcal 기록했어');
         return;
       }
+      /* 초성·부분 입력으로 Enter를 누르면 드롭다운 첫 후보를 바로 기록 */
+      var sug2 = findSuggest(text, 1);
+      if (sug2.length && (isChosungQuery(text) || sug2[0].s >= 0.9)) { recordSuggestion(sug2[0].f, 1); return; }
       if (OFF.items && OFF.items.length) { addOffItem(0); return; }
       var qn = $('qnKcal');
       if (qn) { try { qn.focus(); } catch (e) {} return; }

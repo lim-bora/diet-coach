@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>보라 다이어트 코치</title>
-<!-- v5.0: 첫 화면 흐름 정리(히어로 슬림 · 끼니 선택 상단 고정 · 빠른 기록 컴팩트) · 토스트 상단 이동 · 모든 입력 16px · + 버튼 독 안으로 -->
+<!-- v5.1: 초성·한두 글자 검색 드롭다운에서 터치 즉시 기록(수량 ½·1·1½·2) · 🥗 골라 담기 카테고리 시트 · 직접 입력은 이름·칼로리 2칸(탄단지·개입수는 접힘) · "김치찌개 420kcal" 한 줄 파싱 -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1066,6 +1066,60 @@ input,textarea,select{font-size:16px}
   .tool-btn{font-size:12px;padding:0 7px;gap:4px}
   .tool-btn .tb-n{display:none}
 }
+
+/* ===== v5.1: 초성 검색 · 바로 담기 · 골라 담기 ===== */
+.chip.menu{background:var(--em);border-color:var(--em)}
+.chip.menu:active{background:var(--em-d);border-color:var(--em-d)}
+.chip.menu .cn{color:#fff}
+.chip.menu .ck{color:rgba(255,255,255,.82)}
+.ta-menu{display:flex;align-items:center;gap:10px;width:100%;border:0;border-radius:16px;padding:13px 14px;background:var(--em);color:#fff;text-align:left;-webkit-appearance:none;letter-spacing:-0.01em}
+.ta-menu:active{transform:scale(.99);opacity:.94}
+.ta-menu .tm-e{font-size:19px;line-height:1;flex:0 0 auto}
+.ta-menu .tm-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ta-menu .tm-b b{font-size:14px;font-weight:800;letter-spacing:-0.02em}
+.ta-menu .tm-b i{font-style:normal;font-size:11px;font-weight:600;color:rgba(255,255,255,.78);letter-spacing:0}
+.ta-menu .tm-g{font-size:14px;font-weight:800;color:rgba(255,255,255,.9);flex:0 0 auto}
+.ta-lab{font-size:11px;font-weight:800;color:var(--ink3);margin:12px 2px 6px;letter-spacing:0}
+.ta-chips{display:flex;flex-wrap:wrap;gap:6px}
+.ta-chip{-webkit-appearance:none;border:1px solid #E7ECED;background:#fff;border-radius:11px;padding:7px 10px;display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--ink);letter-spacing:-0.01em}
+.ta-chip:active{background:var(--em-l);border-color:#C2DCCF}
+.ta-chip b{font-size:10.5px;font-weight:800;color:var(--ink3);font-variant-numeric:tabular-nums}
+.ta-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:12px 2px 6px}
+.ta-head span{font-size:11.5px;font-weight:800;color:var(--em-d);letter-spacing:-0.01em}
+.ta-head i{font-style:normal;font-size:10.5px;font-weight:600;color:var(--ink3);letter-spacing:0}
+.prev-row.tap{padding-top:7px;padding-bottom:7px}
+.prev-row.tap .pseg button{min-width:21px}
+.prev-row.tap .pn{font-weight:700}
+.m-more{margin:2px 0 14px;border:1px solid #E8EDEE;border-radius:14px;background:#F8FBFA;overflow:hidden}
+.m-more>summary{display:flex;align-items:center;gap:6px;padding:12px 13px;font-size:12.5px;font-weight:700;color:var(--ink2);list-style:none;letter-spacing:-0.01em;cursor:pointer}
+.m-more>summary::-webkit-details-marker{display:none}
+.m-more>summary .mm-s{font-size:10px;color:var(--ink3);transition:transform .2s ease}
+.m-more[open]>summary .mm-s{transform:rotate(180deg)}
+.m-more[open]>summary{color:var(--em-d)}
+.m-more>summary .mm-o{margin-left:auto;font-size:10.5px;font-weight:600;color:var(--ink3);letter-spacing:0}
+.m-more-body{padding:2px 13px 4px}
+.m-more-body .field>label{font-size:11px}
+.m-more-body .grid2{margin-bottom:0}
+.menu-meal{margin:2px 0 12px}
+.menu-bar{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+.menu-qty{display:flex;gap:2px;background:#EFF4F2;border-radius:11px;padding:3px;flex:0 0 auto}
+.menu-qty button{-webkit-appearance:none;border:0;background:transparent;border-radius:8px;padding:7px 10px;font-size:12px;font-weight:700;color:#8A979C;font-variant-numeric:tabular-nums;line-height:1}
+.menu-qty button.on{background:#fff;color:var(--em-d);box-shadow:0 1px 3px rgba(16,24,28,.12)}
+.menu-hint{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--ink3);text-align:right;line-height:1.35;letter-spacing:0}
+.menu-hint b{color:var(--em-d);font-weight:800}
+.menu-tabs{display:flex;gap:6px;overflow-x:auto;margin:0 -18px;padding:0 18px 3px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.menu-tabs::-webkit-scrollbar{display:none}
+.menu-tab{-webkit-appearance:none;flex:0 0 auto;border:1px solid #E8EDEE;background:#fff;border-radius:12px;padding:9px 12px;font-size:12.5px;font-weight:700;color:var(--ink2);white-space:nowrap;letter-spacing:-0.02em}
+.menu-tab.on{background:var(--em);border-color:var(--em);color:#fff}
+.menu-list{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.menu-row{-webkit-appearance:none;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid #E8F1EC;background:#F7FAF9;border-radius:14px;padding:10px 12px;font:inherit;color:inherit;letter-spacing:-0.01em}
+.menu-row:active{background:#E7F2ED;border-color:#D5E7DE}
+.menu-row .mr-e{font-size:17px;line-height:1;flex:0 0 auto}
+.menu-row .mr-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.menu-row .mr-b b{font-size:13.5px;font-weight:700;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.menu-row .mr-b i{font-style:normal;font-size:10.5px;font-weight:600;color:var(--ink3);letter-spacing:0}
+.menu-row .mr-k{font-size:13px;font-weight:800;color:var(--em-d);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.menu-row .mr-plus{flex:0 0 auto;width:26px;height:26px;border-radius:9px;background:var(--em-l);color:var(--em-d);font-size:14px;font-weight:800;display:grid;place-items:center;line-height:1}
 </style>
 </head>
 <body>
@@ -1315,45 +1369,50 @@ input,textarea,select{font-size:16px}
     </div>
     <button class="preset-btn" id="mPresetFill" type="button">✨ 일반 기준으로 채우기</button>
     <p class="preset-hint" id="mPresetHint" hidden></p>
-    <div class="grid2">
-      <div class="field">
-        <label>칼로리</label>
-        <div class="input-row"><input class="text-input" id="mKcal" type="number" inputmode="numeric" step="1" placeholder="0"><span class="unit">kcal</span></div>
-      </div>
-      <div class="field">
-        <label>단백질</label>
-        <div class="input-row"><input class="text-input" id="mP" type="number" inputmode="decimal" step="0.1" placeholder="0"><span class="unit">g</span></div>
-      </div>
-    </div>
-    <div class="grid2">
-      <div class="field">
-        <label>탄수화물 (선택)</label>
-        <div class="input-row"><input class="text-input" id="mC" type="number" inputmode="decimal" step="0.1" placeholder="0"><span class="unit">g</span></div>
-      </div>
-      <div class="field">
-        <label>지방 (선택)</label>
-        <div class="input-row"><input class="text-input" id="mF" type="number" inputmode="decimal" step="0.1" placeholder="0"><span class="unit">g</span></div>
-      </div>
-    </div>
     <div class="field">
-      <label>총 몇 개 들어있어?<span class="lab-opt">선택 · 1개당 자동 계산</span></label>
-      <div class="input-row">
-        <input class="text-input" id="mPack" type="number" inputmode="numeric" step="1" min="2" placeholder="예: 8 (박스·봉지)">
-        <span class="unit" style="width:auto">개입</span>
-      </div>
-      <div class="pack-box" id="mPackBox" hidden>
-        <div class="pk-row">
-          <span class="pk-lb">먹은 개수</span>
-          <div class="eat-box">
-            <button type="button" class="pk-step" id="mEatMinus" aria-label="한 개 줄이기">&#8722;</button>
-            <b class="pk-n" id="mEatN">1</b>
-            <button type="button" class="pk-step" id="mEatPlus" aria-label="한 개 늘리기">+</button>
-            <span class="pk-unit">개</span>
+      <label>칼로리</label>
+      <div class="input-row"><input class="text-input" id="mKcal" type="number" inputmode="numeric" step="1" placeholder="0"><span class="unit">kcal</span></div>
+    </div>
+    <details class="m-more" id="mMore">
+      <summary><span class="mm-s">&#9662;</span><span class="mm-t">탄단지 · 개입수 더 적기</span><span class="mm-o">선택</span></summary>
+      <div class="m-more-body">
+        <div class="grid2">
+          <div class="field">
+            <label>단백질</label>
+            <div class="input-row"><input class="text-input" id="mP" type="number" inputmode="decimal" step="0.1" placeholder="0"><span class="unit">g</span></div>
+          </div>
+          <div class="field">
+            <label>탄수화물</label>
+            <div class="input-row"><input class="text-input" id="mC" type="number" inputmode="decimal" step="0.1" placeholder="0"><span class="unit">g</span></div>
           </div>
         </div>
-        <p class="pack-hint" id="mPackHint"></p>
+        <div class="grid2">
+          <div class="field">
+            <label>지방</label>
+            <div class="input-row"><input class="text-input" id="mF" type="number" inputmode="decimal" step="0.1" placeholder="0"><span class="unit">g</span></div>
+          </div>
+          <div class="field">
+            <label>총 몇 개?<span class="lab-opt">박스·봉지</span></label>
+            <div class="input-row">
+              <input class="text-input" id="mPack" type="number" inputmode="numeric" step="1" min="2" placeholder="예: 8">
+              <span class="unit" style="width:auto">개입</span>
+            </div>
+          </div>
+        </div>
+        <div class="pack-box" id="mPackBox" hidden>
+          <div class="pk-row">
+            <span class="pk-lb">먹은 개수</span>
+            <div class="eat-box">
+              <button type="button" class="pk-step" id="mEatMinus" aria-label="한 개 줄이기">&#8722;</button>
+              <b class="pk-n" id="mEatN">1</b>
+              <button type="button" class="pk-step" id="mEatPlus" aria-label="한 개 늘리기">+</button>
+              <span class="pk-unit">개</span>
+            </div>
+          </div>
+          <p class="pack-hint" id="mPackHint"></p>
+        </div>
       </div>
-    </div>
+    </details>
     <div class="field" id="mMealField">
       <label>끼니</label>
       <div class="opt-pills" id="mMeal">
@@ -1368,6 +1427,25 @@ input,textarea,select{font-size:16px}
   <div class="sheet-foot"><button class="btn-primary block em" id="btnAddManual">추가하기</button></div>
 </section>
 
+<section class="sheet" id="sheetMenu" role="dialog" aria-modal="true" aria-label="골라 담기">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><h3>🥗 골라 담기</h3><button class="xbtn" data-close="menu" aria-label="닫기">&#10005;</button></div>
+  <div class="sheet-body">
+    <div class="opt-pills menu-meal" id="menuMeal">
+      <button class="opt" data-v="breakfast">아침</button>
+      <button class="opt" data-v="lunch">점심</button>
+      <button class="opt" data-v="dinner">저녁</button>
+      <button class="opt" data-v="snack">간식</button>
+    </div>
+    <div class="menu-bar">
+      <div class="menu-qty" id="menuQty"></div>
+      <div class="menu-hint" id="menuHint"></div>
+    </div>
+    <div class="menu-tabs" id="menuTabs"></div>
+    <div class="menu-list" id="menuList"></div>
+  </div>
+  <div class="sheet-foot"><button class="btn-primary block em" id="btnMenuDone">완료</button></div>
+</section>
 <section class="sheet" id="sheetEdit" role="dialog" aria-modal="true" aria-label="기록 수정">
   <div class="sheet-grab"></div>
   <div class="sheet-head"><h3>기록 수정</h3><button class="xbtn" data-close="edit" aria-label="닫기">&#10005;</button></div>
@@ -2185,6 +2263,125 @@ input,textarea,select{font-size:16px}
   }
   rebuildAliases();
 
+  /* ================= v5.1: 초성 검색 · 바로 담기 후보 ================= */
+  var CHOSUNG_CHARS = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+  var CHOSUNG_FOLD = { 'ㄲ': 'ㄱ', 'ㄸ': 'ㄷ', 'ㅃ': 'ㅂ', 'ㅆ': 'ㅅ', 'ㅉ': 'ㅈ' };
+
+  function chosungOf(text) {
+    var s = String(text == null ? '' : text), out = '';
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i), ch = s.charAt(i);
+      if (c >= 0xAC00 && c <= 0xD7A3) out += CHOSUNG_CHARS[Math.floor((c - 0xAC00) / 588)];
+      else if (/[ㄱ-ㅎ]/.test(ch)) out += ch;
+      else if (/[0-9a-zA-Z]/.test(ch)) out += ch.toLowerCase();
+    }
+    return out;
+  }
+  function foldChosung(s) {
+    return String(s).replace(/[ㄲㄸㅃㅆㅉ]/g, function (c) { return CHOSUNG_FOLD[c]; });
+  }
+  function isChosungQuery(q) {
+    var s = String(q == null ? '' : q).replace(/\s+/g, '');
+    return !!s && /^[ㄱ-ㅎ]+$/.test(s);
+  }
+  function chosungScore(q, key) {
+    var qq = foldChosung(String(q).replace(/\s+/g, ''));
+    if (!qq) return 0;
+    var full = foldChosung(chosungOf(key));
+    if (!full) return 0;
+    if (full === qq) return 1;
+    if (full.indexOf(qq) === 0) return 0.92 - Math.min(0.32, (full.length - qq.length) * 0.05);
+    var words = String(key).split(/\s+/);
+    for (var i = 0; i < words.length; i++) {
+      var w = foldChosung(chosungOf(words[i]));
+      if (w && w !== full && w.indexOf(qq) === 0) return 0.76;
+    }
+    if (full.indexOf(qq) >= 0) return 0.45;
+    return 0;
+  }
+  function plainSuggestScore(query, key) {
+    var q = squash(query), k = squash(key);
+    if (!q || !k) return 0;
+    if (q === k) return 1;
+    if (k.indexOf(q) === 0) return 0.93;
+    if (k.indexOf(q) > 0) return 0.8;
+    var s = textScore(query, key);
+    return s >= 0.42 ? s : 0;
+  }
+  function suggestPool() {
+    var pool = [], seen = {};
+    function push(f) {
+      if (!f || !f.n) return;
+      var key = squash(f.n);
+      if (!key || seen[key]) return;
+      seen[key] = 1;
+      pool.push(f);
+    }
+    if (Array.isArray(state.favs)) state.favs.forEach(push);
+    if (typeof recipesAll === 'function') {
+      recipesAll().forEach(function (r) {
+        if (!r || !r.name) return;
+        push({ n: r.name, e: '🍳', k: num(r.totalKcal, 0), p: num(r.p, 0), c: num(r.c, 0), f: num(r.f, 0), u: '인분', g: 0 });
+      });
+    }
+    allFoods().forEach(push);
+    return pool;
+  }
+  /* 자주 먹는 대표 메뉴는 동점일 때 위로 */
+  var POPULAR_KEYS = null;
+  function popularKeys() {
+    if (POPULAR_KEYS) return POPULAR_KEYS;
+    var set = {};
+    (typeof MENU_CATS !== 'undefined' ? MENU_CATS : []).forEach(function (c) {
+      (c.items || []).forEach(function (n) { set[squash(n)] = 1; });
+    });
+    DEFAULT_FAVS.forEach(function (f) { set[squash(f.n)] = 1; });
+    POPULAR_KEYS = set;
+    return set;
+  }
+
+  function findSuggest(query, limit) {
+    var q = String(query == null ? '' : query).trim();
+    if (!q) return [];
+    var chos = isChosungQuery(q);
+    var pop = popularKeys();
+    var out = [];
+    suggestPool().forEach(function (f) {
+      var best = 0;
+      /* 초성은 이름 전체의 초성 흐름으로 찾는다 (별칭 '고추' 같은 조각으로 엉뚱한 음식이 뜨지 않게) */
+      var keys = chos ? [f.n] : foodKeys(f);
+      keys.forEach(function (key) {
+        var s = chos ? chosungScore(q, key) : plainSuggestScore(q, key);
+        if (s > best) best = s;
+      });
+      if (best > 0.1) {
+        if (pop[squash(f.n)]) best += 0.15;
+        out.push({ f: f, s: best });
+      }
+    });
+    out.sort(function (a, b) {
+      var d = Math.round(b.s * 40) - Math.round(a.s * 40);
+      if (d) return d;
+      return String(a.f.n).length - String(b.f.n).length;
+    });
+    return out.slice(0, limit || 8);
+  }
+  function recentFoods(limit) {
+    var keys = Object.keys(state.days || {}).sort().reverse();
+    var out = [], seen = {};
+    keys.forEach(function (k) {
+      var d = state.days[k];
+      if (!d || !Array.isArray(d.meals)) return;
+      d.meals.slice().reverse().forEach(function (it) {
+        var key = squash(it.name);
+        if (!key || seen[key]) return;
+        seen[key] = 1;
+        out.push({ n: it.name, e: it.emoji || '🍽', k: num(it.kcal, 0), p: num(it.p, 0), c: num(it.c, 0), f: num(it.f, 0), u: it.u || '인분', g: 0 });
+      });
+    });
+    return out.slice(0, limit || 6);
+  }
+
   var DEFAULT_FAVS = [
     { n: '그릭요거트+땅콩버터', e: '🥜', k: 225, p: 22, c: 11, f: 9.5, u: '그릇', q: 1 },
     { n: '테이크핏 맥스 호박고구마맛', e: '🍠', k: 105, p: 24, c: 1, f: 0.5, u: '병', q: 1 },
@@ -2534,6 +2731,11 @@ input,textarea,select{font-size:16px}
   function qtyToServing(food, n, unit) {
     if (!n || n <= 0) n = 1;
     unit = normUnit(unit);
+    /* v5.1: 단위 없이 온 큰 숫자는 인분이 아니라 그램으로 읽는다 (예: 닭가슴살 100) */
+    if (!unit && n >= 20) {
+      var baseG = num(food.g, 0);
+      if (baseG > 0) return n / baseG;
+    }
     if (unit === 'g' || unit === 'gram' || unit === '그램' || unit === 'ml') {
       var base = num(food.g, 0);
       if (base > 0) return n / base;
@@ -2603,9 +2805,39 @@ input,textarea,select{font-size:16px}
     return null;
   }
 
+  /* v5.1: 채팅에서 온 '김치찌개 420kcal · 단백질 14g' 같은 한 줄 텍스트 보정 */
+  function stripMacroNoise(s) {
+    return String(s == null ? '' : s)
+      .replace(/\(?\s*(단백질|탄수화물|탄수|지방)\s*[\d.]+\s*g\s*\)?/g, ' ')
+      .replace(/\s*[·,|]+\s*$/g, ' ');
+  }
+
+  /* 이름 뒤에 붙은 '420kcal' / '420 칼로리' 는 인분이 아니라 그 음식의 열량으로 읽는다 */
+  function readKcalAt(s, i) {
+    var rest = String(s).slice(i);
+    var m = rest.match(/^\s*\(?\s*(\d+(?:\.\d+)?)\s*(kcal|cal|칼로리|칼)(?![가-힣a-z])/i);
+    if (!m) return null;
+    var k = parseFloat(m[1]);
+    if (!isFinite(k) || k <= 0 || k > 5000) return null;
+    return { k: k, end: i + m[0].length };
+  }
+
+  /* 열량만 따로 알려준 음식: 기존 영양값을 같은 비율로 맞춘다 */
+  function overrideFood(f, kcal) {
+    var ratio = num(f.k, 0) > 0 ? num(kcal, 0) / num(f.k, 0) : 1;
+    return {
+      n: f.n, e: f.e, k: num(kcal, 0),
+      p: Math.round(num(f.p, 0) * ratio * 10) / 10,
+      c: Math.round(num(f.c, 0) * ratio * 10) / 10,
+      f: Math.round(num(f.f, 0) * ratio * 10) / 10,
+      u: f.u, g: f.g
+    };
+  }
+
   function parseQuick(text) {
     var s = String(text == null ? '' : text).toLowerCase();
-    s = s.replace(/[,·|/]/g, ' ').replace(/\s+/g, ' ');
+    s = stripMacroNoise(s);
+    s = s.replace(/[,·|/]/g, ' ').replace(/\s+/g, ' ').trim();
 
     /* 1) 문장 전체가 한 음식이면 바로 그것 */
     if (s.indexOf('+') < 0) {
@@ -2618,7 +2850,7 @@ input,textarea,select{font-size:16px}
 
     var items = [], unknown = [];
     var i = 0, guard = 0;
-    while (i < s.length && guard < 300) {
+    while (i < s.length && guard < 400) {
       guard++;
       var ch = s.charAt(i);
       if (ch === ' ' || ch === '+' || ch === '\t') { i++; continue; }
@@ -2632,10 +2864,23 @@ input,textarea,select{font-size:16px}
         continue;
       }
       i += m.len;
-      var q = readQty(s, i);
-      var n = 1, unit = '';
-      if (q) { n = q.n; unit = q.unit; i = q.end; }
-      items.push({ f: m.f, n: qtyToServing(m.f, n, unit) });
+      var n = 1, unit = '', kcalOv = null;
+      var kAt = readKcalAt(s, i);
+      if (kAt) {
+        kcalOv = kAt.k;
+        i = kAt.end;
+      } else {
+        var q = readQty(s, i);
+        if (q) { n = q.n; unit = q.unit; i = q.end; }
+        var kAt2 = readKcalAt(s, i);
+        if (kAt2) { kcalOv = kAt2.k; i = kAt2.end; }
+      }
+      var serving = qtyToServing(m.f, n, unit);
+      /* 그램 정보가 없는 내 음식에 큰 숫자만 오면 열량으로 본다 */
+      if (!kcalOv && !unit && n >= 20 && num(m.f.g, 0) <= 0) { kcalOv = n; serving = 1; }
+      var entry = { f: m.f, n: serving };
+      if (kcalOv != null) entry.k = kcalOv;
+      items.push(entry);
     }
 
     /* 사전에 없는 표현도 유사도로 한 번 더 시도 ("테이크핏 호박고구마맛" 같은 긴 구문) */
@@ -2655,9 +2900,13 @@ input,textarea,select{font-size:16px}
     var merged = [];
     items.forEach(function (it) {
       for (var k = 0; k < merged.length; k++) {
-        if (merged[k].f === it.f || (merged[k].f.n === it.f.n && merged[k].f.k === it.f.k)) { merged[k].n += it.n; return; }
+        if (merged[k].k == null && it.k == null &&
+          (merged[k].f === it.f || (merged[k].f.n === it.f.n && merged[k].f.k === it.f.k))) {
+          merged[k].n += it.n;
+          return;
+        }
       }
-      merged.push({ f: it.f, n: it.n });
+      merged.push({ f: it.f, n: it.n, k: it.k });
     });
     return { items: merged, unknown: leftovers };
   }
@@ -2789,7 +3038,7 @@ input,textarea,select{font-size:16px}
   function renderChips() {
     var favs = state.favs || [];
     var edit = !!state.ui.editChips;
-    var html = '';
+    var html = '<button class="chip menu" data-menuopen="1"><span class="ce">🥗</span><span class="cn">골라 담기</span></button>';
     favs.forEach(function (fav, i) {
       var cal = fav.k * (fav.q || 1);
       html += '<button class="chip' + (edit ? ' edit' : '') + '" data-fav="' + i + '">' +
@@ -3113,15 +3362,17 @@ input,textarea,select{font-size:16px}
 
   function pvMult(i) { return pvAdj[i] || 1; }
 
+  function multLabel(m) {
+    return m === 0.5 ? '½' : (m === 1 ? '1' : (m === 1.5 ? '1½' : '2'));
+  }
+
   function pvSeg(i, m) {
     var on = Math.abs(pvMult(i) - m) < 0.01 ? ' on' : '';
-    var lab = m === 0.5 ? '½' : (m === 1 ? '1' : '1½');
-    return '<button class="' + on.trim() + '" data-padj="' + i + '" data-pm="' + m + '">' + lab + '</button>';
+    return '<button class="' + on.trim() + '" data-padj="' + i + '" data-pm="' + m + '">' + multLabel(m) + '</button>';
   }
 
   function sugSeg(name, m) {
-    var lab = m === 0.5 ? '½' : (m === 1 ? '1' : '1½');
-    return '<button data-sugseg="' + esc(name) + '" data-sm="' + m + '">' + lab + '</button>';
+    return '<button data-sugseg="' + esc(name) + '" data-sm="' + m + '">' + multLabel(m) + '</button>';
   }
 
   function renderPreview() {
@@ -3132,65 +3383,147 @@ input,textarea,select{font-size:16px}
     pvItems = p.items;
     pvUnknown = p.unknown;
     pvSuggest = raw.trim() && !p.items.length ? findFoods(raw, 5) : [];
-    if (raw.trim()) offMaybe(raw.trim(), !p.items.length);
+    if (raw.trim() && !isChosungQuery(raw)) offMaybe(raw.trim(), !p.items.length);
     else offReset();
     syncQbox();
     drawPreview();
   }
 
+  /* v5.1: 드롭다운 = 파싱 결과 + 바로 담기 후보 + 골라 담기 */
+  var taCache = [], taRecCache = [];
+
+  function tapSegs(i) {
+    var out = '';
+    [0.5, 1, 1.5, 2].forEach(function (v) {
+      out += '<button data-tapq="' + i + '" data-qm="' + v + '">' + multLabel(v) + '</button>';
+    });
+    return out;
+  }
+
+  function closeQuickPanel(blur) {
+    var box = $('quickPreview');
+    if (box) { box.className = 'preview'; box.innerHTML = ''; }
+    if (blur) { try { $('quickInput').blur(); } catch (e) {} }
+  }
+
+  /* 후보를 누르면 타자를 마저 치지 않고 그 끼니에 바로 기록 */
+  function recordSuggestion(food, m) {
+    if (!food) return;
+    var mult = m || 1;
+    var meal = state.ui.meal;
+    var item = itemFromFood(food, mult, meal);
+    curDay().meals.push(item);
+    $('quickInput').value = '';
+    syncQbox();
+    save();
+    renderAll();
+    closeQuickPanel(true);
+    toast(food.n + ' ' + fmtInt(num(food.k, 0) * mult) + 'kcal · ' + mealNameOf(meal) + '에 담았어', function () {
+      var dd = curDay();
+      dd.meals = dd.meals.filter(function (x) { return x.id !== item.id; });
+      save(); renderAll();
+    });
+  }
+
+  /* 입력창을 비운 채 눌렀을 때: 골라 담기 + 자주 먹는 + 최근 */
+  function drawZero(box) {
+    var favs = (state.favs || []).slice(0, 10);
+    var rec = recentFoods(6);
+    taRecCache = rec;
+    var html = '<button class="ta-menu" data-openmenu="1"><span class="tm-e">🥗</span>' +
+      '<span class="tm-b"><b>골라 담기</b><i>카테고리에서 터치만으로</i></span><span class="tm-g">→</span></button>';
+    if (favs.length) {
+      html += '<div class="ta-lab">자주 먹는</div><div class="ta-chips">';
+      favs.forEach(function (f, i) {
+        html += '<button class="ta-chip" data-favh="' + i + '"><span>' + f.e + '</span>' + esc(f.n) +
+          '<b>' + fmtInt(num(f.k, 0) * (f.q || 1)) + '</b></button>';
+      });
+      html += '</div>';
+    }
+    if (rec.length) {
+      html += '<div class="ta-lab">최근</div><div class="ta-chips">';
+      rec.forEach(function (f, i) {
+        html += '<button class="ta-chip" data-rech="' + i + '"><span>' + f.e + '</span>' + esc(f.n) +
+          '<b>' + fmtInt(f.k) + '</b></button>';
+      });
+      html += '</div>';
+    }
+    box.className = 'preview show';
+    box.innerHTML = html;
+  }
+
   function drawPreview() {
     var box = $('quickPreview');
     var raw = $('quickInput').value;
+    var qh = $('qHint'); if (qh) qh.style.display = 'none';
     if (!raw.trim()) {
-      box.className = 'preview';
-      box.innerHTML = '';
-      var qh = $('qHint'); if (qh) qh.style.display = 'block';
+      if (document.activeElement === $('quickInput')) drawZero(box);
+      else { box.className = 'preview'; box.innerHTML = ''; }
       return;
     }
-    var qh2 = $('qHint'); if (qh2) qh2.style.display = 'none';
     var html = '';
     if (pvItems.length) {
       var totK = 0, totP = 0;
       html += '<div class="prev-list">';
       pvItems.forEach(function (it, i) {
         var f = it.f, m = it.n * pvMult(i);
-        totK += f.k * m;
-        totP += f.p * m;
+        var baseK = it.k != null ? it.k : num(f.k, 0);
+        var ratio = (it.k != null && num(f.k, 0) > 0) ? baseK / num(f.k, 0) : 1;
+        totK += baseK * m;
+        totP += num(f.p, 0) * ratio * m;
         html += '<div class="prev-row"><span class="pe">' + f.e + '</span>' +
           '<span class="pn">' + esc(f.n) + '</span>' +
           '<span class="pq">' + qtyLabel({ n: m, mult: 1, u: f.u }) + '</span>' +
-          '<span class="pk">' + fmtInt(f.k * m) + '</span>' +
-          '<span class="pseg">' + pvSeg(i, 0.5) + pvSeg(i, 1) + pvSeg(i, 1.5) + '</span></div>';
+          '<span class="pk">' + fmtInt(baseK * m) + '</span>' +
+          '<span class="pseg">' + pvSeg(i, 0.5) + pvSeg(i, 1) + pvSeg(i, 1.5) + pvSeg(i, 2) + '</span></div>';
       });
       html += '</div>';
       html += '<div class="prev-foot"><div class="prev-total"><b>' + fmtInt(totK) + '</b> kcal · 단백질 ' + fmt1(totP) + 'g</div>' +
         '<button class="btn-primary em" id="btnCommit">기록하기</button></div>';
       if (pvUnknown.length) {
         html += '<div class="q-hint" style="margin-top:8px">못 알아들었어: ' + esc(pvUnknown.join(', ')) + '</div>';
-        html += directRow(pvUnknown.join(' '));
       }
-      box.className = 'preview show';
-      box.innerHTML = html;
-      return;
     }
-    var label = (pvUnknown.length ? pvUnknown.join(' ') : raw.trim());
-    html += '<div class="prev-none">못 찾았어' + (label && label !== raw.trim() ? ': <b>' + esc(label) + '</b>' : '') + '. ' +
-      (pvSuggest.length ? '혹시 이거야? 아니면 아래에 바로 적어서 저장해.' : '아래에 칼로리만 적으면 바로 기록되고, 다음부터는 이름만 쳐도 찾아.') + '</div>';
-    if (pvSuggest.length) {
+    var cands = findSuggest(raw.trim(), 8).filter(function (c) {
+      for (var k = 0; k < pvItems.length; k++) if (pvItems[k].f === c.f) return false;
+      return true;
+    });
+    taCache = [];
+    if (cands.length) {
+      html += '<div class="ta-head"><span>바로 담기</span><i>' + esc(mealNameOf(state.ui.meal)) + '에 기록</i></div>';
       html += '<div class="prev-list">';
-      pvSuggest.forEach(function (f) {
-        html += '<div class="prev-row" data-sug="' + esc(f.n) + '">' +
-          '<span class="pe">' + f.e + '</span><span class="pn">' + esc(f.n) + '</span>' +
-          '<span class="pq">' + esc(f.u || '인분') + '</span><span class="pk">' + fmtInt(f.k) + '</span>' +
-          '<span class="pseg">' + sugSeg(f.n, 0.5) + sugSeg(f.n, 1) + sugSeg(f.n, 1.5) + '</span></div>';
+      cands.forEach(function (c) {
+        var idx = taCache.length;
+        taCache.push(c.f);
+        html += '<div class="prev-row tap" data-tap="' + idx + '">' +
+          '<span class="pe">' + (c.f.e || '🍽') + '</span>' +
+          '<span class="pn">' + esc(c.f.n) + '</span>' +
+          '<span class="pq">' + esc(c.f.u || '인분') + '</span>' +
+          '<span class="pk">' + fmtInt(num(c.f.k, 0)) + '</span>' +
+          '<span class="pseg">' + tapSegs(idx) + '</span></div>';
       });
       html += '</div>';
+      html += directRow(raw.trim());
+    } else if (!pvItems.length) {
+      var label = (pvUnknown.length ? pvUnknown.join(' ') : raw.trim());
+      html += '<div class="prev-none">못 찾았어' + (label && label !== raw.trim() ? ': <b>' + esc(label) + '</b>' : '') + '. ' +
+        (pvSuggest.length ? '혹시 이거야? 아니면 아래에 바로 적어서 저장해.' : '아래에 칼로리만 적으면 바로 기록되고, 다음부터는 이름만 쳐도 찾아.') + '</div>';
+      if (pvSuggest.length) {
+        html += '<div class="prev-list">';
+        pvSuggest.forEach(function (f) {
+          html += '<div class="prev-row" data-sug="' + esc(f.n) + '">' +
+            '<span class="pe">' + f.e + '</span><span class="pn">' + esc(f.n) + '</span>' +
+            '<span class="pq">' + esc(f.u || '인분') + '</span><span class="pk">' + fmtInt(f.k) + '</span>' +
+            '<span class="pseg">' + sugSeg(f.n, 0.5) + sugSeg(f.n, 1) + sugSeg(f.n, 1.5) + sugSeg(f.n, 2) + '</span></div>';
+        });
+        html += '</div>';
+      }
+      html += offSection();
+      html += '<button class="prev-row direct" data-offgo="1" style="margin-top:8px"><span class="pe">🌐</span>' +
+        '<span class="pn">Open Food Facts에서 더 찾기</span><span class="pk">→</span></button>';
+      html += quickNewForm(label);
+      if (label) html += directRow(label);
     }
-    html += offSection();
-    html += '<button class="prev-row direct" data-offgo="1" style="margin-top:8px"><span class="pe">🌐</span>' +
-      '<span class="pn">Open Food Facts에서 더 찾기</span><span class="pk">→</span></button>';
-    html += quickNewForm(label);
-    if (label) html += directRow(label);
     box.className = 'preview show';
     box.innerHTML = html;
   }
@@ -3312,28 +3645,32 @@ input,textarea,select{font-size:16px}
         var f = sug[0].f;
         $('quickInput').value = '';
         addFood(f, 1, state.ui.meal);
+        closeQuickPanel(true);
         toast(f.n + ' ' + fmtInt(f.k) + 'kcal 기록했어');
         return;
       }
       if (OFF.items && OFF.items.length) { addOffItem(0); return; }
       var qn = $('qnKcal');
       if (qn) { try { qn.focus(); } catch (e) {} return; }
+      closeQuickPanel(false);
       openManual(text.trim());
       return;
     }
     var d = curDay(), tot = 0, names = [];
     var added = pvItems.map(function (it, i) {
       var m = it.n * pvMult(i);
-      var item = itemFromFood(it.f, m, state.ui.meal);
+      var f = it.k != null ? overrideFood(it.f, it.k) : it.f;
+      var item = itemFromFood(f, m, state.ui.meal);
       d.meals.push(item);
-      tot += it.f.k * m;
-      names.push(it.f.n);
+      tot += num(f.k, 0) * m;
+      names.push(f.n);
       return item.id;
     });
     $('quickInput').value = '';
     pvItems = []; pvAdj = {}; offReset();
     save();
     renderAll();
+    closeQuickPanel(true);
     toast(names.length === 1
       ? names[0] + ' ' + fmtInt(tot) + 'kcal 기록했어'
       : names.length + '개 기록 · ' + fmtInt(tot) + 'kcal', function () {
@@ -5058,6 +5395,7 @@ input,textarea,select{font-size:16px}
     $('mP').value = fmt1(num(f.p, 0));
     $('mC').value = fmt1(num(f.c, 0));
     $('mF').value = fmt1(num(f.f, 0));
+    if ($('mMore')) $('mMore').open = true;
     presetShowHint('mPresetHint', presetHint(r, '1' + u));
     toast('\'' + r.matched + '\' 기준으로 채웠어');
   }
@@ -5065,6 +5403,84 @@ input,textarea,select{font-size:16px}
   if ($('frPresetFill')) $('frPresetFill').onclick = presetFillFridge;
   if ($('rcPresetFill')) $('rcPresetFill').onclick = presetFillRc;
   if ($('mPresetFill')) $('mPresetFill').onclick = presetFillManual;
+
+  /* ================= v5.1: 골라 담기 (카테고리 메뉴판) ================= */
+  var MENU_CATS = [
+    { k: 'rice', n: '밥·면', e: '🍚', items: ['흰쌀밥', '현미밥', '잡곡밥', '곤약밥', '김밥', '삼각김밥', '비빔밥', '김치볶음밥', '라면', '컵누들', '우동', '파스타', '쌀국수', '떡볶이', '식빵', '베이글', '고구마', '오트밀'] },
+    { k: 'soup', n: '국·찌개', e: '🍲', items: ['김치찌개', '된장찌개', '순두부찌개', '미역국', '부대찌개', '육개장', '갈비탕', '설렁탕', '콩나물국밥', '순대국', '된장국', '닭볶음탕'] },
+    { k: 'protein', n: '고기·단백질', e: '🍗', items: ['닭가슴살', '닭가슴살 스테이크', '닭가슴살 큐브', '삶은계란', '계란후라이', '두부', '참치캔', '연어', '소고기 등심', '삼겹살', '목살', '훈제오리', '닭갈비', '치킨', '샤브샤브', '그릭요거트'] },
+    { k: 'side', n: '반찬', e: '🥢', items: ['김치', '깍두기', '멸치볶음', '진미채볶음', '어묵볶음', '장조림', '콩자반', '무생채', '숙주나물', '시금치나물', '콩나물무침', '두부부침', '계란말이', '애호박볶음', '잡채', '갈치조림', '고등어구이'] },
+    { k: 'cafe', n: '카페·간식', e: '☕️', items: ['아메리카노', '카페라떼', '바닐라라떼', '스타벅스 아메리카노', '스타벅스 카페라떼', '아샷추', '제로콜라', '크림빵', '마가렛트', '초코파이', '과자', '아이스크림', '케이크', '도넛', '견과류', '바나나', '방울토마토'] },
+    { k: 'cvs', n: '편의점', e: '🏪', items: ['삼각김밥 참치마요', '참치마요 컵밥', '제육 도시락', '치킨마요 도시락', '햄치즈 샌드위치', '핫도그', '육개장 컵라면', '비비고 왕교자', '편의점 김밥', '테이크핏 맥스 호박고구마맛', '더단백 드링크 초코맛', '닭가슴살 소시지', '구운란', '곤약면', '연어포케', '샐러디 샐러드', '컵과일', '제로 아이스크림'] }
+  ];
+  var menuTab = 'rice', menuQty = 1, menuAdded = 0, menuAddedKcal = 0, menuCache = [];
+
+  function menuCatOf(k) {
+    for (var i = 0; i < MENU_CATS.length; i++) if (MENU_CATS[i].k === k) return MENU_CATS[i];
+    return MENU_CATS[0];
+  }
+
+  function renderMenu() {
+    if (!$('menuTabs')) return;
+    var tabs = '';
+    MENU_CATS.forEach(function (c) {
+      tabs += '<button type="button" class="menu-tab' + (c.k === menuTab ? ' on' : '') + '" data-mt="' + c.k + '">' + c.e + ' ' + c.n + '</button>';
+    });
+    $('menuTabs').innerHTML = tabs;
+    var qs = '';
+    [0.5, 1, 1.5, 2].forEach(function (v) {
+      qs += '<button type="button" class="' + (Math.abs(menuQty - v) < 0.01 ? 'on' : '') + '" data-mq="' + v + '">' + multLabel(v) + '</button>';
+    });
+    $('menuQty').innerHTML = qs;
+    menuCache = [];
+    menuCatOf(menuTab).items.forEach(function (n) {
+      var f = findFoodByName(n);
+      if (f) menuCache.push(f);
+    });
+    var list = '';
+    menuCache.forEach(function (f, i) {
+      var k = num(f.k, 0) * menuQty;
+      list += '<button type="button" class="menu-row" data-mrow="' + i + '">' +
+        '<span class="mr-e">' + f.e + '</span>' +
+        '<span class="mr-b"><b>' + esc(f.n) + '</b><i>' + multLabel(menuQty) + esc(f.u || '인분') + ' · ' + fmtInt(num(f.k, 0)) + 'kcal</i></span>' +
+        '<span class="mr-k">' + fmtInt(k) + '</span>' +
+        '<span class="mr-plus">＋</span></button>';
+    });
+    $('menuList').innerHTML = list || '<div class="favs-empty">이 카테고리에 담을 메뉴가 없어요.</div>';
+    syncOpt('menuMeal', state.ui.meal);
+    $('menuHint').innerHTML = menuAdded
+      ? esc(mealNameOf(state.ui.meal)) + '에 <b>' + menuAdded + '개 · ' + fmtInt(menuAddedKcal) + 'kcal</b>'
+      : esc(mealNameOf(state.ui.meal)) + '에 담을 준비';
+  }
+
+  function openMenuSheet() {
+    menuAdded = 0;
+    menuAddedKcal = 0;
+    menuQty = 1;
+    closeQuickPanel(true);
+    renderMenu();
+    openSheet('menu');
+  }
+
+  function menuAdd(i) {
+    var f = menuCache[i];
+    if (!f) return;
+    var meal = state.ui.meal;
+    var item = itemFromFood(f, menuQty, meal);
+    curDay().meals.push(item);
+    menuAdded += 1;
+    menuAddedKcal += num(f.k, 0) * menuQty;
+    save();
+    renderAll();
+    renderMenu();
+    toast(f.n + ' ' + fmtInt(num(f.k, 0) * menuQty) + 'kcal · ' + mealNameOf(meal) + '에 담았어', function () {
+      var dd = curDay();
+      dd.meals = dd.meals.filter(function (x) { return x.id !== item.id; });
+      menuAdded = Math.max(0, menuAdded - 1);
+      menuAddedKcal = Math.max(0, menuAddedKcal - num(f.k, 0) * menuQty);
+      save(); renderAll(); renderMenu();
+    });
+  }
 
   /* ================= sheets ================= */
   function openSheet(name) {
@@ -5089,6 +5505,8 @@ input,textarea,select{font-size:16px}
     if (f2) f2.classList.remove('open');
     var f3 = $('sheetFridge');
     if (f3) f3.classList.remove('open');
+    var f4 = $('sheetMenu');
+    if (f4) f4.classList.remove('open');
     document.body.classList.remove('lock');
     document.body.style.top = '';
     window.scrollTo(0, lockY);
@@ -5125,11 +5543,19 @@ input,textarea,select{font-size:16px}
     renderOcrHint(pre);
     presetHideHint(['mPresetHint']);
     syncOpt('mMeal', manualMeal);
+    syncMore($('mMore'), pre);
     openSheet('manual');
     setTimeout(function () {
       var focusKcal = !manualFromQuery && pre && pre.k != null;
       try { (focusKcal ? $('mKcal') : $('mName')).focus(); } catch (e) {}
     }, 380);
+  }
+
+  /* v5.1: 세부 값(탄단지·개입수)이 이미 있으면 접힌 칸을 펼쳐 확인하게 */
+  function syncMore(det, pre) {
+    if (!det) return;
+    var has = !!(pre && (pre.ocr || num(pre.p, 0) > 0 || num(pre.c, 0) > 0 || num(pre.f, 0) > 0 || packOf(pre.pack)));
+    det.open = has;
   }
 
   /* 성분표에서 읽은 값을 폼 위에 안내 */
@@ -5877,8 +6303,7 @@ input,textarea,select{font-size:16px}
       renderPreview();
     });
     qi.addEventListener('focus', function () {
-      var box = $('quickPreview');
-      if (qi.value.trim() && box.className.indexOf('show') < 0) renderPreview();
+      drawPreview();
     });
     qi.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { e.preventDefault(); commitQuick(); }
@@ -5894,6 +6319,30 @@ input,textarea,select{font-size:16px}
       var t = e.target;
       if (!t.closest) return;
       pvTouch = Date.now();
+      var openM = t.closest('[data-openmenu]');
+      if (openM) { openMenuSheet(); return; }
+      var tapq = t.closest('[data-tapq]');
+      if (tapq) {
+        var tqi = parseInt(tapq.getAttribute('data-tapq'), 10);
+        recordSuggestion(taCache[tqi], parseFloat(tapq.getAttribute('data-qm')));
+        return;
+      }
+      var tapRow = t.closest('[data-tap]');
+      if (tapRow) {
+        recordSuggestion(taCache[parseInt(tapRow.getAttribute('data-tap'), 10)], 1);
+        return;
+      }
+      var favHit = t.closest('[data-favh]');
+      if (favHit) {
+        var fv = state.favs[parseInt(favHit.getAttribute('data-favh'), 10)];
+        if (fv) recordSuggestion({ n: fv.n, e: fv.e, k: fv.k, p: fv.p, c: fv.c, f: fv.f, u: fv.u }, fv.q || 1);
+        return;
+      }
+      var recHit = t.closest('[data-rech]');
+      if (recHit) {
+        recordSuggestion(taRecCache[parseInt(recHit.getAttribute('data-rech'), 10)], 1);
+        return;
+      }
       var padj = t.closest('[data-padj]');
       if (padj) {
         var pi = parseInt(padj.getAttribute('data-padj'), 10);
@@ -5958,6 +6407,8 @@ input,textarea,select{font-size:16px}
     });
 
     $('chipsRow').addEventListener('click', function (e) {
+      var menuOpen = e.target.closest ? e.target.closest('[data-menuopen]') : null;
+      if (menuOpen) { openMenuSheet(); return; }
       var add = e.target.closest ? e.target.closest('[data-manual]') : null;
       if (add) { openManual(); return; }
       var chip = e.target.closest ? e.target.closest('[data-fav]') : null;
@@ -6238,6 +6689,40 @@ input,textarea,select{font-size:16px}
       });
     }
 
+    /* v5.1: 골라 담기 */
+    if ($('menuTabs')) {
+      $('menuTabs').addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('[data-mt]') : null;
+        if (!b) return;
+        menuTab = b.getAttribute('data-mt');
+        renderMenu();
+      });
+    }
+    if ($('menuQty')) {
+      $('menuQty').addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('[data-mq]') : null;
+        if (!b) return;
+        menuQty = parseFloat(b.getAttribute('data-mq')) || 1;
+        renderMenu();
+      });
+    }
+    if ($('menuList')) {
+      $('menuList').addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('[data-mrow]') : null;
+        if (!b) return;
+        menuAdd(parseInt(b.getAttribute('data-mrow'), 10));
+      });
+    }
+    if ($('menuMeal')) {
+      $('menuMeal').addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('button[data-v]') : null;
+        if (!b) return;
+        state.ui.meal = b.getAttribute('data-v');
+        save(); renderPills(); renderMenu();
+      });
+    }
+    if ($('btnMenuDone')) $('btnMenuDone').onclick = function () { closeSheets(); };
+
     /* 내 냉장고 */
     bindFridge();
   }
@@ -6292,6 +6777,13 @@ input,textarea,select{font-size:16px}
     findFoods: findFoods,
     bestMatch: bestMatch,
     textScore: textScore,
+    suggest: findSuggest,
+    chosungOf: chosungOf,
+    recentFoods: recentFoods,
+    openMenu: openMenuSheet,
+    renderMenu: renderMenu,
+    menuAdd: menuAdd,
+    recordSuggestion: recordSuggestion,
     openManual: openManual,
     ocrParse: parseNutrition,
     ocrPack: ocrPackCount,

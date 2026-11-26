@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>보라 다이어트 코치</title>
-<!-- v5.1: 초성·한두 글자 검색 드롭다운에서 터치 즉시 기록(수량 ½·1·1½·2) · 🥗 골라 담기 카테고리 시트 · 직접 입력은 이름·칼로리 2칸(탄단지·개입수는 접힘) · "김치찌개 420kcal" 한 줄 파싱 -->
+<!-- v5.2: 성분표 카메라(OCR) 제거 · 하단 📅 달력 탭 · 날짜별 그림일기 플립 카드(IndexedDB 사진 · Canvas 수채화 필터 · 탭하면 실제 사진 뒷면) -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -737,50 +737,6 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   html{background:#E9EEEC}
   #app{box-shadow:0 20px 60px -30px rgba(16,24,28,.45),0 0 0 1px rgba(20,26,28,.04)}
 }
-/* ===== v4.3: 성분표 사진 인식 ===== */
-.qbox .cam{
-  -webkit-appearance:none;border:0;flex:0 0 auto;width:34px;height:34px;padding:0;border-radius:11px;
-  background:#EAF4F0;color:#004E34;display:grid;place-items:center;
-  transition:transform .12s ease,background .15s ease;
-}
-.qbox .cam:active{transform:scale(.92);background:#D2E9DE}
-.qbox .cam svg{width:19px;height:19px;color:inherit}
-.link-btn.ocr-btn{
-  display:inline-flex;align-items:center;gap:4px;background:#E7F1EC;color:var(--em-d);
-  border-radius:9px;padding:5px 9px;font-size:12px;font-weight:800;letter-spacing:-0.01em;
-}
-.link-btn.ocr-btn:active{opacity:.6}
-.ocr-shot{
-  margin:2px 0 12px;border-radius:16px;overflow:hidden;background:#F1F5F4;
-  border:1px solid var(--line);display:none;align-items:center;justify-content:center;
-}
-.ocr-shot.on{display:flex}
-.ocr-shot img{width:100%;display:block;max-height:190px;object-fit:contain;background:#fff}
-.ocr-status{font-size:14px;font-weight:800;color:var(--ink);letter-spacing:-0.025em}
-.ocr-sub{font-size:11.5px;color:var(--ink3);margin-top:5px;line-height:1.5;min-height:17px}
-.ocr-bar{height:6px;border-radius:3px;background:#EAF0EE;overflow:hidden;margin:11px 0 0}
-.ocr-bar i{display:block;height:100%;width:0;border-radius:3px;background:#006241;transition:width .3s ease}
-.ocr-hint{
-  margin:0 0 14px;padding:10px 12px;border-radius:12px;background:#F2FBF7;
-  border:1px solid #CFE7DB;font-size:11.5px;color:#03412F;line-height:1.6;letter-spacing:-0.01em;
-}
-.ocr-hint b{font-weight:800}
-.ocr-hint.warn{background:#FFF8F1;border-color:#F3E2CE;color:#8A5A20}
-.ocr-hint[hidden]{display:none}
-.ocr-details{margin:0 0 12px}
-.ocr-details[hidden]{display:none}
-.ocr-details summary{
-  font-size:11.5px;font-weight:700;color:var(--ink3);cursor:pointer;
-  list-style:none;padding:2px 0;letter-spacing:0;
-}
-.ocr-details summary::-webkit-details-marker{display:none}
-.ocr-details summary::before{content:"▸ ";font-size:10px}
-.ocr-details[open] summary::before{content:"▾ "}
-.ocr-raw{
-  margin:7px 0 0;max-height:150px;overflow:auto;background:#F7F9F9;border:1px solid var(--line);
-  border-radius:10px;padding:9px 10px;font-size:11px;line-height:1.55;color:var(--ink2);
-  white-space:pre-wrap;word-break:break-all;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",system-ui,sans-serif;
-}
 
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
@@ -1120,6 +1076,148 @@ input,textarea,select{font-size:16px}
 .menu-row .mr-b i{font-style:normal;font-size:10.5px;font-weight:600;color:var(--ink3);letter-spacing:0}
 .menu-row .mr-k{font-size:13px;font-weight:800;color:var(--em-d);font-variant-numeric:tabular-nums;flex:0 0 auto}
 .menu-row .mr-plus{flex:0 0 auto;width:26px;height:26px;border-radius:9px;background:var(--em-l);color:var(--em-d);font-size:14px;font-weight:800;display:grid;place-items:center;line-height:1}
+
+/* ===== v5.2: 달력 · 그림일기 플립 카드 ===== */
+.calscreen{
+  position:fixed;inset:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;
+  z-index:36;background:var(--bg);display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;visibility:hidden;transition:opacity .2s ease;
+}
+.calscreen.open{opacity:1;pointer-events:auto;visibility:visible}
+body.cal-on .toast{top:auto;bottom:calc(80px + env(safe-area-inset-bottom, 0px));transform:translateY(18px)}
+body.cal-on .toast.show{transform:translateY(0)}
+.cal-top{
+  flex:0 0 auto;display:flex;align-items:center;gap:8px;
+  padding:calc(9px + env(safe-area-inset-top, 0px)) 14px 9px;
+  background:rgba(242,245,243,.97);
+  border-bottom:1px solid rgba(20,26,28,.045);
+}
+.cal-top h2{flex:1;min-width:0;margin:0;font-size:16.5px;font-weight:800;letter-spacing:-0.03em;display:flex;align-items:center;gap:7px}
+.cal-top h2 .ct-e{font-size:15px;line-height:1}
+.cal-today{
+  -webkit-appearance:none;border:1px solid #D9E7E0;background:#fff;color:var(--em-d);
+  border-radius:10px;padding:7px 10px;font-size:12px;font-weight:800;letter-spacing:-0.01em;line-height:1;
+}
+.cal-today:active{background:var(--em-l)}
+.cal-x{
+  -webkit-appearance:none;border:0;background:transparent;width:34px;height:34px;border-radius:11px;
+  color:var(--ink2);font-size:16px;line-height:1;display:grid;place-items:center;padding:0;flex:0 0 auto;
+}
+.cal-x:active{background:rgba(18,24,26,.06)}
+.cal-scroll{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:12px 14px calc(88px + env(safe-area-inset-bottom, 0px))}
+.cal-monthbar{display:flex;align-items:center;justify-content:center;gap:6px;margin:2px 0 10px}
+.cal-monthbar b{font-size:17px;font-weight:800;letter-spacing:-0.03em;min-width:136px;text-align:center;font-variant-numeric:tabular-nums}
+.cal-mbtn{
+  -webkit-appearance:none;border:0;background:#fff;width:34px;height:34px;border-radius:11px;
+  color:var(--ink2);font-size:20px;line-height:1;display:grid;place-items:center;padding:0;
+  box-shadow:0 1px 2px rgba(16,24,28,.05);
+}
+.cal-mbtn:active{background:#E9F1ED}
+.cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:0 0 4px;padding:0 1px}
+.cal-week span{text-align:center;font-size:10.5px;font-weight:700;color:var(--ink3);letter-spacing:0;padding:2px 0}
+.cal-week span:first-child{color:#CE7A63}
+.cal-week span:last-child{color:#6B86B8}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;background:#fff;border-radius:20px;padding:8px 7px;box-shadow:var(--sh)}
+.cal-pad{height:50px}
+.cal-cell{
+  -webkit-appearance:none;border:0;background:transparent;border-radius:11px;height:50px;padding:3px 1px 2px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1px;
+  font:inherit;color:var(--ink);letter-spacing:0;position:relative;min-width:0;
+}
+.cal-cell:active{background:#EFF5F2}
+.cal-cell .cc-num{font-size:12px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.cal-cell.sun .cc-num{color:#CE7A63}
+.cal-cell.sat .cc-num{color:#6B86B8}
+.cal-cell .cc-kcal{font-size:8.5px;font-weight:700;color:var(--em-d);font-variant-numeric:tabular-nums;letter-spacing:-0.04em;line-height:1.1;max-width:100%;overflow:hidden;white-space:nowrap}
+.cal-cell .cc-thumb{width:26px;height:26px;border-radius:7px;background:#EFF4F2 center/cover no-repeat;margin-top:1px;border:1px solid rgba(16,24,28,.06)}
+.cal-cell .cc-dot{width:4px;height:4px;border-radius:50%;background:var(--em);margin-top:auto;margin-bottom:3px;opacity:.55}
+.cal-cell.today{box-shadow:inset 0 0 0 1.5px #9CCDB9}
+.cal-cell.sel{background:var(--em);box-shadow:none}
+.cal-cell.sel .cc-num{color:#fff}
+.cal-cell.sel .cc-kcal{color:rgba(255,255,255,.88)}
+.cal-cell.sel .cc-thumb{border-color:rgba(255,255,255,.65)}
+.cal-cell.sel .cc-dot{background:#fff;opacity:.9}
+.cal-diary{margin-top:13px}
+.diary-head{display:flex;align-items:baseline;gap:8px;margin:2px 2px 9px}
+.diary-head b{font-size:15.5px;font-weight:800;letter-spacing:-0.03em}
+.diary-head span{font-size:11.5px;color:var(--ink3);font-weight:700;margin-left:auto;font-variant-numeric:tabular-nums}
+.diary-empty{background:#fff;border:1.5px dashed #CFE0D7;border-radius:20px;padding:24px 18px 18px;text-align:center}
+.diary-empty .de-e{font-size:30px;line-height:1}
+.diary-empty b{display:block;margin-top:9px;font-size:14.5px;font-weight:800;letter-spacing:-0.025em}
+.diary-empty p{margin:6px 0 14px;font-size:11.5px;color:var(--ink3);line-height:1.6}
+.diary-empty .de-menu{margin:13px 0 0;font-size:11.5px;color:var(--ink2);font-weight:600;line-height:1.5;word-break:keep-all}
+.diary-empty .de-menu:before{content:"그날 기록 · ";color:var(--ink3);font-weight:700}
+.flip{position:relative;width:100%;aspect-ratio:4 / 5;perspective:1200px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.flip-inner{
+  position:absolute;inset:0;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;
+  transition:transform .62s cubic-bezier(.22,.9,.24,1);
+}
+.flip.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:20px;overflow:hidden;box-shadow:0 16px 32px -22px rgba(16,24,28,.55);
+}
+.flip-front{background:#FBF6E9;border:1px solid #EADFC6;padding:12px 12px 10px;display:flex;flex-direction:column;gap:8px}
+.dp-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex:0 0 auto}
+.dp-date{font-size:13.5px;font-weight:800;letter-spacing:-0.02em;color:#4B4234;line-height:1.25}
+.dp-date i{display:block;font-style:normal;font-size:8.5px;font-weight:800;color:#A2957C;letter-spacing:0.14em;margin-top:2px}
+.dp-stamp{
+  flex:0 0 auto;width:52px;height:52px;border:2px solid var(--em);border-radius:50%;color:var(--em);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-9deg);
+  line-height:1;opacity:.92;
+}
+.dp-stamp b{font-size:17px;font-weight:800;letter-spacing:-0.05em}
+.dp-stamp i{font-style:normal;font-size:6.5px;font-weight:800;letter-spacing:0.05em;margin-top:2px}
+.dp-photo{flex:1;min-height:0;background:#fff;border:1px solid #E7DFC9;border-radius:10px;padding:5px;box-shadow:0 2px 6px -3px rgba(75,66,52,.35)}
+.dp-photo img{width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;background:#F1EBDD}
+.dp-memo{
+  flex:0 0 auto;font-size:13px;font-weight:700;line-height:1.4;color:#4B4234;letter-spacing:-0.02em;
+  min-height:36px;max-height:36px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;word-break:keep-all;
+}
+.dp-memo.empty{color:#A79C86;font-weight:600}
+.dp-foot{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;border-top:1px dashed #DED3B8;padding-top:7px}
+.dp-foot span{font-size:8.5px;font-weight:800;color:#A2957C;letter-spacing:0.1em}
+.dp-foot b{font-size:13px;font-weight:800;color:var(--em-d);font-variant-numeric:tabular-nums}
+.flip-back{transform:rotateY(180deg);background:#0E1513;border:1px solid #0E1513}
+.flip-back>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.fb-info{position:absolute;left:0;right:0;bottom:0;padding:15px 14px 13px;background:rgba(9,20,17,.66);color:#fff}
+.fb-info b{display:block;font-size:14px;font-weight:800;letter-spacing:-0.02em}
+.fb-info span{display:block;font-size:11.5px;color:rgba(255,255,255,.8);margin-top:3px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fb-info em{display:inline-block;font-style:normal;font-size:12.5px;font-weight:800;margin-top:6px;color:#B7E3CE;font-variant-numeric:tabular-nums}
+.flip-hint{text-align:center;font-size:11px;color:var(--ink3);font-weight:600;margin:8px 0 0;letter-spacing:0}
+.diary-memo-field{margin-top:11px}
+.diary-memo-field label{display:block;margin:0 2px 5px;font-size:11.5px;font-weight:800;color:var(--ink2);letter-spacing:-0.01em}
+.diary-memo-field input{
+  width:100%;height:46px;border:1.4px solid #E5EDE9;background:#fff;border-radius:13px;
+  padding:0 13px;font-size:16px;font-weight:600;color:var(--ink);outline:none;letter-spacing:-0.01em;
+}
+.diary-memo-field input:focus{border-color:#B3D9C9;box-shadow:0 0 0 4px rgba(0,98,65,.10)}
+.diary-memo-field input::placeholder{color:#B4BFC3;font-weight:500}
+.diary-tools{display:flex;gap:7px;margin-top:9px}
+.dt-btn{
+  -webkit-appearance:none;flex:1;border:1px solid #DCE7E1;background:#fff;border-radius:13px;
+  padding:12px 8px;font-size:12.5px;font-weight:800;color:var(--ink2);letter-spacing:-0.01em;
+}
+.dt-btn:active{background:var(--em-l);color:var(--em-d)}
+.dt-btn.del{flex:0 0 auto;padding:12px 15px;color:#B4553F;border-color:#F0DBD4;background:#FFF8F5}
+.dt-btn.del:active{background:#FDEDE7}
+
+@media (max-width:360px){
+  .dock{padding-left:5px;padding-right:5px;gap:0}
+  .dock-btn{font-size:9px;gap:2px}
+  .dock-btn svg{width:20px;height:20px}
+  .fab{flex:0 0 48px;width:48px;height:48px;margin:0 1px}
+  .cal-scroll{padding-left:10px;padding-right:10px}
+  .cal-grid{padding:6px 4px;gap:2px;border-radius:18px}
+  .cal-cell{height:46px}
+  .cal-pad{height:46px}
+  .cal-cell .cc-thumb{width:24px;height:24px}
+  .dp-stamp{width:46px;height:46px}
+  .dp-stamp b{font-size:15px}
+  .dp-date{font-size:12.5px}
+  .dp-memo{font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -1143,9 +1241,6 @@ input,textarea,select{font-size:16px}
         <svg class="magic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/><path d="M18 15.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg>
         <input id="quickInput" type="text" placeholder="뭐 먹었어?  예) 마가렛트 2봉지 아메리카노" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
         <button class="clr" id="btnClear" aria-label="입력 지우기">&#10005;</button>
-        <button class="cam" id="btnOcrCam" aria-label="성분표 사진으로 등록" title="성분표 사진으로 등록">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5h3l1.4-2.2h6.2l1.4 2.2h3a1.6 1.6 0 0 1 1.6 1.6v7.3a1.6 1.6 0 0 1-1.6 1.6H3.5a1.6 1.6 0 0 1-1.6-1.6V10.1a1.6 1.6 0 0 1 1.6-1.6Z"/><circle cx="12" cy="13.4" r="2.9"/></svg>
-        </button>
         <button class="qgo" id="qGo" aria-label="바로 기록">&#8629;</button>
       </div>
       <div class="qmeal" id="mealPills" role="group" aria-label="기록할 끼니">
@@ -1255,17 +1350,41 @@ input,textarea,select{font-size:16px}
   </footer>
 </div>
 
+
+<div class="calscreen" id="calScreen" aria-hidden="true">
+  <header class="cal-top">
+    <h2><span class="ct-e">📅</span>그림일기 달력</h2>
+    <button class="cal-today" id="calToday">오늘</button>
+    <button class="cal-x" id="calClose" aria-label="달력 닫기">&#10005;</button>
+  </header>
+  <div class="cal-scroll" id="calScroll">
+    <div class="cal-monthbar">
+      <button class="cal-mbtn" id="calPrev" aria-label="이전 달">&lsaquo;</button>
+      <b id="calMonth">2026년 11월</b>
+      <button class="cal-mbtn" id="calNext" aria-label="다음 달">&rsaquo;</button>
+    </div>
+    <div class="cal-week"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-diary" id="calDiary"></div>
+  </div>
+  <input type="file" id="fileDiary" class="file-in" accept="image/*">
+</div>
+
 <nav class="dock" aria-label="빠른 이동">
   <button class="dock-btn" data-goto="mealsCard" data-spy="mealsCard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v5.5a2.5 2.5 0 0 0 5 0V3"/><path d="M9.5 11v10"/><path d="M17 3c-1.6 1.1-2.5 2.8-2.5 4.6 0 1.6 1 2.6 2.5 3V21"/></svg>
     <span>식사</span>
   </button>
-  <button class="dock-btn" data-goto="weightCard" data-spy="weightCard">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="4.5"/><path d="M8.2 11.4a5.2 5.2 0 0 1 7.6 0"/><path d="M12 11.8v2"/></svg>
-    <span>체중</span>
+  <button class="dock-btn" id="tabCalendar" data-cal="1">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3.6"/><path d="M3.5 9.5h17"/><path d="M8 3.5v3"/><path d="M16 3.5v3"/><circle cx="8.3" cy="13.6" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="13.6" r="1" fill="currentColor" stroke="none"/><circle cx="15.7" cy="13.6" r="1" fill="currentColor" stroke="none"/><circle cx="8.3" cy="17.1" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="17.1" r="1" fill="currentColor" stroke="none"/></svg>
+    <span>달력</span>
   </button>
   <button class="fab" id="fab" aria-label="빠른 기록">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M12 5.5v13"/><path d="M5.5 12h13"/></svg>
+  </button>
+  <button class="dock-btn" data-goto="weightCard" data-spy="weightCard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="4.5"/><path d="M8.2 11.4a5.2 5.2 0 0 1 7.6 0"/><path d="M12 11.8v2"/></svg>
+    <span>체중</span>
   </button>
   <button class="dock-btn" data-goto="exerciseCard" data-spy="exerciseCard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12h2.8l2-5.2 3.2 10.4 2.6-6.4 1.6 3.2h4.8"/></svg>
@@ -1276,8 +1395,6 @@ input,textarea,select{font-size:16px}
 <div class="toast" id="toast"><span class="tm" id="toastMsg"></span><button class="tu" id="toastUndo" hidden>되돌리기</button></div>
 
 <div class="mask" id="mask"></div>
-
-<input type="file" id="fileOcr" class="file-in" accept="image/*">
 
 <section class="sheet" id="sheetSettings" role="dialog" aria-modal="true" aria-label="내 정보와 목표">
   <div class="sheet-grab"></div>
@@ -1358,11 +1475,6 @@ input,textarea,select{font-size:16px}
   <div class="sheet-grab"></div>
   <div class="sheet-head"><h3 id="mTitle">직접 입력</h3><button class="xbtn" data-close="manual" aria-label="닫기">&#10005;</button></div>
   <div class="sheet-body">
-    <div class="ocr-hint" id="mOcrHint" hidden></div>
-    <details class="ocr-details" id="mOcrDet" hidden>
-      <summary>인식된 칼자 보기</summary>
-      <pre class="ocr-raw" id="mOcrRawText"></pre>
-    </details>
     <div class="field">
       <label id="mNameLabel">음식 이름</label>
       <input class="text-input" id="mName" type="text" placeholder="예: 엄마표 김치볶음밥" autocomplete="off">
@@ -1536,18 +1648,6 @@ input,textarea,select{font-size:16px}
   </div>
   <div class="sheet-foot"><button class="btn-primary block em" id="btnFavsDone">완료</button></div>
 </section>
-<section class="sheet" id="sheetOcr" role="dialog" aria-modal="true" aria-label="성분표 사진 인식">
-  <div class="sheet-grab"></div>
-  <div class="sheet-head"><h3>성분표 사진</h3><button class="xbtn" data-close="ocr" aria-label="닫기">&#10005;</button></div>
-  <div class="sheet-body">
-    <div class="ocr-shot" id="ocrShot"><img id="ocrImg" alt="성분표 사진"></div>
-    <div class="ocr-status" id="ocrStatus">성분표 읽는 중...</div>
-    <div class="ocr-sub" id="ocrSub">사진을 정리하는 중</div>
-    <div class="ocr-bar" id="ocrBar"><i id="ocrBarFill"></i></div>
-    <p class="formula" id="ocrNote" style="margin-top:12px">사진에서 열량·단백질·탄수화물·지방을 찾아 폼에 채워둘게요. 숫자는 넣기 전에 한 번 확인할 수 있어요.</p>
-  </div>
-  <div class="sheet-foot"><button class="btn-ghost" id="btnOcrSkip" style="width:100%">사진 없이 직접 입력</button></div>
-</section>
 
 <section class="sheet" id="sheetRecipe" role="dialog" aria-modal="true" aria-label="내 레시피">
   <div class="sheet-grab"></div>
@@ -1569,7 +1669,6 @@ input,textarea,select{font-size:16px}
         <button class="rc-add" id="rcAdd">추가</button>
       </div>
       <div class="rc-tools">
-        <button class="rc-tool" id="rcOcr">📷 성분표로 재료 추가</button>
         <button class="rc-tool" id="rcDirect">＋ 직접 재료 추가</button>
       </div>
       <div class="rc-res" id="rcResults"></div>
@@ -1649,7 +1748,6 @@ input,textarea,select{font-size:16px}
     </div>
     <div class="frb-actions">
       <button class="frb-act primary" id="frAddToggle">＋ 새 제품 추가</button>
-      <button class="frb-act" id="frOcrAdd">📷 성분표로 추가</button>
     </div>
     <div class="frb-add" id="frAddBox" hidden>
       <input class="text-input" id="frNewName" type="text" autocomplete="off" placeholder="이름 (예: 3분 카레, 굴소스)">
@@ -3822,7 +3920,7 @@ input,textarea,select{font-size:16px}
     return main + '<span class="pk-sub">' + sub + '</span>';
   }
 
-  /* 직접 입력 · 성분표 확인 폼 */
+  /* 직접 입력 폼 */
   function renderPackManual() {
     var box = $('mPackBox'), hint = $('mPackHint'), nEl = $('mEatN');
     if (!box || !hint || !$('mPack')) return;
@@ -4409,7 +4507,6 @@ input,textarea,select{font-size:16px}
   var rcItems = [];
   var rcPortion = 1;
   var rcMeal = 'lunch';
-  var rcOcrMode = false;
   var rcPickCache = [];
 
   function rcTotal() {
@@ -4514,7 +4611,7 @@ input,textarea,select{font-size:16px}
     }
   }
 
-  /* 내 냉장고(직접 등록·성분표로 저장) 음식을 먼저 보여준다 */
+  /* 내 냉장고(직접 등록) 음식을 먼저 보여준다 */
   function rcFindList(query) {
     var list = findFoods(query, 12);
     list.sort(function (a, b) {
@@ -4905,7 +5002,6 @@ input,textarea,select{font-size:16px}
 
   var frQuery = '', frTab = 'all', frEditKey = null, frEditCat = 'prod';
   var frNewCat = 'prod', frNewCatTouched = false;
-  var fridgeOcr = false, manualFromFridge = false;
 
   function renderFridge() {
     var box = $('frList');
@@ -4932,7 +5028,7 @@ input,textarea,select{font-size:16px}
     if (!all.length) {
       box.innerHTML = '<div class="frb-empty"><span class="fe-e">🧊</span>' +
         '아직 내 냉장고에 담아 둔 제품이나 요리가 없어요.<br>' +
-        '성분표 사진이나 직접 추가, <b>내 레시피</b> 저장 시 여기에 모여요.</div>';
+        '직접 추가하거나 <b>내 레시피</b>로 저장한 음식이 여기에 모여요.</div>';
       return;
     }
     if (!rows.length) {
@@ -5188,13 +5284,6 @@ input,textarea,select{font-size:16px}
       });
     });
     if ($('frNewSave')) $('frNewSave').onclick = frAddNew;
-    if ($('frOcrAdd')) {
-      $('frOcrAdd').onclick = function () {
-        closeSheets();
-        fridgeOcr = true;
-        pickOcrPhoto();
-      };
-    }
     var list = $('frList');
     if (list) {
       list.addEventListener('click', function (e) {
@@ -5496,14 +5585,12 @@ input,textarea,select{font-size:16px}
   }
 
   function closeSheets() {
-    if (ocrRunning) { ocrToken++; ocrRunning = false; }
     $('mask').classList.remove('open');
-    var a = $('sheetSettings'), b = $('sheetManual'), c = $('sheetEdit'), d = $('sheetFavs'), e = $('sheetOcr');
+    var a = $('sheetSettings'), b = $('sheetManual'), c = $('sheetEdit'), d = $('sheetFavs');
     if (a) a.classList.remove('open');
     if (b) b.classList.remove('open');
     if (c) c.classList.remove('open');
     if (d) d.classList.remove('open');
-    if (e) e.classList.remove('open');
     var f2 = $('sheetRecipe');
     if (f2) f2.classList.remove('open');
     var f3 = $('sheetFridge');
@@ -5529,21 +5616,13 @@ input,textarea,select{font-size:16px}
     if ($('mPack')) $('mPack').value = pre && pre.pack ? String(pre.pack) : '';
     manualEat = 1;
     renderPackManual();
-    rcOcrMode = !!(pre && pre.recipe);
-    /* fridgeOcr: 내 냉장고의 '성분표로 추가'에서 시작한 OCR인지 */
-    manualFromFridge = !!fridgeOcr && !rcOcrMode;
-    fridgeOcr = false;
-    if ($('mFav')) $('mFav').checked = rcOcrMode ? true : manualFromQuery;
-    if ($('mTitle')) {
-      $('mTitle').textContent = rcOcrMode ? '성분표 · 재료 확인'
-        : ((pre && pre.ocr && !pre.error) ? '성분표 확인' : '직접 입력');
-    }
-    if ($('btnAddManual')) $('btnAddManual').textContent = rcOcrMode ? '재료로 담기' : '추가하기';
-    if ($('mNameLabel')) $('mNameLabel').textContent = rcOcrMode ? '재료 이름' : '음식 이름';
-    if ($('mName')) $('mName').placeholder = rcOcrMode ? '예: 시판 저당 소스' : '예: 엄마표 김치볶음밥';
-    if ($('mFavLabel')) $('mFavLabel').textContent = rcOcrMode ? '내 냉장고에도 저장하기' : '자주 먹는 음식에 저장';
-    if ($('mMealField')) $('mMealField').hidden = rcOcrMode;
-    renderOcrHint(pre);
+    if ($('mFav')) $('mFav').checked = manualFromQuery;
+    if ($('mTitle')) $('mTitle').textContent = '직접 입력';
+    if ($('btnAddManual')) $('btnAddManual').textContent = '추가하기';
+    if ($('mNameLabel')) $('mNameLabel').textContent = '음식 이름';
+    if ($('mName')) $('mName').placeholder = '예: 엄마표 김치볶음밥';
+    if ($('mFavLabel')) $('mFavLabel').textContent = '자주 먹는 음식에 저장';
+    if ($('mMealField')) $('mMealField').hidden = false;
     presetHideHint(['mPresetHint']);
     syncOpt('mMeal', manualMeal);
     syncMore($('mMore'), pre);
@@ -5557,44 +5636,8 @@ input,textarea,select{font-size:16px}
   /* v5.1: 세부 값(탄단지·개입수)이 이미 있으면 접힌 칸을 펼쳐 확인하게 */
   function syncMore(det, pre) {
     if (!det) return;
-    var has = !!(pre && (pre.ocr || num(pre.p, 0) > 0 || num(pre.c, 0) > 0 || num(pre.f, 0) > 0 || packOf(pre.pack)));
+    var has = !!(pre && (num(pre.p, 0) > 0 || num(pre.c, 0) > 0 || num(pre.f, 0) > 0 || packOf(pre.pack)));
     det.open = has;
-  }
-
-  /* 성분표에서 읽은 값을 폼 위에 안내 */
-  function renderOcrHint(pre) {
-    var box = $('mOcrHint'), det = $('mOcrDet'), raw = $('mOcrRawText');
-    if (!box || !det || !raw) return;
-    if (!pre || !pre.ocr) {
-      box.hidden = true;
-      box.className = 'ocr-hint';
-      box.innerHTML = '';
-      det.hidden = true;
-      det.open = false;
-      raw.textContent = '';
-      return;
-    }
-    box.hidden = false;
-    if (pre.error) {
-      box.className = 'ocr-hint warn';
-      box.innerHTML = '<b>사진을 읽지 못했어요</b><br>' + esc(pre.error) + ' 직접 넣어줄게요.';
-    } else {
-      box.className = 'ocr-hint';
-      var miss = pre.miss || [];
-      var html = '<b>📷 성분표에서 읽은 값이에요</b><br>인식된 숫자를 확인하고 필요하면 살짝 고쳐주세요.';
-      if (miss.length) html += '<br>' + esc(miss.join(' · ')) + '은 못 읽었어요.';
-      if (pre.serv) html += '<br>' + esc(pre.serv);
-      box.innerHTML = html;
-    }
-    if (pre.text && String(pre.text).trim()) {
-      det.hidden = false;
-      det.open = false;
-      raw.textContent = String(pre.text).trim();
-    } else {
-      det.hidden = true;
-      det.open = false;
-      raw.textContent = '';
-    }
   }
 
   function syncOpt(id, val) {
@@ -5652,7 +5695,7 @@ input,textarea,select{font-size:16px}
   function addManual() {
     var name = $('mName').value.trim();
     var kcal = num($('mKcal').value, null);
-    if (!name) { toast(rcOcrMode ? '재료 이름을 적어줘' : '음식 이름을 적어줘'); $('mName').focus(); return; }
+    if (!name) { toast('음식 이름을 적어줘'); $('mName').focus(); return; }
     if (kcal == null || !isFinite(kcal) || kcal <= 0) { toast('칼로리를 적어줘'); $('mKcal').focus(); return; }
     var pack = packOf($('mPack') && $('mPack').value);
     var eat = pack ? Math.min(pack, Math.max(1, Math.round(manualEat || 1))) : 1;
@@ -5669,28 +5712,6 @@ input,textarea,select{font-size:16px}
     };
     var wantFav = !!$('mFav').checked;
     var meal = manualMeal;
-    /* 내 냉장고에서 '성분표로 추가'로 부른 경우: 기록 없이 냉장고에만 담는다 */
-    if (manualFromFridge && !rcOcrMode) {
-      manualFromFridge = false;
-      saveCustomFood(food, false);
-      save();
-      renderChips();
-      closeSheets();
-      toast(name + ' 내 냉장고에 담았어 · ' + fmtInt(food.k) + 'kcal');
-      openFridge(frCatOf(food));
-      return;
-    }
-    /* 요리 시트에서 부른 경우: 기록 대신 재료 목록으로 되돌아간다 */
-    if (rcOcrMode) {
-      food.cat = 'ing';
-      if ($('mFav').checked) saveCustomFood(food, false);
-      rcAdd(food, Math.max(0.5, eat));
-      rcOcrMode = false;
-      closeSheets();
-      openRecipe();
-      toast(food.n + ' 재료로 담았어 · ' + fmt1(food.k * Math.max(0.5, eat)) + 'kcal');
-      return;
-    }
     saveCustomFood(food, wantFav);
     if (manualFromQuery) { $('quickInput').value = ''; manualFromQuery = false; }
     closeSheets();
@@ -5704,445 +5725,572 @@ input,textarea,select{font-size:16px}
     }
   }
 
-  /* ================= v4.3: 성분표 사진 인식 (Tesseract.js) ================= */
-  var OCR_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
-  var OCR_LANG_PATH = 'https://tessdata.projectnaptha.com/4.0.0_fast';
-  var ocrEngineP = null;
-  var ocrToken = 0;
-  var ocrRunning = false;
+  /* ================= v5.2: 달력 · 그림일기 플립 카드 ================= */
+  var CAL_DB = 'dietCoachPhotos';
+  var CAL_STORE = 'photos';
+  var calSel = '';
+  var calMonth = '';
+  var calRecs = {};
+  var calFiltered = {};
+  var calFullUrl = '';
+  var calFullDate = '';
+  var calOpen = false;
+  var calLockY = 0;
+  var calToken = 0;
+  var calMemoTimer = null;
+  var calDBP = null;
 
-  function ocrSetStatus(main, sub, pct) {
-    var a = $('ocrStatus'), b = $('ocrSub'), f = $('ocrBarFill');
-    if (a && main != null) a.textContent = main;
-    if (b && sub != null) b.textContent = sub;
-    if (f && pct != null) f.style.width = Math.max(0, Math.min(100, Math.round(pct * 100))) + '%';
-  }
+  function calPad2(n) { return n < 10 ? '0' + n : '' + n; }
 
-  /* 인식 엔진은 처음 사진을 넣을 때만 CDN에서 받아온다 */
-  function loadOcrEngine() {
-    if (window.Tesseract && window.Tesseract.recognize) return Promise.resolve(window.Tesseract);
-    if (ocrEngineP) return ocrEngineP;
-    ocrEngineP = new Promise(function (res, rej) {
-      var s = document.createElement('script');
-      s.src = OCR_CDN;
-      s.async = true;
-      s.onload = function () {
-        if (window.Tesseract && window.Tesseract.recognize) res(window.Tesseract);
-        else { ocrEngineP = null; rej(new Error('인식 엔진을 열지 못했어요.')); }
+  /* ---- IndexedDB (사진은 localStorage 대신 여기에) ---- */
+  function calDB() {
+    if (calDBP) return calDBP;
+    calDBP = new Promise(function (res, rej) {
+      if (!window.indexedDB) { rej(new Error('이 브라우저에서는 사진 저장이 안 돼요')); return; }
+      var req = window.indexedDB.open(CAL_DB, 1);
+      req.onupgradeneeded = function () {
+        var db = req.result;
+        if (!db.objectStoreNames.contains(CAL_STORE)) db.createObjectStore(CAL_STORE, { keyPath: 'date' });
       };
-      s.onerror = function () {
-        ocrEngineP = null;
-        rej(new Error('인터넷이 필요해요(처음 한 번).'));
-      };
-      document.head.appendChild(s);
+      req.onsuccess = function () { res(req.result); };
+      req.onerror = function () { rej(req.error || new Error('사진 저장소를 열지 못했어요')); };
     });
-    return ocrEngineP;
+    return calDBP;
   }
-
-  /* 사진 → 가로 최대 1400px · 그레이스케일 · 자동 대조 */
-  function ocrPreprocess(file) {
-    return new Promise(function (res, rej) {
-      var url = null;
-      try { url = URL.createObjectURL(file); } catch (e) {}
-      if (!url) { rej(new Error('사진을 열지 못했어요.')); return; }
-      var img = new Image();
-      img.onload = function () {
-        try {
-          var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
-          if (!iw || !ih) throw new Error('사진 크기를 읽지 못했어요.');
-          var scale = Math.min(1, 1400 / iw);
-          var w = Math.max(1, Math.round(iw * scale));
-          var h = Math.max(1, Math.round(ih * scale));
-          var cv = document.createElement('canvas');
-          cv.width = w; cv.height = h;
-          var cx = cv.getContext('2d');
-          cx.fillStyle = '#fff';
-          cx.fillRect(0, 0, w, h);
-          cx.drawImage(img, 0, 0, w, h);
-
-          var id = cx.getImageData(0, 0, w, h), d = id.data, n = d.length;
-          var hist = new Array(256), i;
-          for (i = 0; i < 256; i++) hist[i] = 0;
-          for (i = 0; i < n; i += 4) {
-            var y = (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114) | 0;
-            d[i] = d[i + 1] = d[i + 2] = y;
-            hist[y]++;
-          }
-          var total = (n / 4) | 0, lo = 0, hi = 255, acc = 0, loT = total * 0.012, hiT = total * 0.988;
-          for (i = 0; i < 256; i++) { acc += hist[i]; if (acc >= loT) { lo = i; break; } }
-          acc = 0;
-          for (i = 255; i >= 0; i--) { acc += hist[i]; if (acc >= total - hiT) { hi = i; break; } }
-          var span = Math.max(24, hi - lo);
-          for (i = 0; i < n; i += 4) {
-            var v = (d[i] - lo) / span * 255 * 1.12 - 10;
-            v = v < 0 ? 0 : (v > 255 ? 255 : v);
-            d[i] = d[i + 1] = d[i + 2] = v | 0;
-          }
-          cx.putImageData(id, 0, 0);
-          var out = cv.toDataURL('image/jpeg', 0.92);
-          try { URL.revokeObjectURL(url); } catch (e) {}
-          res({ dataUrl: out, w: w, h: h });
-        } catch (e) {
-          try { URL.revokeObjectURL(url); } catch (e2) {}
-          rej(e);
-        }
-      };
-      img.onerror = function () {
-        try { URL.revokeObjectURL(url); } catch (e) {}
-        rej(new Error('사진을 열지 못했어요.'));
-      };
-      img.src = url;
-    });
+  function calStore(mode) {
+    return calDB().then(function (db) { return db.transaction(CAL_STORE, mode).objectStore(CAL_STORE); });
   }
-
-  function ocrProgress(m) {
-    if (!m) return;
-    var p = typeof m.progress === 'number' ? m.progress : 0;
-    var st = String(m.status || '');
-    if (st.indexOf('recognizing') >= 0) ocrSetStatus('성분표 읽는 중...', '글자를 읽는 중 ' + Math.round(p * 100) + '%', 0.15 + p * 0.85);
-    else if (st.indexOf('language') >= 0) ocrSetStatus('성분표 읽는 중...', '한국어 인식 데이터 받는 중 (처음 한 번만)', 0.05 + p * 0.08);
-    else ocrSetStatus('성분표 읽는 중...', '인식 엔진 준비 중', Math.max(0.05, p * 0.1));
-  }
-
-  function pickOcrPhoto() {
-    var f = $('fileOcr');
-    if (!f) return;
-    f.value = '';
-    try { f.click(); } catch (e) { toast('사진을 열 수 없어'); }
-  }
-
-  function startOcr(file) {
-    var token = ++ocrToken;
-    ocrRunning = true;
-    var shot = $('ocrShot'), im = $('ocrImg'), note = $('ocrNote');
-    if (shot) shot.className = 'ocr-shot';
-    if (im) im.removeAttribute('src');
-    if (note) note.textContent = '사진에서 열량·단백질·탄수화물·지방을 찾아 폼에 채워둘게요. 숫자는 넣기 전에 한 번 확인할 수 있어요.';
-    ocrSetStatus('성분표 읽는 중...', '사진을 정리하는 중', 0.03);
-    openSheet('ocr');
-    var dataUrl = '';
-
-    ocrPreprocess(file).then(function (r) {
-      if (token !== ocrToken) return null;
-      dataUrl = r.dataUrl;
-      if (im) im.src = dataUrl;
-      if (shot) shot.className = 'ocr-shot on';
-      ocrSetStatus('성분표 읽는 중...', '인식 엔진 준비 중 (처음 한 번만 받아와요)', 0.06);
-      return loadOcrEngine();
-    }).then(function (T) {
-      if (token !== ocrToken || !T) return null;
-      return T.recognize(dataUrl, 'kor+eng', {
-        langPath: OCR_LANG_PATH,
-        logger: function (m) { if (token === ocrToken) ocrProgress(m); }
+  function calPhotoGet(k) {
+    return calStore('readonly').then(function (st) {
+      return new Promise(function (res, rej) {
+        var q = st.get(k);
+        q.onsuccess = function () { res(q.result || null); };
+        q.onerror = function () { rej(q.error); };
       });
-    }).then(function (r) {
-      if (token !== ocrToken || !r) return;
-      ocrRunning = false;
-      var text = (r && r.data && typeof r.data.text === 'string') ? r.data.text : String(r || '');
-      finishOcr(text);
-    }).catch(function (err) {
-      if (token !== ocrToken) return;
-      ocrRunning = false;
-      failOcr(err);
+    });
+  }
+  function calPhotoKeys() {
+    return calStore('readonly').then(function (st) {
+      return new Promise(function (res, rej) {
+        var q = st.getAllKeys();
+        q.onsuccess = function () { res(q.result || []); };
+        q.onerror = function () { rej(q.error); };
+      });
+    });
+  }
+  function calPhotoPut(rec) {
+    return calStore('readwrite').then(function (st) {
+      return new Promise(function (res, rej) {
+        var q = st.put(rec);
+        q.onsuccess = function () { res(rec); };
+        q.onerror = function () { rej(q.error); };
+      });
+    });
+  }
+  function calPhotoDel(k) {
+    return calStore('readwrite').then(function (st) {
+      return new Promise(function (res, rej) {
+        var q = st.delete(k);
+        q.onsuccess = function () { res(true); };
+        q.onerror = function () { rej(q.error); };
+      });
     });
   }
 
-  function ocrReadable() {
-    var s = $('sheetOcr');
-    return !!(s && s.className.indexOf('open') >= 0);
-  }
-
-  function finishOcr(text) {
-    if (!ocrReadable()) return; /* 사용자가 시트를 먼저 침으면 버린다 */
-    var p = parseNutrition(text);
-    var got = p.k != null || p.p != null || p.c != null || p.f != null;
-    var toRecipe = rcOcrMode;
-    closeSheets();
-    openManual('', {
-      ocr: true, k: p.k, p: p.p, c: p.c, f: p.f, pack: p.pack, recipe: toRecipe,
-      name: got ? p.name : '', text: text, miss: p.miss, serv: p.serv
+  /* ---- 사진 정리: 긴 변 900px 이하 JPEG ---- */
+  function calLoadImage(src) {
+    return new Promise(function (res, rej) {
+      var img = new Image();
+      img.onload = function () { res(img); };
+      img.onerror = function () { rej(new Error('사진을 열지 못했어요')); };
+      img.src = src;
     });
-    toast(got ? '성분표에서 읽었어 · 확인하고 등록해줘' : '숫자를 못 읽었어 · 직접 넣어줄래?');
   }
-
-  function failOcr(err) {
-    var msg = (err && err.message) ? err.message : '사진을 읽지 못했어요.';
-    if (!ocrReadable()) return;
-    var toRecipe = rcOcrMode;
-    closeSheets();
-    openManual('', { ocr: true, error: msg, recipe: toRecipe });
-    toast('사진을 못 읽었어 · 직접 넣어줄게');
+  function calCanvasFromImage(img) {
+    var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+    var sc = Math.min(1, 900 / Math.max(1, Math.max(iw, ih)));
+    var w = Math.max(1, Math.round(iw * sc)), h = Math.max(1, Math.round(ih * sc));
+    var cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    var cx = cv.getContext('2d');
+    cx.fillStyle = '#fff'; cx.fillRect(0, 0, w, h);
+    cx.drawImage(img, 0, 0, w, h);
+    return cv;
   }
-
-  /* ---------- 영양성분표 글자 → 숫자 ---------- */
-  function ocrNormalize(t) {
-    var s = String(t == null ? '' : t);
-    s = s.replace(/[\uFF01-\uFF5E]/g, function (c) {
-      return String.fromCharCode(c.charCodeAt(0) - 0xFEE0);
+  function calCanvasBlob(cv) {
+    return new Promise(function (res) {
+      if (cv.toBlob) { cv.toBlob(function (b) { res(b); }, 'image/jpeg', 0.82); return; }
+      var d = cv.toDataURL('image/jpeg', 0.82).split(',')[1];
+      var bin = atob(d), arr = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      res(new Blob([arr], { type: 'image/jpeg' }));
     });
-    s = s.replace(/[\u3000\u00A0]/g, ' ');
-    s = s.replace(/[|｜│┃]/g, ' ');
-    s = s.replace(/[·・•∙]/g, ' ');
-    s = s.replace(/[“”"]/g, ' ');
-    s = s.replace(/[（(]/g, ' (').replace(/[）)]/g, ') ');
-    return s;
+  }
+  function calThumbData(cv) {
+    var sc = Math.max(1, Math.max(cv.width, cv.height) / 120);
+    var w = Math.max(1, Math.round(cv.width / sc)), h = Math.max(1, Math.round(cv.height / sc));
+    var tc = document.createElement('canvas'); tc.width = w; tc.height = h;
+    var cx = tc.getContext('2d');
+    cx.fillStyle = '#fff'; cx.fillRect(0, 0, w, h);
+    cx.drawImage(cv, 0, 0, w, h);
+    return tc.toDataURL('image/jpeg', 0.7);
   }
 
-  function ocrNum(s) {
-    if (s == null) return null;
-    var v = parseFloat(String(s).replace(/[^0-9.]/g, ''));
-    return isFinite(v) ? v : null;
+  /* ---- 그림일기 필터: 수채화 번짐 + 색연필 단계 + 스케치 선 + 종이 결 + 비네팅 ---- */
+  function calHash2(a, b) {
+    var h = Math.imul(a | 0, 374761393) + Math.imul(b | 0, 668265263);
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    h ^= h >>> 16;
+    return (h >>> 0) / 4294967295;
   }
-
-  var OCR_STOP_WORDS = [
-    '영양정보', '영양성분', '영양성분표', '영양', '1일', '기준치', '비율', '총내용량', '내용량', '1회', '제공량', '분량',
-    '열량', '칼로리', '나트륨', '탄수화물', '당류', '지방', '트랜스', '포화', '콜레스테롤', '단백질',
-    '원재료', '유통기한', '보관', '제조', '고객', '반품', '교환', '품목', '알레르기', '주의', '섭취', '조리', '포장', '재질',
-    'kcal', 'cal', 'mg', 'ml'
-  ];
-
-  function ocrLines(raw) {
-    return String(raw || '').split(/\r?\n/).map(function (l) {
-      return l.replace(/\s+/g, ' ').trim();
-    }).filter(function (l) { return !!l; });
-  }
-
-  /* OCR이 "단 백 질"처럼 글자를 띄어 읽은 경우를 되붙인다 */
-  function mergeSpacedHangul(toks) {
-    var out = [], run = [];
-    function flush() {
-      if (!run.length) return;
-      var hasSingle = run.some(function (t) { return t.length === 1; });
-      if (hasSingle && run.length > 1) out.push(run.join(''));
-      else out = out.concat(run);
-      run = [];
+  function calDiaryCanvas(srcCv) {
+    var w = srcCv.width, h = srcCv.height;
+    var sd = srcCv.getContext('2d').getImageData(0, 0, w, h).data;
+    /* 1) 물감 번짐: 줄였다가 부드럽게 되돌려 사진의 미세 디테일을 덜어낸다 */
+    var hs = 0.55;
+    var half = document.createElement('canvas');
+    half.width = Math.max(1, Math.round(w * hs));
+    half.height = Math.max(1, Math.round(h * hs));
+    var hx = half.getContext('2d');
+    hx.imageSmoothingEnabled = true;
+    hx.imageSmoothingQuality = 'high';
+    hx.drawImage(srcCv, 0, 0, half.width, half.height);
+    var softCv = document.createElement('canvas');
+    softCv.width = w; softCv.height = h;
+    var sx = softCv.getContext('2d');
+    sx.imageSmoothingEnabled = true;
+    sx.imageSmoothingQuality = 'high';
+    sx.drawImage(half, 0, 0, w, h);
+    var soft = sx.getImageData(0, 0, w, h).data;
+    /* 2) 가로/세로 블러 */
+    var tmp = new Uint8ClampedArray(soft.length);
+    var blur = new Uint8ClampedArray(soft.length);
+    var rad = 2;
+    var x, y, dx, dy, xx, yy, p, o, r, g, b, n;
+    for (y = 0; y < h; y++) {
+      var row = y * w * 4;
+      for (x = 0; x < w; x++) {
+        r = 0; g = 0; b = 0; n = 0;
+        for (dx = -rad; dx <= rad; dx++) {
+          xx = x + dx; if (xx < 0) xx = 0; else if (xx >= w) xx = w - 1;
+          p = row + xx * 4; r += soft[p]; g += soft[p + 1]; b += soft[p + 2]; n++;
+        }
+        o = row + x * 4; tmp[o] = r / n; tmp[o + 1] = g / n; tmp[o + 2] = b / n; tmp[o + 3] = 255;
+      }
     }
-    for (var i = 0; i < toks.length; i++) {
-      var t = toks[i];
-      if (/^[\uAC00-\uD7A3]{1,2}$/.test(t)) run.push(t);
-      else { flush(); out.push(t); }
+    for (x = 0; x < w; x++) {
+      for (y = 0; y < h; y++) {
+        r = 0; g = 0; b = 0; n = 0;
+        for (dy = -rad; dy <= rad; dy++) {
+          yy = y + dy; if (yy < 0) yy = 0; else if (yy >= h) yy = h - 1;
+          p = (yy * w + x) * 4; r += tmp[p]; g += tmp[p + 1]; b += tmp[p + 2]; n++;
+        }
+        o = (y * w + x) * 4; blur[o] = r / n; blur[o + 1] = g / n; blur[o + 2] = b / n; blur[o + 3] = 255;
+      }
     }
-    flush();
+    /* 3) 윤곽선은 원본 밝기에서 뽑아 디테일을 살린다 */
+    var lum = new Float32Array(w * h);
+    for (var i = 0; i < w * h; i++) lum[i] = sd[i * 4] * 0.299 + sd[i * 4 + 1] * 0.587 + sd[i * 4 + 2] * 0.114;
+    var out = document.createElement('canvas');
+    out.width = w; out.height = h;
+    var octx = out.getContext('2d');
+    var od = octx.createImageData(w, h);
+    var dst = od.data;
+    var cx2 = w / 2, cy2 = h / 2;
+    var maxR = Math.sqrt(cx2 * cx2 + cy2 * cy2) || 1;
+    function vnoise(px, py, cell) {
+      var fx = px / cell, fy = py / cell;
+      var x0 = Math.floor(fx), y0 = Math.floor(fy);
+      var tx = fx - x0, ty = fy - y0;
+      tx = tx * tx * (3 - 2 * tx); ty = ty * ty * (3 - 2 * ty);
+      var n00 = calHash2(x0, y0), n10 = calHash2(x0 + 1, y0);
+      var n01 = calHash2(x0, y0 + 1), n11 = calHash2(x0 + 1, y0 + 1);
+      return (n00 * (1 - tx) + n10 * tx) * (1 - ty) + (n01 * (1 - tx) + n11 * tx) * ty;
+    }
+    for (y = 0; y < h; y++) {
+      for (x = 0; x < w; x++) {
+        var idx = (y * w + x) * 4;
+        var rr = blur[idx], gg = blur[idx + 1], bb = blur[idx + 2];
+        var l = rr * 0.3 + gg * 0.59 + bb * 0.11;
+        /* 채도는 살짝 살리고, 밝은 곳은 종이색으로 번지게 */
+        rr = l + (rr - l) * 0.92;
+        gg = l + (gg - l) * 0.92;
+        bb = l + (bb - l) * 0.92;
+        var lift = l > 198 ? Math.min(0.42, (l - 198) / 57 * 0.42) : 0;
+        rr = rr * (1 - lift) + 252 * lift;
+        gg = gg * (1 - lift) + 247 * lift;
+        bb = bb * (1 - lift) + 234 * lift;
+        rr = rr * 0.9 + 255 * 0.1;
+        gg = gg * 0.9 + 249 * 0.1;
+        bb = bb * 0.9 + 236 * 0.1;
+        /* 색연필 톤: 색 단계를 큼직하게 */
+        var qr = Math.round(rr / 26) * 26, qg = Math.round(gg / 26) * 26, qb = Math.round(bb / 26) * 26;
+        rr = rr * 0.42 + qr * 0.58;
+        gg = gg * 0.42 + qg * 0.58;
+        bb = bb * 0.42 + qb * 0.58;
+        /* 물감 얼룩 (큰 결 + 잔 결) */
+        var wash = (vnoise(x, y, 30) - 0.5) * 11 + (vnoise(x, y, 7) - 0.5) * 5;
+        rr += wash; gg += wash; bb += wash;
+        /* 은은한 스케치 외곽선 (원본 밝기 기준, 살짝 흔들리게) */
+        var gx = 0, gy = 0;
+        if (x > 0 && x < w - 1 && y > 0 && y < h - 1) {
+          var l00 = lum[(y - 1) * w + (x - 1)], l01 = lum[(y - 1) * w + x], l02 = lum[(y - 1) * w + (x + 1)];
+          var l10 = lum[y * w + (x - 1)], l12 = lum[y * w + (x + 1)];
+          var l20 = lum[(y + 1) * w + (x - 1)], l21 = lum[(y + 1) * w + x], l22 = lum[(y + 1) * w + (x + 1)];
+          gx = (l02 + 2 * l12 + l22) - (l00 + 2 * l10 + l20);
+          gy = (l20 + 2 * l21 + l22) - (l00 + 2 * l01 + l02);
+        }
+        var edge = Math.sqrt(gx * gx + gy * gy);
+        edge *= 0.85 + calHash2(x, y) * 0.3;
+        if (edge > 14) {
+          var ea = Math.min(0.62, (edge - 14) / 54 * 0.62);
+          rr = rr * (1 - ea) + 84 * ea;
+          gg = gg * (1 - ea) + 68 * ea;
+          bb = bb * (1 - ea) + 52 * ea;
+        }
+        /* 종이 결 */
+        var grain = (calHash2(x * 3 + 1, y * 5 + 7) - 0.5) * 10;
+        /* 비네팅 */
+        var vdx = (x - cx2) / maxR, vdy = (y - cy2) / maxR;
+        var vv = 1 - 0.3 * (vdx * vdx + vdy * vdy);
+        rr = (rr + grain) * vv;
+        gg = (gg + grain) * vv;
+        bb = (bb + grain) * vv;
+        dst[idx] = rr; dst[idx + 1] = gg; dst[idx + 2] = bb; dst[idx + 3] = 255;
+      }
+    }
+    octx.putImageData(od, 0, 0);
+    octx.fillStyle = 'rgba(255,246,228,0.08)';
+    octx.fillRect(0, 0, w, h);
     return out;
   }
 
-  /* 한 줄 → 토큰 (앞쪽 기호를 떼고, 끝이 %인 비율 토큰은 버린다) */
-  function ocrTokens(line) {
-    var toks = String(line || '').split(' ').map(function (t) {
-      return t.replace(/^[^0-9A-Za-z\uAC00-\uD7A3]+/, '').replace(/[^0-9A-Za-z\uAC00-\uD7A3%)]+$/, '');
-    }).filter(function (t) { return t && !/%$/.test(t); });
-    return mergeSpacedHangul(toks);
-  }
-
-  /* "18g" / "188"(=18g 오인식) / "1,200" 같은 토큰에서 가능한 값을 모두 낸다 */
-  function ocrParseNum(tok) {
-    if (tok == null) return null;
-    var t = String(tok).replace(/([0-9]),([0-9]{3})(?![0-9])/g, '$1$2');
-    var m = t.match(/^([0-9]{1,5}(?:[.,][0-9]{1,2})?)(.*)$/);
-    if (!m) return null;
-    var digits = m[1].replace(',', '.');
-    var v = parseFloat(digits);
-    if (!isFinite(v)) return null;
-    return { v: v, digits: digits, suf: m[2] || '' };
-  }
-
-  function ocrValueCands(tok) {
-    var pn = ocrParseNum(tok);
-    if (!pn) return [];
-    var out = [];
-    if (/^[gGqQ]/.test(pn.suf)) {
-      out.push({ v: pn.v, exact: true });
-    } else {
-      out.push({ v: pn.v, exact: false });
-      /* g이 8·9로 잘못 읽히면 숫자에 붙는다: 18g → 188, 62g → 629 */
-      var d = pn.digits;
-      if (d.indexOf('.') < 0 && d.length >= 2 && /[89]$/.test(d)) {
-        out.push({ v: parseFloat(d.slice(0, -1)), exact: false });
-      }
+  /* ---- 표시용 URL / 필터 캐시 ---- */
+  function calUrlFor(rec) {
+    if (!calFullUrl || calFullDate !== rec.date) {
+      if (calFullUrl) { try { URL.revokeObjectURL(calFullUrl); } catch (e) {} }
+      calFullUrl = URL.createObjectURL(rec.blob);
+      calFullDate = rec.date;
     }
-    return out.filter(function (c) { return isFinite(c.v) && c.v >= 0 && c.v <= 300; });
+    return calFullUrl;
+  }
+  function calFilterFor(rec) {
+    if (calFiltered[rec.date]) return calFiltered[rec.date];
+    var src = URL.createObjectURL(rec.blob);
+    calLoadImage(src).then(function (img) {
+      try { URL.revokeObjectURL(src); } catch (e) {}
+      var cv = calCanvasFromImage(img);
+      var out = calDiaryCanvas(cv);
+      var data = out.toDataURL('image/jpeg', 0.9);
+      if (calRecs[rec.date] !== rec) return;
+      calFiltered[rec.date] = data;
+      if (calSel === rec.date && calRecs[rec.date] === rec) {
+        var el = $('diaryFiltered');
+        if (el && el.getAttribute('data-src') !== 'back') {
+          el.src = data;
+          el.setAttribute('data-filtered', '1');
+        }
+      }
+    }).catch(function () {});
+    return '';
   }
 
-  function ocrNutrientCands(lines, words, skipPrev) {
-    var cands = [];
-    for (var li = 0; li < lines.length; li++) {
-      var toks = ocrTokens(lines[li]);
-      var found = false;
-      for (var ti = 0; ti < toks.length; ti++) {
-        var t = toks[ti], hit = false;
-        for (var wi = 0; wi < words.length; wi++) {
-          if (t === words[wi] || t.indexOf(words[wi]) === 0) { hit = true; break; }
-        }
-        if (!hit) continue;
-        var prev = ti > 0 ? toks[ti - 1] : '';
-        if (skipPrev && /(트랜스|포화)$/.test(prev)) continue;
-
-        var valTok = null, unitNext = false;
-        if (toks[ti + 1] && /^[0-9]/.test(toks[ti + 1])) {
-          valTok = toks[ti + 1];
-          unitNext = /^[gG]$/.test(toks[ti + 2] || '');
-        }
-        if (!valTok) {
-          /* 값이 다음 줄로 내려간 표기 */
-          for (var k = 1; k <= 2 && li + k < lines.length; k++) {
-            var nx = ocrTokens(lines[li + k]);
-            if (!nx.length) continue;
-            if (/^[0-9]/.test(nx[0])) { valTok = nx[0]; unitNext = /^[gG]$/.test(nx[1] || ''); }
-            break;
-          }
-        }
-        if (!valTok) continue;
-        var cs = ocrValueCands(valTok);
-        if (unitNext) cs = cs.map(function (c) { return { v: c.v, exact: true }; });
-        cands = cands.concat(cs);
-        found = true;
-        break;
-      }
-      if (found) break;
-    }
-    var seen = {}, out = [];
-    cands.forEach(function (c) {
-      var kk = c.v + '|' + (c.exact ? 1 : 0);
-      if (!seen[kk]) { seen[kk] = 1; out.push(c); }
+  /* ---- 날짜/메뉴 요약 ---- */
+  function calDateLabel(k) {
+    var p = String(k).split('-');
+    return (+p[1]) + '월 ' + (+p[2]) + '일 ' + WD[dateOf(k).getDay()] + '요일';
+  }
+  function calMenuText(d) {
+    if (!d || !d.meals || !d.meals.length) return '';
+    var names = [];
+    d.meals.forEach(function (it) {
+      if (it && it.name && names.indexOf(it.name) < 0) names.push(it.name);
     });
-    return out;
+    if (!names.length) return '';
+    return names.slice(0, 3).join(' · ') + (names.length > 3 ? ' 외 ' + (names.length - 3) : '');
+  }
+  function calDayKcal(k) {
+    var d = state.days[k];
+    return d ? Math.round(totalsOf(d).kcal) : 0;
   }
 
-  function ocrKcal(lines) {
-    var unitRe = /^(kcal|kca1|keal|kal|cal)$/i;
-    for (var li = 0; li < lines.length; li++) {
-      var toks = ocrTokens(lines[li]);
-      for (var ti = 0; ti < toks.length; ti++) {
-        var t = toks[ti];
-        var m = t.match(/^([0-9][0-9,]{0,6}(?:[.][0-9]{1,2})?)(kcal|kca1|keal|kal|cal)$/i);
-        if (m) {
-          var v = parseFloat(m[1].replace(/,/g, ''));
-          if (isFinite(v) && v > 0 && v <= 5000) return Math.round(v);
-        }
-        if (unitRe.test(t) && ti > 0) {
-          var pn = ocrParseNum(toks[ti - 1]);
-          if (pn && pn.v > 0 && pn.v <= 5000) return Math.round(pn.v);
-        }
-        if (t === '칼로리' || t.indexOf('열량') === 0) {
-          for (var j = ti + 1; j < toks.length; j++) {
-            if (unitRe.test(toks[j])) break;
-            var pn2 = ocrParseNum(toks[j]);
-            if (pn2) {
-              if (pn2.v > 0 && pn2.v <= 5000) return Math.round(pn2.v);
-              break;
-            }
-          }
-        }
+  /* ---- 달력 그리기 ---- */
+  function renderCalendar() {
+    var p = String(calMonth).split('-'), yy = +p[0], mm = +p[1];
+    var label = $('calMonth');
+    if (label) label.textContent = yy + '년 ' + mm + '월';
+    var first = new Date(yy, mm - 1, 1);
+    var start = first.getDay();
+    var days = new Date(yy, mm, 0).getDate();
+    var today = todayKey();
+    var html = '';
+    var i, d, k, cls, rec, kc, inner;
+    for (i = 0; i < start; i++) html += '<span class="cal-pad"></span>';
+    for (d = 1; d <= days; d++) {
+      k = yy + '-' + calPad2(mm) + '-' + calPad2(d);
+      var dow = new Date(yy, mm - 1, d).getDay();
+      cls = 'cal-cell' + (dow === 0 ? ' sun' : (dow === 6 ? ' sat' : ''));
+      if (k === today) cls += ' today';
+      if (k === calSel) cls += ' sel';
+      rec = calRecs[k];
+      kc = calDayKcal(k);
+      inner = '<span class="cc-num">' + d + '</span>';
+      if (rec && rec.thumb) {
+        inner += '<span class="cc-thumb" style="background-image:url(' + rec.thumb + ')"></span>';
+      } else if (kc > 0) {
+        inner += '<span class="cc-kcal">' + (kc >= 10000 ? '9.9k' : fmtInt(kc)) + '</span>';
+      } else {
+        var dd = state.days[k];
+        if (dd && (dd.weight != null || (dd.meals && dd.meals.length))) inner += '<span class="cc-dot"></span>';
       }
+      html += '<button type="button" class="' + cls + '" data-calday="' + k + '" aria-label="' + k + '">' + inner + '</button>';
     }
-    return null;
+    var tail = (7 - ((start + days) % 7)) % 7;
+    for (i = 0; i < tail; i++) html += '<span class="cal-pad"></span>';
+    var grid = $('calGrid');
+    if (grid) grid.innerHTML = html;
   }
 
-  /* 4·4·9 법칙으로 열량과 가장 잘 맞는 조합을 고른다 (g/8 오인식 교정) */
-  function pickMacros(kcal, pl, cl, fl) {
-    var sets = [pl.length ? pl : [null], cl.length ? cl : [null], fl.length ? fl : [null]];
-    var best = null;
-    for (var a = 0; a < sets[0].length; a++) {
-      for (var b = 0; b < sets[1].length; b++) {
-        for (var c = 0; c < sets[2].length; c++) {
-          var p = sets[0][a], cc = sets[1][b], ff = sets[2][c];
-          var pv = p ? p.v : 0, cv = cc ? cc.v : 0, fv = ff ? ff.v : 0;
-          var miss = (p ? 0 : 1) + (cc ? 0 : 1) + (ff ? 0 : 1);
-          var energy = 4 * pv + 4 * cv + 9 * fv;
-          var diff = kcal != null ? Math.abs(energy - kcal) : 0;
-          var exacts = (p && p.exact ? 1 : 0) + (cc && cc.exact ? 1 : 0) + (ff && ff.exact ? 1 : 0);
-          var score = (kcal != null ? diff : 0) + miss * 45 + (p ? 0 : 60) + (cc ? 0 : 60) + (ff ? 0 : 60) - exacts * 4;
-          if (pv > 120 || cv > 250 || fv > 120) score += 1000;
-          if (!best || score < best.score) best = { score: score, p: p, c: cc, f: ff, diff: diff };
-        }
-      }
+  /* ---- 그림일기 카드 그리기 ---- */
+  function renderDiary() {
+    var box = $('calDiary');
+    if (!box) return;
+    var k = calSel;
+    var d = state.days[k] || null;
+    var kc = d ? Math.round(totalsOf(d).kcal) : 0;
+    var menu = calMenuText(d);
+    var rec = calRecs[k] || null;
+    var head = '<div class="diary-head"><b>' + calDateLabel(k) + '</b><span>' + (kc > 0 ? fmtInt(kc) + ' kcal' : '기록 없음') + '</span></div>';
+    if (!rec) {
+      box.innerHTML = head +
+        '<div class="diary-empty">' +
+          '<div class="de-e">🍽️</div>' +
+          '<b>이 날의 그림일기를 남겨 보세요</b>' +
+          '<p>그날 대표로 먹은 음식 사진 한 장이면 돼요.<br>사진이 그림일기로 그려지고, 톡 누르면 실제 사진이 보여요.</p>' +
+          '<button class="btn-primary block em" id="diaryPick">＋ 대표 음식 사진 올리기</button>' +
+          (menu ? '<p class="de-menu">' + esc(menu) + '</p>' : '') +
+        '</div>';
+      var pick = $('diaryPick');
+      if (pick) pick.onclick = function () { $('fileDiary').click(); };
+      return;
     }
-    return best || {};
+    var url = calUrlFor(rec);
+    var filtered = calFiltered[k] || '';
+    var memoRaw = (rec.memo || '').trim();
+    var memoTxt = memoRaw || '오늘의 한 접시';
+    var memoCls = memoRaw ? 'dp-memo' : 'dp-memo empty';
+    var p2 = String(k).split('-');
+    box.innerHTML = head +
+      '<div class="flip" id="diaryFlip" role="button" tabindex="0" aria-pressed="false" aria-label="카드를 눌러 실제 사진 보기">' +
+        '<div class="flip-inner" id="flipInner">' +
+          '<div class="flip-face flip-front">' +
+            '<div class="dp-top"><span class="dp-date">' + (+p2[1]) + '월 ' + (+p2[2]) + '일 ' + WD[dateOf(k).getDay()] + '<i>MY MEAL DIARY</i></span>' +
+              '<span class="dp-stamp"><b>B.</b><i>그림일기</i></span></div>' +
+            '<div class="dp-photo"><img id="diaryFiltered" src="' + (filtered || url) + '" data-filtered="' + (filtered ? '1' : '0') + '" alt="그림일기로 그린 음식 사진"></div>' +
+            '<div class="' + memoCls + '" id="diaryMemoText">' + esc(memoTxt) + '</div>' +
+            '<div class="dp-foot"><span>TODAY I ATE</span><b>' + (kc > 0 ? fmtInt(kc) + ' kcal' : '0 kcal') + '</b></div>' +
+          '</div>' +
+          '<div class="flip-face flip-back">' +
+            '<img src="' + url + '" alt="실제 음식 사진">' +
+            '<div class="fb-info"><b>' + calDateLabel(k) + '</b><span>' + esc(menu || '기록 없음') + '</span><em>' + (kc > 0 ? fmtInt(kc) + ' kcal' : '0 kcal') + '</em></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="flip-hint">카드를 톡 누르면 실제 사진이 보여요</div>' +
+      '<div class="diary-memo-field"><label for="diaryMemo">한 줄 일기</label>' +
+        '<input id="diaryMemo" type="text" maxlength="60" autocomplete="off" placeholder="예: 비 오는 날엔 김치찌개지" value="' + esc(rec.memo || '') + '"></div>' +
+      '<div class="diary-tools"><button class="dt-btn" id="diaryReplace">사진 바꾸기</button><button class="dt-btn del" id="diaryDelete">삭제</button></div>';
+    if (!filtered) calFilterFor(rec);
+    var flip = $('diaryFlip');
+    function toggleFlip() {
+      flip.classList.toggle('flipped');
+      flip.setAttribute('aria-pressed', flip.classList.contains('flipped') ? 'true' : 'false');
+    }
+    flip.onclick = toggleFlip;
+    flip.onkeydown = function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleFlip(); }
+    };
+    var mi = $('diaryMemo');
+    mi.addEventListener('input', calMemoInput);
+    mi.addEventListener('change', calMemoFlush);
+    mi.addEventListener('blur', calMemoFlush);
+    $('diaryReplace').onclick = function () { $('fileDiary').click(); };
+    $('diaryDelete').onclick = calDeleteDiary;
   }
 
-  /* 총 개입 수: "(20g × 8봉)", "8개입", "총 8개" 같은 표기 */
-  function ocrPackCount(lines) {
-    var flat = lines.join(' ');
-    var m = flat.match(/([0-9]{1,4}(?:[.,][0-9]{1,2})?)\s*(?:g|G|ml|mL|m1|그램)\s*[x×X*]\s*([0-9]{1,3})\s*(?:개입|개들이|봉지|봉|팩|포|입|조각|알|캔|병|미)?/);
-    var n = m ? ocrNum(m[2]) : null;
-    if (!(n >= 2 && n <= 60)) {
-      m = flat.match(/(?:총|전체)\s*(?:내용량|중량)?[^0-9]{0,8}([0-9]{1,3})\s*(?:개입|개들이|개|봉지|봉|팩|포|입|조각|알|캔|병|미)/);
-      n = m ? ocrNum(m[1]) : null;
+  /* ---- 메모 저장 ---- */
+  function calMemoInput() {
+    var v = this.value.trim();
+    var rec = calRecs[calSel];
+    if (rec) rec.memo = v;
+    var t = $('diaryMemoText');
+    if (t) {
+      t.textContent = v || '오늘의 한 접시';
+      t.className = v ? 'dp-memo' : 'dp-memo empty';
     }
-    if (!(n >= 2 && n <= 60)) {
-      m = flat.match(/([0-9]{1,3})\s*(?:개입|개들이|봉지|입|조각|알|미)(?![0-9])/);
-      n = m ? ocrNum(m[1]) : null;
-    }
-    return (n >= 2 && n <= 60) ? Math.round(n) : null;
+    clearTimeout(calMemoTimer);
+    calMemoTimer = setTimeout(function () {
+      if (rec) rec.updatedAt = Date.now();
+      if (rec) calPhotoPut(rec).catch(function () {});
+    }, 500);
+  }
+  function calMemoFlush() {
+    clearTimeout(calMemoTimer);
+    var inp = $('diaryMemo');
+    var rec = calRecs[calSel];
+    if (!inp || !rec) return;
+    var v = inp.value.trim();
+    rec.memo = v;
+    rec.updatedAt = Date.now();
+    calPhotoPut(rec).catch(function () {});
   }
 
-  function parseNutrition(text) {
-    var raw = ocrNormalize(text);
-    var lines = ocrLines(raw);
-    var out = { k: null, p: null, c: null, f: null, pack: null, name: '', serv: '', miss: [], raw: raw };
-
-    out.k = ocrKcal(lines);
-
-    var pl = ocrNutrientCands(lines, ['단백질'], null);
-    var cl = ocrNutrientCands(lines, ['탄수화물', '탄수화물질', '탄수'], null);
-    var fl = ocrNutrientCands(lines, ['지방'], true);
-    var pick = pickMacros(out.k, pl, cl, fl);
-    if (pick.p) out.p = Math.round(pick.p.v * 10) / 10;
-    if (pick.c) out.c = Math.round(pick.c.v * 10) / 10;
-    if (pick.f) out.f = Math.round(pick.f.v * 10) / 10;
-
-    /* 1회 제공량 / 총 내용량 */
-    var flat = lines.join(' ');
-    var serv = flat.match(/(?:1회\s*제공량|1회분량|1회\s*당)[^0-9]{0,8}([0-9]{1,4}(?:[.,][0-9]{1,2})?)\s*(g|ml|mL|m1)/i);
-    var totalG = flat.match(/총\s*내용량[^0-9]{0,8}([0-9]{1,4}(?:[.,][0-9]{1,2})?)\s*(g|ml|mL|m1)/i);
-    if (serv) out.serv = '1회 제공량 ' + ocrNum(serv[1]) + (/(ml|m1)/i.test(serv[2]) ? 'ml' : 'g') + ' 기준 값이에요.';
-    else if (totalG) out.serv = '총 내용량 ' + ocrNum(totalG[1]) + (/(ml|m1)/i.test(totalG[2]) ? 'ml' : 'g') + ' 기준 값이에요.';
-
-    out.pack = ocrPackCount(lines);
-    if (out.pack) out.serv = (out.serv ? out.serv + ' ' : '') + '총 ' + out.pack + '개입으로 읽었어요. 1개당으로 나눠 담을게요.';
-
-    if (out.k == null) out.miss.push('열량');
-    if (out.p == null) out.miss.push('단백질');
-    if (out.c == null) out.miss.push('탄수화물');
-    if (out.f == null) out.miss.push('지방');
-
-    out.name = guessFoodName(raw);
-    return out;
-  }
-
-  /* 사진 위쪽의 상품명을 짐작한다 (틀리면 사용자가 고치는 전제) */
-  function guessFoodName(raw) {
-    var lines = ocrLines(raw);
-    var strict = [], loose = [];
-    for (var i = 0; i < lines.length && i < 8; i++) {
-      var line = lines[i];
-      var bare = line.replace(/[\s:·\-_,.()\[\]]/g, '');
-      if (bare.length < 2 || bare.length > 26) continue;
-      if (/[0-9]/.test(bare)) continue;
-      var stop = false;
-      for (var j = 0; j < OCR_STOP_WORDS.length; j++) {
-        if (bare.indexOf(OCR_STOP_WORDS[j]) >= 0) { stop = true; break; }
-      }
-      if (stop) continue;
-      var hangul = (bare.match(/[\uAC00-\uD7A3]/g) || []).length;
-      if (hangul < 2) continue;
-      var latin = (bare.match(/[A-Za-z]/g) || []).length;
-      var ratio = hangul / bare.length;
-      if (latin <= 1 && ratio >= 0.75) strict.push(line);
-      else if (latin <= 2 && ratio >= 0.5) loose.push(line);
-    }
-    var pick = strict[0] || loose[0] || '';
-    return pick.slice(0, 26);
-  }
-
-  function onOcrFile(input) {
+  /* ---- 사진 올리기/바꾸기 ---- */
+  function calPickFile(input) {
     var f = input.files && input.files[0];
     try { input.value = ''; } catch (e) {}
     if (!f) return;
-    if (!/^image\//.test(f.type || '')) {
-      if (f.type && f.type.indexOf('image') < 0) { toast('사진 파일을 골라줘'); return; }
+    if (f.type && f.type.indexOf('image/') !== 0) { toast('사진 파일을 골라줘'); return; }
+    var k = calSel;
+    var tok = ++calToken;
+    toast('사진을 그림일기로 정리하는 중...');
+    var src = URL.createObjectURL(f);
+    calLoadImage(src).then(function (img) {
+      var cv = calCanvasFromImage(img);
+      try { URL.revokeObjectURL(src); } catch (e) {}
+      return calCanvasBlob(cv).then(function (blob) {
+        if (!blob) throw new Error('사진을 저장하지 못했어요');
+        var rec = {
+          date: k, blob: blob, thumb: calThumbData(cv), memo: (calRecs[k] && calRecs[k].memo) || '',
+          w: cv.width, h: cv.height, updatedAt: Date.now()
+        };
+        return calPhotoPut(rec).then(function () { return rec; });
+      });
+    }).then(function (rec) {
+      if (tok !== calToken) return;
+      if (calFullUrl) { try { URL.revokeObjectURL(calFullUrl); } catch (e) {} calFullUrl = ''; calFullDate = ''; }
+      delete calFiltered[k];
+      calRecs[k] = rec;
+      renderCalendar();
+      renderDiary();
+      toast('그림일기 카드에 담았어');
+    }).catch(function (e) {
+      toast((e && e.message) ? e.message : '사진을 저장하지 못했어');
+    });
+  }
+
+  /* ---- 삭제 ---- */
+  function calDeleteDiary() {
+    var k = calSel;
+    if (!calRecs[k]) return;
+    if (!window.confirm('이 날 그림일기를 지울까요?')) return;
+    calPhotoDel(k).then(function () {
+      delete calRecs[k];
+      delete calFiltered[k];
+      if (calFullDate === k && calFullUrl) { try { URL.revokeObjectURL(calFullUrl); } catch (e) {} calFullUrl = ''; calFullDate = ''; }
+      renderCalendar();
+      renderDiary();
+      toast('그림일기를 지웠어');
+    }).catch(function () { toast('지우지 못했어'); });
+  }
+
+  /* ---- 달 이동 / 날짜 선택 ---- */
+  function calLoadMonth() {
+    var m = calMonth;
+    calPhotoKeys().then(function (keys) {
+      var mine = keys.filter(function (k) { return String(k).indexOf(m + '-') === 0; });
+      return Promise.all(mine.map(function (k) { return calPhotoGet(k); }));
+    }).then(function (list) {
+      if (m !== calMonth) return;
+      calRecs = {};
+      list.forEach(function (rec) { if (rec && rec.date) calRecs[rec.date] = rec; });
+      renderCalendar();
+      renderDiary();
+    }).catch(function () {
+      renderCalendar();
+      renderDiary();
+    });
+  }
+  function calShiftMonth(n) {
+    var p = String(calMonth).split('-');
+    var dt = new Date(+p[0], +p[1] - 1 + n, 1);
+    calMonth = dt.getFullYear() + '-' + calPad2(dt.getMonth() + 1);
+    calSel = calMonth + '-01';
+    calRecs = {};
+    renderCalendar();
+    renderDiary();
+    calLoadMonth();
+    var sc = $('calScroll');
+    if (sc) sc.scrollTop = 0;
+  }
+  function pickCalDay(k) {
+    if (!k) return;
+    calSel = k;
+    if (state.ui.date !== k) {
+      state.ui.date = k;
+      save();
+      renderAll();
     }
-    startOcr(f);
+    renderCalendar();
+    renderDiary();
+    setTimeout(function () {
+      var head = document.querySelector('#calDiary .diary-head');
+      var box = $('calScroll');
+      if (head && box) {
+        var top = head.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - 8;
+        box.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      }
+    }, 40);
+    if (!calRecs[k]) {
+      calPhotoGet(k).then(function (rec) {
+        if (rec && calSel === k) {
+          calRecs[k] = rec;
+          renderCalendar();
+          renderDiary();
+        }
+      }).catch(function () {});
+    }
+  }
+
+  function markCalTab(on) {
+    var btns = document.querySelectorAll('.dock-btn');
+    for (var i = 0; i < btns.length; i++) {
+      var isCal = btns[i].getAttribute('data-cal') === '1';
+      if (on) btns[i].className = 'dock-btn' + (isCal ? ' on' : '');
+      else if (isCal) btns[i].className = 'dock-btn';
+    }
+  }
+
+  function openCalendar() {
+    if (calOpen) return;
+    calOpen = true;
+    calLockY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.top = (-calLockY) + 'px';
+    document.body.classList.add('lock');
+    var k = curKey();
+    calSel = k;
+    calMonth = k.slice(0, 7);
+    calRecs = {};
+    var sc = $('calScreen');
+    document.body.classList.add('cal-on');
+    if (sc) { sc.classList.add('open'); sc.setAttribute('aria-hidden', 'false'); }
+    renderCalendar();
+    renderDiary();
+    calLoadMonth();
+    markCalTab(true);
+    var box = $('calScroll');
+    if (box) box.scrollTop = 0;
+  }
+  function closeCalendar() {
+    if (!calOpen) return;
+    calOpen = false;
+    var sc = $('calScreen');
+    if (sc) { sc.classList.remove('open'); sc.setAttribute('aria-hidden', 'true'); }
+    document.body.classList.remove('cal-on');
+    document.body.classList.remove('lock');
+    document.body.style.top = '';
+    window.scrollTo(0, calLockY);
+    updateSpy();
   }
 
   /* ================= data io ================= */
@@ -6220,6 +6368,7 @@ input,textarea,select{font-size:16px}
 
   var spyTick = 0;
   function updateSpy() {
+    if (calOpen) { markCalTab(true); return; }
     var ids = ['mealsCard', 'weightCard', 'exerciseCard'];
     var y = (window.scrollY || 0) + 160;
     var active = ids[0];
@@ -6250,6 +6399,7 @@ input,textarea,select{font-size:16px}
   }
 
   function flashQuick() {
+    if (calOpen) closeCalendar();
     scrollToCard('quickCard');
     var card = $('quickCard');
     card.classList.add('flash');
@@ -6482,9 +6632,36 @@ input,textarea,select{font-size:16px}
     var dockBtns = document.getElementsByClassName('dock-btn');
     for (var i = 0; i < dockBtns.length; i++) {
       dockBtns[i].onclick = function () {
-        scrollToCard(this.getAttribute('data-goto'));
+        var g = this.getAttribute('data-goto');
+        if (!g) return;
+        if (calOpen) closeCalendar();
+        scrollToCard(g);
       };
     }
+    $('tabCalendar').onclick = function () {
+      if (calOpen) closeCalendar();
+      else openCalendar();
+    };
+    $('calClose').onclick = closeCalendar;
+    $('calToday').onclick = function () {
+      var t = todayKey();
+      calSel = t;
+      calMonth = t.slice(0, 7);
+      if (state.ui.date !== t) { state.ui.date = t; save(); renderAll(); }
+      calRecs = {};
+      renderCalendar();
+      renderDiary();
+      calLoadMonth();
+      var sc = $('calScroll');
+      if (sc) sc.scrollTop = 0;
+    };
+    $('calPrev').onclick = function () { calShiftMonth(-1); };
+    $('calNext').onclick = function () { calShiftMonth(1); };
+    $('calGrid').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-calday]') : null;
+      if (b) pickCalDay(b.getAttribute('data-calday'));
+    });
+    $('fileDiary').onchange = function () { calPickFile(this); };
     window.addEventListener('scroll', onScroll, { passive: true });
 
     $('mask').onclick = closeSheets;
@@ -6493,7 +6670,7 @@ input,textarea,select{font-size:16px}
       closers[j].onclick = closeSheets;
     }
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeSheets();
+      if (e.key === 'Escape') { if (calOpen) closeCalendar(); else closeSheets(); }
     });
 
     /* settings */
@@ -6581,21 +6758,6 @@ input,textarea,select{font-size:16px}
       if ($('mEatPlus')) $('mEatPlus').onclick = function () { stepManualEat(1); };
     }
 
-    /* 성분표 사진 */
-    if ($('btnOcr')) $('btnOcr').onclick = function () { rcOcrMode = false; fridgeOcr = false; pickOcrPhoto(); };
-    $('btnOcrCam').onclick = function () { rcOcrMode = false; fridgeOcr = false; pickOcrPhoto(); };
-    $('fileOcr').onchange = function () { onOcrFile(this); };
-    $('btnOcrSkip').onclick = function () {
-      if (rcOcrMode) {
-        rcOcrMode = false;
-        closeSheets();
-        openRecipe();
-        toast('사진 없이 직접 재료를 넣어줘');
-        return;
-      }
-      closeSheets(); openManual('');
-    };
-
     /* 내 요리 */
     $('btnRecipe').onclick = openRecipe;
     $('rcAdd').onclick = function () { rcParseAdd($('rcInput').value); };
@@ -6658,12 +6820,6 @@ input,textarea,select{font-size:16px}
       rcOpenDirect('');
     };
     $('rcNewAdd').onclick = rcAddDirect;
-    $('rcOcr').onclick = function () {
-      rcOcrMode = true;
-      fridgeOcr = false;
-      closeSheets();
-      pickOcrPhoto();
-    };
     $('btnRecipeSave').onclick = rcSaveMeal;
     if ($('btnRecipeSaveOnly')) $('btnRecipeSaveOnly').onclick = rcSaveRecipeOnly;
 
@@ -6788,9 +6944,15 @@ input,textarea,select{font-size:16px}
     menuAdd: menuAdd,
     recordSuggestion: recordSuggestion,
     openManual: openManual,
-    ocrParse: parseNutrition,
-    ocrPack: ocrPackCount,
-    ocrNameGuess: guessFoodName,
+    openCalendar: openCalendar,
+    closeCalendar: closeCalendar,
+    calOpen: function () { return calOpen; },
+    calPick: pickCalDay,
+    calMonth: function () { return calMonth; },
+    calSel: function () { return calSel; },
+    calRec: function (k) { return calRecs[k] || null; },
+    calFiltered: function (k) { return calFiltered[k] || ''; },
+    photoGet: calPhotoGet,
     openEdit: openEdit,
     createQuickFood: createQuickFood,
     saveEdit: saveEdit,

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>보라 다이어트 코치</title>
-<!-- v4.9: 그라데이션 전부 제거 · 단색 #006241 플랫 통일 · 레시피 워딩을 '내 레시피'로 -->
+<!-- v5.0: 첫 화면 흐름 정리(히어로 슬림 · 끼니 선택 상단 고정 · 빠른 기록 컴팩트) · 토스트 상단 이동 · 모든 입력 16px · + 버튼 독 안으로 -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -654,7 +654,7 @@ body.dg-lock,body.dg-lock *{-webkit-user-select:none;-moz-user-select:none;user-
   position:fixed;left:50%;bottom:calc(118px + env(safe-area-inset-bottom, 0px));z-index:80;
   transform:translateX(-50%) translateY(14px);opacity:0;pointer-events:none;
   display:flex;align-items:center;gap:10px;
-  background:rgba(18,24,26,.94);color:#fff;padding:11px 14px 11px 16px;border-radius:15px;
+  background:#12181A;color:#fff;padding:11px 14px 11px 16px;border-radius:15px;
   font-size:12.5px;font-weight:600;letter-spacing:-0.01em;max-width:calc(100% - 40px);
   box-shadow:0 12px 28px -10px rgba(0,0,0,.5);
   transition:opacity .22s ease,transform .26s cubic-bezier(.22,.9,.24,1);
@@ -976,6 +976,96 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   .macro-top span{font-size:10.5px}
   .macro-top b{font-size:11.5px;white-space:nowrap}
 }
+/* ===== v5.0: 첫 화면 흐름 정리 · 시트/토스트/iOS 디테일 ===== */
+#app{padding-bottom:calc(96px + env(safe-area-inset-bottom, 0px))}
+
+/* 상단 입력바 바로 아래 끼니 선택 */
+.qbar{padding:8px 14px}
+.qbar .qbox{height:48px}
+.qmeal{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#EDF1EF;border-radius:12px;padding:3px;margin-top:6px}
+.qmeal button{
+  -webkit-appearance:none;border:0;background:transparent;border-radius:9px;min-height:30px;padding:4px 2px;
+  font-size:13px;font-weight:700;color:#78878D;letter-spacing:-0.02em;
+  transition:background .16s ease,color .16s ease;
+}
+.qmeal button.on{background:var(--em);color:#fff;font-weight:800;box-shadow:0 2px 6px -2px rgba(0,78,52,.45)}
+.qmeal button:active{opacity:.75}
+
+/* 히어로 슬림 */
+.hero{margin:8px 14px 0;padding:13px 16px 12px;border-radius:24px}
+.hero-top{margin-bottom:0}
+.ring-wrap{width:150px;height:150px;margin:2px auto 0}
+.ring-svg{width:150px;height:150px}
+.ring-num{font-size:38px}
+.ring-num.small{font-size:31px}
+.ring-label{margin-top:4px}
+.ring-sub{margin-top:2px}
+.macros{margin-top:9px;padding-top:9px}
+.macro-top{margin-bottom:5px}
+
+/* 빠른 기록: 2×2 그리드 → 한 줄 도구 + 내 칩 */
+#quickCard{padding:12px 14px 14px}
+.tool-row{display:grid;grid-template-columns:1fr 1fr auto;gap:7px}
+.tool-btn{
+  -webkit-appearance:none;display:flex;align-items:center;justify-content:center;gap:5px;
+  min-width:0;min-height:44px;padding:0 9px;border-radius:13px;border:1px solid #E8EDEE;background:#fff;
+  color:var(--ink);font-size:13px;font-weight:700;letter-spacing:-0.02em;
+  box-shadow:0 1px 2px rgba(16,24,28,.04);
+  transition:background .15s ease,border-color .15s ease;
+}
+.tool-btn:active{background:var(--em-l);border-color:#C2DCCF}
+.tool-btn .tb-e{font-size:15px;line-height:1;flex:0 0 auto}
+.tool-btn .tb-t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tool-btn .tb-n{font-size:10.5px;font-weight:800;color:#4B8A71;font-variant-numeric:tabular-nums;flex:0 0 auto;letter-spacing:0}
+.tool-btn.fridge{background:#EDF5F1;border-color:#D9EAE2;color:var(--em-d)}
+.tool-btn.muted{background:#F7F9F9;color:var(--ink2)}
+#quickCard .chips{padding:2px 14px 2px;margin:10px -14px 0}
+#quickCard .chips-empty{margin:10px 0 0}
+#quickCard .preset-head{margin:12px 0 7px}
+#quickCard .presets{margin:0 -14px 2px;padding:0 14px 2px}
+
+/* 토스트: 시트 제목을 가리지 않게 상단으로 */
+.toast{
+  top:calc(8px + env(safe-area-inset-top, 0px));bottom:auto;left:0;right:0;margin:0 auto;
+  width:max-content;max-width:calc(100% - 24px);
+  transform:translateY(-18px);z-index:90;
+  padding:9px 12px 9px 14px;
+}
+.toast.show{transform:translateY(0)}
+.toast .tm{max-width:none;flex:1 1 auto;min-width:0;line-height:1.35}
+.toast .tu{flex:0 0 auto;white-space:nowrap}
+
+/* + 버튼을 독 안으로: 하단 글자를 가리지 않게 */
+.dock{align-items:center;padding:9px 8px calc(7px + env(safe-area-inset-bottom, 0px))}
+.fab{
+  position:relative;left:auto;bottom:auto;transform:none;
+  flex:0 0 52px;width:52px;height:52px;margin:0 3px;
+  box-shadow:0 8px 18px -8px rgba(0,78,52,.5),0 0 0 4px rgba(252,253,253,.92);
+}
+.fab:active{transform:scale(.93)}
+
+/* iOS Safari 입력창 자동 확대 방지: 모든 입력 16px 이상 */
+input,textarea,select{font-size:16px}
+.qnew input,.rc-new .text-input,.frb-search .text-input,.frb-add .text-input,.frb-edit .text-input,
+.frb-grid4 .text-input,.frb-addfoot .text-input,.frb-editfoot .text-input{font-size:16px}
+
+@media (max-width:360px){
+  .ex-row{gap:8px}
+  .ex-kcal{display:none}
+  .ex-ctl{padding:2px}
+  .ex-ctl button{width:24px;height:24px;font-size:14px}
+  .ex-min{min-width:32px}
+  .sw{width:36px;height:22px}
+  .sw i::after{width:18px;height:18px}
+  .sw input:checked+i::after{transform:translateX(14px)}
+}
+
+@media (max-width:344px){
+  .qmeal button{font-size:12.5px}
+  .tool-row{gap:6px}
+  .tool-btn{font-size:12px;padding:0 7px;gap:4px}
+  .tool-btn .tb-n{display:none}
+}
 </style>
 </head>
 <body>
@@ -1003,6 +1093,12 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5h3l1.4-2.2h6.2l1.4 2.2h3a1.6 1.6 0 0 1 1.6 1.6v7.3a1.6 1.6 0 0 1-1.6 1.6H3.5a1.6 1.6 0 0 1-1.6-1.6V10.1a1.6 1.6 0 0 1 1.6-1.6Z"/><circle cx="12" cy="13.4" r="2.9"/></svg>
         </button>
         <button class="qgo" id="qGo" aria-label="바로 기록">&#8629;</button>
+      </div>
+      <div class="qmeal" id="mealPills" role="group" aria-label="기록할 끼니">
+        <button type="button" data-meal="breakfast">아침</button>
+        <button type="button" data-meal="lunch">점심</button>
+        <button type="button" data-meal="dinner">저녁</button>
+        <button type="button" data-meal="snack">간식</button>
       </div>
       <div class="preview" id="quickPreview"></div>
     </div>
@@ -1041,26 +1137,15 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   </section>
 
   <section class="card" id="quickCard">
-    <div class="card-head">
-      <h2>빠른 기록</h2>
+    <div class="tool-row">
+      <button class="tool-btn" id="btnRecipe"><span class="tb-e">🍳</span><span class="tb-t">내 레시피</span></button>
+      <button class="tool-btn fridge" id="btnFridge"><span class="tb-e">🧊</span><span class="tb-t">내 냉장고</span><span class="tb-n" id="fridgeCount">0개</span></button>
+      <button class="tool-btn muted" id="btnChipsEdit"><span class="tb-e">⚙️</span><span class="tb-t">칩 설정</span></button>
     </div>
-    <div class="quick-grid">
-      <button class="qg-btn" id="btnRecipe"><span class="qg-e">🍳</span><span class="qg-t">내 요리</span></button>
-      <button class="qg-btn fridge" id="btnFridge"><span class="qg-e">🧊</span><span class="qg-t">내 냉장고</span><span class="qg-n" id="fridgeCount">0개</span></button>
-      <button class="qg-btn" id="btnOcr"><span class="qg-e">📷</span><span class="qg-t">성분표</span></button>
-      <button class="qg-btn muted" id="btnChipsEdit"><span class="qg-e">⚙️</span><span class="qg-t">칩 설정</span></button>
-    </div>
-    <div class="preset-head"><span class="ph-t">대충 컷</span><span class="ph-s">메뉴가 기억 안 나면 한 번에</span></div>
-    <div class="presets" id="presetRow"></div>
-    <div class="pills" id="mealPills">
-      <button data-meal="breakfast">아침</button>
-      <button data-meal="lunch">점심</button>
-      <button data-meal="dinner">저녁</button>
-      <button data-meal="snack">간식</button>
-    </div>
-    <div class="q-hint" id="qHint">대충 적어도 찾아요 &middot; <b>&ldquo;마가렛트 2봉지&rdquo;</b> <b>&ldquo;김치찌개 반공기 계란 2개&rdquo;</b> &middot; 없으면 바로 새 음식으로 기록</div>
     <div class="chips" id="chipsRow"></div>
     <div class="chips-empty" id="chipsEmpty" style="display:none">자주 먹는 음식을 추가해 두면 한 번에 기록돼요.</div>
+    <div class="preset-head"><span class="ph-t">대충 컷</span><span class="ph-s">메뉴가 기억 안 나면</span></div>
+    <div class="presets" id="presetRow"></div>
   </section>
 
   <section class="card" id="mealsCard">
@@ -1386,13 +1471,13 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   <div class="sheet-foot"><button class="btn-ghost" id="btnOcrSkip" style="width:100%">사진 없이 직접 입력</button></div>
 </section>
 
-<section class="sheet" id="sheetRecipe" role="dialog" aria-modal="true" aria-label="내 요리 만들기">
+<section class="sheet" id="sheetRecipe" role="dialog" aria-modal="true" aria-label="내 레시피">
   <div class="sheet-grab"></div>
-  <div class="sheet-head"><h3>🍳 내 요리</h3><button class="xbtn" data-close="recipe" aria-label="닫기">&#10005;</button></div>
+  <div class="sheet-head"><h3>🍳 내 레시피</h3><button class="xbtn" data-close="recipe" aria-label="닫기">&#10005;</button></div>
   <div class="sheet-body">
     <div class="frb-tabs rc-tabs" id="rcTabs">
-      <button class="frb-tab on" data-rctab="build">새 요리 만들기</button>
-      <button class="frb-tab" data-rctab="saved">내 레시피<i id="rcTabCount">0</i></button>
+      <button class="frb-tab on" data-rctab="build">새 레시피</button>
+      <button class="frb-tab" data-rctab="saved">저장한 레시피<i id="rcTabCount">0</i></button>
     </div>
     <div id="rcBuildPane">
     <div class="field">
@@ -2653,6 +2738,10 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
       if (btns[i].getAttribute('data-meal') === 'auto') continue;
       btns[i].className = btns[i].getAttribute('data-meal') === state.ui.meal ? 'on' : '';
     }
+    var nm = '';
+    MEALS.forEach(function (m) { if (m.k === state.ui.meal) nm = m.n; });
+    var qi = $('quickInput');
+    if (qi && nm) qi.placeholder = nm + '에 기록 · 예) 마가렛트 2봉지';
   }
 
   function segBtn(it, m, label) {
@@ -2715,7 +2804,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     $('chipsEmpty').style.display = favs.length ? 'none' : 'block';
     var cbe = $('btnChipsEdit');
     if (cbe) {
-      var cbt = cbe.getElementsByClassName('qg-t')[0];
+      var cbt = cbe.getElementsByClassName('tb-t')[0];
       if (cbt) cbt.textContent = edit ? '완료' : '칩 설정'; else cbe.textContent = edit ? '완료' : '칩 설정';
     }
   }
@@ -3055,10 +3144,10 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     if (!raw.trim()) {
       box.className = 'preview';
       box.innerHTML = '';
-      $('qHint').style.display = 'block';
+      var qh = $('qHint'); if (qh) qh.style.display = 'block';
       return;
     }
-    $('qHint').style.display = 'none';
+    var qh2 = $('qHint'); if (qh2) qh2.style.display = 'none';
     var html = '';
     if (pvItems.length) {
       var totK = 0, totP = 0;
@@ -4180,7 +4269,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   function rcSaveMeal() {
     if (!rcItems.length) { toast('재료를 먼저 담아줘'); return; }
     var t = rcTotal();
-    var name = String($('rcName').value || '').trim() || '내 요리';
+    var name = String($('rcName').value || '').trim() || '내 레시피';
     var food = {
       n: name, e: '🍳',
       k: Math.round(t.kcal * 10) / 10,
@@ -4250,7 +4339,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
 
   function recipeSave(name, items) {
     if (!Array.isArray(state.recipes)) state.recipes = [];
-    var nm = String(name == null ? '' : name).trim() || '내 요리';
+    var nm = String(name == null ? '' : name).trim() || '내 레시피';
     var copy = recipeCopyItems(items);
     if (!copy.length) return null;
     var t = { k: 0, p: 0, c: 0, f: 0 };
@@ -4304,7 +4393,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     if (!all.length) {
       box.innerHTML = '<div class="rc-saved-empty"><span class="se-e">🍳</span>' +
         '아직 내 레시피가 없어요.<br>재료를 담고 <b>내 레시피로 저장</b>해 두면<br>다음에 재료 조합 그대로 불러올 수 있어요.' +
-        '<button class="btn-ghost" type="button" data-rctab="build">새 요리 만들기</button></div>';
+        '<button class="btn-ghost" type="button" data-rctab="build">새 레시피 만들기</button></div>';
       return;
     }
     var html = '<div class="rc-saved">';
@@ -4503,7 +4592,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     if (!all.length) {
       box.innerHTML = '<div class="frb-empty"><span class="fe-e">🧊</span>' +
         '아직 내 냉장고에 담아 둔 제품이나 요리가 없어요.<br>' +
-        '성분표 사진이나 직접 추가, <b>내 요리</b> 저장 시 여기에 모여요.</div>';
+        '성분표 사진이나 직접 추가, <b>내 레시피</b> 저장 시 여기에 모여요.</div>';
       return;
     }
     if (!rows.length) {
@@ -5726,8 +5815,8 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
   function scrollToCard(id) {
     var el = $(id);
     if (!el) return;
-    /* 상단 고정 입력 바(약 66px) + 헤더(46px)에 카드 제목이 가리지 않게 */
-    var top = el.getBoundingClientRect().top + (window.scrollY || 0) - (id === 'quickCard' ? 76 : 118);
+    /* 상단 고정 입력 바+끼니(약 106px) + 헤더(46px)에 카드 제목이 가리지 않게 */
+    var top = el.getBoundingClientRect().top + (window.scrollY || 0) - 160;
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   }
 
@@ -6039,7 +6128,7 @@ button,input,textarea,select{font-family:'Pretendard Variable',Pretendard,-apple
     }
 
     /* 성분표 사진 */
-    $('btnOcr').onclick = function () { rcOcrMode = false; fridgeOcr = false; pickOcrPhoto(); };
+    if ($('btnOcr')) $('btnOcr').onclick = function () { rcOcrMode = false; fridgeOcr = false; pickOcrPhoto(); };
     $('btnOcrCam').onclick = function () { rcOcrMode = false; fridgeOcr = false; pickOcrPhoto(); };
     $('fileOcr').onchange = function () { onOcrFile(this); };
     $('btnOcrSkip').onclick = function () {
